@@ -1,5 +1,6 @@
 import time
 time_start = time.time()
+print("main_class.py Start")
 
 import numpy as np
 import matplotlib as mpl
@@ -14,7 +15,7 @@ import class_pool as classes
 
 mpl.rcParams["text.usetex"] = True
 
-path = ['/home/jaesung/OneDrive/Code/WongCode/13TeV_atlas/atlasgraphs', '/home/jaesung/OneDrive/Code/WongCode/13TeV-Alice/HEPData-ins1840098-v1-csv', '/home/jaesung/OneDrive/Code/WongCode/13TeV/HEPData-ins1397173-v1-csv']
+path = ['/home/jaesung/OneDrive/Code/WongCode/Momentum_Kick/13TeV_atlas/atlasgraphs', '/home/jaesung/OneDrive/Code/WongCode/Momentum_Kick/13TeV-Alice/HEPData-ins1840098-v1-csv', '/home/jaesung/OneDrive/Code/WongCode/Momentum_Kick/13TeV/HEPData-ins1397173-v1-csv']
 phi_13TeV_multi_atlas = []
 dat_13TeV_multi_atlas = []
 # 순서 : alice, alice, alice, ..., cms, cms, cms, ....., atlas, alice, cms

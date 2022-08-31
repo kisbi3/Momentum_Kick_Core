@@ -69,24 +69,6 @@ class Fitting_gpu:
         '''number of pt distribution data ex) 13TeV : ALICE + CMS = 2, 7 TeV : CMS = 1'''
         self.ptdis_number = len(pt_range[0])
         ''' Line 70~87 to be deleted '''
-        # dist_ptrange_loww = np.array([])
-        # dist_ptrange_high = np.array([])
-        # checking for length of alice and cms Yridge data
-        # if int(len(pt_range)/2) == 1:
-        #     pass
-
-        # elif int(len(pt_range)/2) == 2:
-        #     self.ptrange_index = (len(pt_range[0][0]), len(pt_range[0][1]))     # pt_range[0][0] : ALICE pt number  pt_range[0][1] : CMS pt number
-        #     for i in range(len(pt_range[0])):
-        #         if i==0:
-        #             dist_ptrange_loww = pt_range[0][i]
-        #             dist_ptrange_high = pt_range[1][i]
-        #         else:
-        #             dist_ptrange_loww = np.concatenate((dist_ptrange_loww, pt_range[0][i]))
-        #             dist_ptrange_high = np.concatenate((dist_ptrange_high, pt_range[1][i]))
-        #     self.ptrange_loww = dist_ptrange_loww
-        #     self.ptrange_high = dist_ptrange_high
-        #     print(dist_ptrange_loww, dist_ptrange_high)
 
         '''데이터 길이 확인하기 위함'''
         if (len(self.phi_array) != len(self.data)) and (len(self.data) != len(self.ptf)) and (len(self.ptf) != len(self.etaf)):
