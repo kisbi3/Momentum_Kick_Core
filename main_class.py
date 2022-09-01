@@ -27,6 +27,7 @@ phi_07TeV_ptdep = []
 dat_07TeV_ptdep = []
 err_07TeV_ptdep = []
 fitting_error = []
+# delta_phi_zyam = []
 for i in range(5):
     start = 10*i + 90
     end = 10*i + 100
@@ -90,6 +91,8 @@ for i in range(3):
 phi_13TeV_ptdep.append(np.loadtxt(path[0]+'/13TeV_90~.csv',delimiter=',',usecols=[0],skiprows=3,max_rows=12))
 dat_13TeV_ptdep.append(np.loadtxt(path[0]+'/13TeV_90~.csv',delimiter=',',usecols=[1],skiprows=3,max_rows=12))
 
+''' table에 있는 delta phi_CZYAM값을 직접 이용하여 fitting하기 위함 '''
+''' ALICE의 CZYAM을 알 수 없기 때문에 이를 통일하기 위해서 table의 delta phi_CZYAM를 이용하기 힘들어 보임. '''
 for i in range(len(dat_13TeV_ptdep)):
     dat_13TeV_ptdep[i] -= min(dat_13TeV_ptdep[i])
 
@@ -160,7 +163,7 @@ boundary = ((0.2, 0.1, 0, 0, 0),(5, 3., 20, 10, 10))
 # initial = (0.82, 0.57, .36, .6)
 # initial = (0.72, 0.3, 0.18, 1.6, 0.5)
 # initial = (1.11919, 0.98740754, 1.7766, .1051285459, 0.0)
-initial = (1., 0.2, 2, 3, 0)
+initial = (1., 0.7, 2, 3, 0)
 # initial = (1.08674554e+00, 1.16530031e+00, 1.74236505e+00, 7.99187696e-09, 3.67480403e-18)
 
 '''입력 데이터를 변경할 때에 꼭 제대로 들어가는지 확인하자'''
@@ -198,6 +201,7 @@ del dat_13TeV_ptdep_fitting[7]                        # delete ATLAS data
 del phi_13TeV_ptdep_fitting[3]                        # delete 0.1<pT<1 phi
 del dat_13TeV_ptdep_fitting[3]                        # delete 0.1<pT<1 data
 
+print(dat_13TeV_ptdep_fitting)
 # '''Fitting 13TeV data'''
 # ptdep = classes.Fitting_gpu(13000, phi_13TeV_ptdep_fitting, dat_13TeV_ptdep_fitting, (ptloww, pthigh), None, ptf, etaf, boundary, initial, "pTdependence")
 # # ptdep_result, ptdep_error = ptdep.fitting(fitting_error)         # error를 대입하려는 경우(absolute sigma)
@@ -207,18 +211,19 @@ del dat_13TeV_ptdep_fitting[3]                        # delete 0.1<pT<1 data
 # print(ptdep_result)
 # print(ptdep_error)
 
-# '''Fitting 7TeV data'''
-# ptf_07 = [(1, 2), (2, 3), (3, 4)]
+'''Fitting 7TeV data'''
+ptf_07 = [(1, 2), (2, 3), (3, 4)]
 # etaf_07 = [(2, 4.8), (2, 4.8), (2, 4.8)]
-# phi_07TeV_ptdep_fitting = phi_07TeV_ptdep[1::]
-# dat_07TeV_ptdep_fitting = dat_07TeV_ptdep[1::]
-# ptdep = classes.Fitting_gpu(7000, phi_07TeV_ptdep_fitting, dat_07TeV_ptdep_fitting, (ptloww_07, pthigh_07), None, ptf_07, etaf, boundary, initial, "pTdependence")
-# # ptdep_result, ptdep_error = ptdep.fitting(fitting_error)         # error를 대입하려는 경우(absolute sigma)
-# ptdep_result_07, ptdep_error_07 = ptdep.fitting(None)                  # error를 고려하지 않으려는 경우
-# # ptdep_result = [0.68893858, 0.58398214, 0.39126606, 1.31503716]
+etaf_07 = [(2, 4), (2, 4), (2, 4)]
+phi_07TeV_ptdep_fitting = phi_07TeV_ptdep[1::]
+dat_07TeV_ptdep_fitting = dat_07TeV_ptdep[1::]
+ptdep = classes.Fitting_gpu(7000, phi_07TeV_ptdep_fitting, dat_07TeV_ptdep_fitting, (ptloww_07, pthigh_07), None, ptf_07, etaf, boundary, initial, "pTdependence")
+# ptdep_result, ptdep_error = ptdep.fitting(fitting_error)         # error를 대입하려는 경우(absolute sigma)
+ptdep_result_07, ptdep_error_07 = ptdep.fitting(None)                  # error를 고려하지 않으려는 경우
+# ptdep_result = [0.68893858, 0.58398214, 0.39126606, 1.31503716]
 
-# print(ptdep_result_07)
-# print(ptdep_error_07)
+print(ptdep_result_07)
+print(ptdep_error_07)
 
 '''
 FrNk의 크기(xx)에 따라 fitting이 전혀 다르게 되는 것 같은 느낌이 듦. 이 아래는 이를 체크해보기 위함.
@@ -282,7 +287,7 @@ dat_13TeV_ptdep = dat_13TeV_ptdep[0:-2]
 # ptdep_result = [1.08674554, 1.16530031, 1.74236505, 7.99187696e-09, 3.67480403e-18]
 # ptdep_result = [1.16705241, 3.00000000, 11.2761222, 9.72160460e-14, 0.492948044]
 ptdep_result = [9.77048585e-01, 1.79374925e+00, 5.29529630e+00, 8.52747999e-35, 2.20904141e-01]
-ptdep_result_07 = [1.00266407e+00, 4.83737711e-01, 1.02320562e+01, 4.08927964e+00, 9.12644624e-10]
+# ptdep_result_07 = [1.00266407e+00, 4.83737711e-01, 1.02320562e+01, 4.08927964e+00, 9.12644624e-10]
 
 fig1, axes1 = plt.subplots(nrows=1, ncols=5,figsize=(125,20))
 #그래프 그리기
@@ -418,15 +423,15 @@ Hanul_FrNk = [[1.5, 2.5], [0.93, 1.37]]
 Hanul_FrNk_error = [[0.5, 0.5], [0.5, 0.5]]
 ptf = np.arange(0.01,4,0.01)
 
-plt.plot(ptf, FrNk_func(ptf, *AuAu_200GeV), color = 'red', linewidth=7, label=r'$AuAu, \, 200GeV$')
-plt.plot(ptf, FrNk_func(ptf, *PbPb_276TeV), color = 'black', linewidth=7, label=r'$PbPb, \, 2.76TeV$')
-plt.plot(ptf, FrNk_func(ptf, *pp_13TeV), color = 'blue', linewidth=7, label=r'$pp, \, 13TeV$')
-plt.plot(ptf, FrNk_func(ptf, *pp_07TeV), color = 'grey', linewidth=7, label=r'$pp, \, 07TeV$')
-plt.scatter(Hanul_FrNk[0], Hanul_FrNk[1], edgecolor = 'green', facecolors='none', s=900, marker='o', linewidths=5, zorder=2, label=r'$pp, \, 13TeV$')
+plt.plot(ptf, FrNk_func(ptf, *AuAu_200GeV), color = 'red', linewidth=7, label=r'$AuAu, \, 200\mathrm{GeV}$')
+plt.plot(ptf, FrNk_func(ptf, *PbPb_276TeV), color = 'black', linewidth=7, label=r'$PbPb, \, 2.76\mathrm{TeV}$')
+plt.plot(ptf, FrNk_func(ptf, *pp_13TeV), color = 'blue', linewidth=7, label=r'$pp, \, 13\mathrm{TeV}$')
+plt.plot(ptf, FrNk_func(ptf, *pp_07TeV), color = 'grey', linewidth=7, label=r'$pp, \, 07\mathrm{TeV}$')
+plt.scatter(Hanul_FrNk[0], Hanul_FrNk[1], edgecolor = 'green', facecolors='none', s=900, marker='o', linewidths=5, zorder=2, label=r'$pp, \, 13\mathrm{TeV}$')
 plt.scatter(Hanul_FrNk[0], Hanul_FrNk[1], facecolors='green', s=900, marker='+', linewidths=5, zorder=2)
 plt.errorbar(Hanul_FrNk[0], Hanul_FrNk[1], xerr=Hanul_FrNk_error, color="green", linestyle=' ', linewidth=7, capthick=3, capsize=15)
 
-plt.xlabel(r'$p_T^{trig}$',size=70)
+plt.xlabel(r'$p_T^{\mathrm{trig}}$',size=70)
 plt.ylabel(r'$f_{R} \langle N_k \rangle $',size=70)
 plt.xlim(0,4)
 
