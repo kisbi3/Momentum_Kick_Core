@@ -93,8 +93,8 @@ dat_13TeV_ptdep.append(np.loadtxt(path[0]+'/13TeV_90~.csv',delimiter=',',usecols
 
 ''' table에 있는 delta phi_CZYAM값을 직접 이용하여 fitting하기 위함 '''
 ''' ALICE의 CZYAM을 알 수 없기 때문에 이를 통일하기 위해서 table의 delta phi_CZYAM를 이용하기 힘들어 보임. '''
-for i in range(len(dat_13TeV_ptdep)):
-    dat_13TeV_ptdep[i] -= min(dat_13TeV_ptdep[i])
+# for i in range(len(dat_13TeV_ptdep)):
+#     dat_13TeV_ptdep[i] -= min(dat_13TeV_ptdep[i])
 
 fitting_error.append(np.zeros(len(phi_13TeV_ptdep[-1]))+0.000703141335931843)
 
@@ -163,7 +163,7 @@ boundary = ((0.2, 0.1, 0, 0, 0),(5, 3., 20, 10, 10))
 # initial = (0.82, 0.57, .36, .6)
 # initial = (0.72, 0.3, 0.18, 1.6, 0.5)
 # initial = (1.11919, 0.98740754, 1.7766, .1051285459, 0.0)
-initial = (1., 0.7, 2, 3, 0)
+initial = (1., 0.5, 2, 3, 0)
 # initial = (1.08674554e+00, 1.16530031e+00, 1.74236505e+00, 7.99187696e-09, 3.67480403e-18)
 
 '''입력 데이터를 변경할 때에 꼭 제대로 들어가는지 확인하자'''
@@ -201,7 +201,38 @@ del dat_13TeV_ptdep_fitting[7]                        # delete ATLAS data
 del phi_13TeV_ptdep_fitting[3]                        # delete 0.1<pT<1 phi
 del dat_13TeV_ptdep_fitting[3]                        # delete 0.1<pT<1 data
 
-print(dat_13TeV_ptdep_fitting)
+phi_07TeV_ptdep_fitting = phi_07TeV_ptdep[1::]
+dat_07TeV_ptdep_fitting = dat_07TeV_ptdep[1::]
+
+'''
+    최솟값인 부분을 찾아서 fitting 데이터 자르기(양쪽 끝 자르기)
+    Yridge가 있는 경우를 상정하므로 Yridge 데이터를 fitting하지 않으려는 경우, 이 부분을 다시 세팅해야 함
+'''
+for i in range(len(dat_13TeV_ptdep_fitting)-2):
+    argmin = np.argmin(dat_13TeV_ptdep_fitting[i])
+    if argmin == 0:
+        pass
+    elif argmin == len(dat_13TeV_ptdep_fitting[i]):
+        pass
+    elif argmin<len(dat_13TeV_ptdep_fitting[i])/2:
+        dat_13TeV_ptdep_fitting[i] = dat_13TeV_ptdep_fitting[i][argmin:-argmin]
+        phi_13TeV_ptdep_fitting[i] = phi_13TeV_ptdep_fitting[i][argmin:-argmin]
+    elif argmin>len(dat_13TeV_ptdep_fitting[i])/2:
+        dat_13TeV_ptdep_fitting[i] = dat_13TeV_ptdep_fitting[i][len(dat_13TeV_ptdep_fitting[i])-argmin-1:argmin+1]
+        phi_13TeV_ptdep_fitting[i] = phi_13TeV_ptdep_fitting[i][len(phi_13TeV_ptdep_fitting[i])-argmin-1:argmin+1]
+for i in range(len(dat_07TeV_ptdep_fitting)-1):
+    argmin = np.argmin(dat_07TeV_ptdep_fitting[i])
+    if argmin == 0:
+        pass
+    elif argmin == len(dat_07TeV_ptdep_fitting[i]):
+        pass
+    elif argmin<len(dat_07TeV_ptdep_fitting[i])/2:
+        dat_07TeV_ptdep_fitting[i] = dat_07TeV_ptdep_fitting[i][argmin:-argmin]
+        phi_07TeV_ptdep_fitting[i] = phi_07TeV_ptdep_fitting[i][argmin:-argmin]
+    elif argmin>len(dat_07TeV_ptdep_fitting[i])/2:
+        dat_07TeV_ptdep_fitting[i] = dat_07TeV_ptdep_fitting[i][len(dat_07TeV_ptdep_fitting[i])-argmin-1:argmin+1]
+        phi_07TeV_ptdep_fitting[i] = phi_07TeV_ptdep_fitting[i][len(phi_07TeV_ptdep_fitting[i])-argmin-1:argmin+1]
+
 # '''Fitting 13TeV data'''
 # ptdep = classes.Fitting_gpu(13000, phi_13TeV_ptdep_fitting, dat_13TeV_ptdep_fitting, (ptloww, pthigh), None, ptf, etaf, boundary, initial, "pTdependence")
 # # ptdep_result, ptdep_error = ptdep.fitting(fitting_error)         # error를 대입하려는 경우(absolute sigma)
@@ -215,15 +246,14 @@ print(dat_13TeV_ptdep_fitting)
 ptf_07 = [(1, 2), (2, 3), (3, 4)]
 # etaf_07 = [(2, 4.8), (2, 4.8), (2, 4.8)]
 etaf_07 = [(2, 4), (2, 4), (2, 4)]
-phi_07TeV_ptdep_fitting = phi_07TeV_ptdep[1::]
-dat_07TeV_ptdep_fitting = dat_07TeV_ptdep[1::]
-ptdep = classes.Fitting_gpu(7000, phi_07TeV_ptdep_fitting, dat_07TeV_ptdep_fitting, (ptloww_07, pthigh_07), None, ptf_07, etaf, boundary, initial, "pTdependence")
-# ptdep_result, ptdep_error = ptdep.fitting(fitting_error)         # error를 대입하려는 경우(absolute sigma)
-ptdep_result_07, ptdep_error_07 = ptdep.fitting(None)                  # error를 고려하지 않으려는 경우
-# ptdep_result = [0.68893858, 0.58398214, 0.39126606, 1.31503716]
 
-print(ptdep_result_07)
-print(ptdep_error_07)
+# ptdep = classes.Fitting_gpu(7000, phi_07TeV_ptdep_fitting, dat_07TeV_ptdep_fitting, (ptloww_07, pthigh_07), None, ptf_07, etaf, boundary, initial, "pTdependence")
+# # ptdep_result, ptdep_error = ptdep.fitting(fitting_error)         # error를 대입하려는 경우(absolute sigma)
+# ptdep_result_07, ptdep_error_07 = ptdep.fitting(None)                  # error를 고려하지 않으려는 경우
+# # ptdep_result = [0.68893858, 0.58398214, 0.39126606, 1.31503716]
+
+# print(ptdep_result_07)
+# print(ptdep_error_07)
 
 '''
 FrNk의 크기(xx)에 따라 fitting이 전혀 다르게 되는 것 같은 느낌이 듦. 이 아래는 이를 체크해보기 위함.
@@ -286,8 +316,11 @@ dat_13TeV_ptdep = dat_13TeV_ptdep[0:-2]
 # ptdep_result = [0.798958702, 0.840820694, 6.70967779, 1.49370324, 3.51939886e-12]
 # ptdep_result = [1.08674554, 1.16530031, 1.74236505, 7.99187696e-09, 3.67480403e-18]
 # ptdep_result = [1.16705241, 3.00000000, 11.2761222, 9.72160460e-14, 0.492948044]
-ptdep_result = [9.77048585e-01, 1.79374925e+00, 5.29529630e+00, 8.52747999e-35, 2.20904141e-01]
+# ptdep_result = [9.77048585e-01, 1.79374925e+00, 5.29529630e+00, 8.52747999e-35, 2.20904141e-01]
 # ptdep_result_07 = [1.00266407e+00, 4.83737711e-01, 1.02320562e+01, 4.08927964e+00, 9.12644624e-10]
+ptdep_result = [1.26263183e+00, 3.00000000e+00, 1.16320702e+01, 5.74133130e-16, 6.00599565e-01]
+# ptdep_result_07 = [1.70772461, 1.4136777,  9.6661728, 0.83413059, 1.01163764]  # Without czyam
+ptdep_result_07 = [1.68531124, 1.43640594, 7.85469003, 0.80428453, 0.88283783]
 
 fig1, axes1 = plt.subplots(nrows=1, ncols=5,figsize=(125,20))
 #그래프 그리기
@@ -303,15 +336,21 @@ for i in range(5):
         '''cms plot 13TeV'''
         cms_result = cms.result_plot("pTdependence", None, ptf, (min(phi_13TeV_ptdep[i+3]), max(phi_13TeV_ptdep[i+3])))
         axes1[i].plot(cms_result[0], cms_result[1], color = "black", linewidth=7, linestyle='-')
-        axes1[i].errorbar(phi_13TeV_ptdep[i+3], dat_13TeV_ptdep[i+3]-min(dat_13TeV_ptdep[i+3]), yerr=(abs(err_13TeV_ptdep[2*(i+3)+1]),err_13TeV_ptdep[2*(i+3)]), color="black", linestyle=' ', linewidth=7, capthick=3, capsize=15)
-        axes1[i].scatter(phi_13TeV_ptdep[i+3], dat_13TeV_ptdep[i+3]-min(dat_13TeV_ptdep[i+3]), edgecolors="black", s=800, marker='o', facecolors='none', linewidths=7)
-        axes1[i].scatter(phi_13TeV_ptdep[i+3], dat_13TeV_ptdep[i+3]-min(dat_13TeV_ptdep[i+3]), s=800, marker='+', facecolors='black', linewidths=7)
+        # axes1[i].errorbar(phi_13TeV_ptdep[i+3], dat_13TeV_ptdep[i+3]-min(dat_13TeV_ptdep[i+3]), yerr=(abs(err_13TeV_ptdep[2*(i+3)+1]),err_13TeV_ptdep[2*(i+3)]), color="black", linestyle=' ', linewidth=7, capthick=3, capsize=15)
+        # axes1[i].scatter(phi_13TeV_ptdep[i+3], dat_13TeV_ptdep[i+3]-min(dat_13TeV_ptdep[i+3]), edgecolors="black", s=800, marker='o', facecolors='none', linewidths=7)
+        # axes1[i].scatter(phi_13TeV_ptdep[i+3], dat_13TeV_ptdep[i+3]-min(dat_13TeV_ptdep[i+3]), s=800, marker='+', facecolors='black', linewidths=7)
+        axes1[i].errorbar(phi_13TeV_ptdep[i+3], dat_13TeV_ptdep[i+3], yerr=(abs(err_13TeV_ptdep[2*(i+3)+1]),err_13TeV_ptdep[2*(i+3)]), color="black", linestyle=' ', linewidth=7, capthick=3, capsize=15)
+        axes1[i].scatter(phi_13TeV_ptdep[i+3], dat_13TeV_ptdep[i+3], edgecolors="black", s=800, marker='o', facecolors='none', linewidths=7)
+        axes1[i].scatter(phi_13TeV_ptdep[i+3], dat_13TeV_ptdep[i+3], s=800, marker='+', facecolors='black', linewidths=7)
         '''cms plot 7TeV'''
         cms_07result = cms_07.result_plot("pTdependence", None, ptf, (min(phi_07TeV_ptdep[i]), max(phi_07TeV_ptdep[i])))
         axes1[i].plot(cms_07result[0], cms_07result[1], color = "grey", linewidth=7, linestyle='-')
-        axes1[i].errorbar(phi_07TeV_ptdep[i], dat_07TeV_ptdep[i]-min(dat_07TeV_ptdep[i]), yerr=(abs(err_07TeV_ptdep[2*i+1]),err_07TeV_ptdep[2*i]), color="grey", linestyle=' ', linewidth=7, capthick=3, capsize=15)
-        axes1[i].scatter(phi_07TeV_ptdep[i], dat_07TeV_ptdep[i]-min(dat_07TeV_ptdep[i]), edgecolors="grey", s=800, marker='o', facecolors='none', linewidths=7)
-        axes1[i].scatter(phi_07TeV_ptdep[i], dat_07TeV_ptdep[i]-min(dat_07TeV_ptdep[i]), s=800, marker='+', facecolors='grey', linewidths=7)
+        # axes1[i].errorbar(phi_07TeV_ptdep[i], dat_07TeV_ptdep[i]-min(dat_07TeV_ptdep[i]), yerr=(abs(err_07TeV_ptdep[2*i+1]),err_07TeV_ptdep[2*i]), color="grey", linestyle=' ', linewidth=7, capthick=3, capsize=15)
+        # axes1[i].scatter(phi_07TeV_ptdep[i], dat_07TeV_ptdep[i]-min(dat_07TeV_ptdep[i]), edgecolors="grey", s=800, marker='o', facecolors='none', linewidths=7)
+        # axes1[i].scatter(phi_07TeV_ptdep[i], dat_07TeV_ptdep[i]-min(dat_07TeV_ptdep[i]), s=800, marker='+', facecolors='grey', linewidths=7)
+        axes1[i].errorbar(phi_07TeV_ptdep[i], dat_07TeV_ptdep[i], yerr=(abs(err_07TeV_ptdep[2*i+1]),err_07TeV_ptdep[2*i]), color="grey", linestyle=' ', linewidth=7, capthick=3, capsize=15)
+        axes1[i].scatter(phi_07TeV_ptdep[i], dat_07TeV_ptdep[i], edgecolors="grey", s=800, marker='o', facecolors='none', linewidths=7)
+        axes1[i].scatter(phi_07TeV_ptdep[i], dat_07TeV_ptdep[i], s=800, marker='+', facecolors='grey', linewidths=7)
         # axes1[i].set_title(str(st)+r'$<p_{T, \, \mathrm{trig(assoc)}}<$'+str(en), size = 70, pad=30)
         axes1[i].set_title(r'$0.1<p_{T, \, \mathrm{trig(assoc)}}<1$', size = 70, pad=30)
     elif i==4:
@@ -329,19 +368,28 @@ for i in range(5):
         # print(i)
         # print(dat_13TeV_ptdep[i-1])
         # print(err_13TeV_ptdep[2*i-1])
-        axes1[i].errorbar(phi_13TeV_ptdep[i-1], dat_13TeV_ptdep[i-1]-min(dat_13TeV_ptdep[i-1]), yerr=(abs(err_13TeV_ptdep[2*i-1]),err_13TeV_ptdep[2*i-2]), color="red", linestyle=' ', linewidth=7, capthick=3, capsize=15)
-        axes1[i].scatter(phi_13TeV_ptdep[i-1], dat_13TeV_ptdep[i-1]-min(dat_13TeV_ptdep[i-1]), edgecolors="red", s=800, marker='o', facecolors='none', linewidths=7)
-        axes1[i].scatter(phi_13TeV_ptdep[i-1], dat_13TeV_ptdep[i-1]-min(dat_13TeV_ptdep[i-1]), s=800, marker='+', facecolors='red', linewidths=7)
+        # axes1[i].errorbar(phi_13TeV_ptdep[i-1], dat_13TeV_ptdep[i-1]-min(dat_13TeV_ptdep[i-1]), yerr=(abs(err_13TeV_ptdep[2*i-1]),err_13TeV_ptdep[2*i-2]), color="red", linestyle=' ', linewidth=7, capthick=3, capsize=15)
+        # axes1[i].scatter(phi_13TeV_ptdep[i-1], dat_13TeV_ptdep[i-1]-min(dat_13TeV_ptdep[i-1]), edgecolors="red", s=800, marker='o', facecolors='none', linewidths=7)
+        # axes1[i].scatter(phi_13TeV_ptdep[i-1], dat_13TeV_ptdep[i-1]-min(dat_13TeV_ptdep[i-1]), s=800, marker='+', facecolors='red', linewidths=7)
+        axes1[i].errorbar(phi_13TeV_ptdep[i-1], dat_13TeV_ptdep[i-1], yerr=(abs(err_13TeV_ptdep[2*i-1]),err_13TeV_ptdep[2*i-2]), color="red", linestyle=' ', linewidth=7, capthick=3, capsize=15)
+        axes1[i].scatter(phi_13TeV_ptdep[i-1], dat_13TeV_ptdep[i-1], edgecolors="red", s=800, marker='o', facecolors='none', linewidths=7)
+        axes1[i].scatter(phi_13TeV_ptdep[i-1], dat_13TeV_ptdep[i-1], s=800, marker='+', facecolors='red', linewidths=7)
         '''cms plot 13TeV'''
-        axes1[i].errorbar(phi_13TeV_ptdep[i+3], dat_13TeV_ptdep[i+3]-min(dat_13TeV_ptdep[i+3]), yerr=(abs(err_13TeV_ptdep[2*(i+3)+1]),err_13TeV_ptdep[2*(i+3)]), color="black", linestyle=' ', linewidth=7, capthick=3, capsize=15)
-        axes1[i].scatter(phi_13TeV_ptdep[i+3], dat_13TeV_ptdep[i+3]-min(dat_13TeV_ptdep[i+3]), edgecolors="black", s=800, marker='o', facecolors='none', linewidths=7)
-        axes1[i].scatter(phi_13TeV_ptdep[i+3], dat_13TeV_ptdep[i+3]-min(dat_13TeV_ptdep[i+3]), s=800, marker='+', facecolors='black', linewidths=7)
+        # axes1[i].errorbar(phi_13TeV_ptdep[i+3], dat_13TeV_ptdep[i+3]-min(dat_13TeV_ptdep[i+3]), yerr=(abs(err_13TeV_ptdep[2*(i+3)+1]),err_13TeV_ptdep[2*(i+3)]), color="black", linestyle=' ', linewidth=7, capthick=3, capsize=15)
+        # axes1[i].scatter(phi_13TeV_ptdep[i+3], dat_13TeV_ptdep[i+3]-min(dat_13TeV_ptdep[i+3]), edgecolors="black", s=800, marker='o', facecolors='none', linewidths=7)
+        # axes1[i].scatter(phi_13TeV_ptdep[i+3], dat_13TeV_ptdep[i+3]-min(dat_13TeV_ptdep[i+3]), s=800, marker='+', facecolors='black', linewidths=7)
+        axes1[i].errorbar(phi_13TeV_ptdep[i+3], dat_13TeV_ptdep[i+3], yerr=(abs(err_13TeV_ptdep[2*(i+3)+1]),err_13TeV_ptdep[2*(i+3)]), color="black", linestyle=' ', linewidth=7, capthick=3, capsize=15)
+        axes1[i].scatter(phi_13TeV_ptdep[i+3], dat_13TeV_ptdep[i+3], edgecolors="black", s=800, marker='o', facecolors='none', linewidths=7)
+        axes1[i].scatter(phi_13TeV_ptdep[i+3], dat_13TeV_ptdep[i+3], s=800, marker='+', facecolors='black', linewidths=7)
         '''cms plot 7TeV'''
-        cms_07result = cms_07.result_plot("pTdependence", None, ptf, (min(phi_13TeV_ptdep[i+3]), max(phi_13TeV_ptdep[i+3])))
+        cms_07result = cms_07.result_plot("pTdependence", None, ptf, (min(phi_07TeV_ptdep_fitting[i-1]), max(phi_07TeV_ptdep_fitting[i-1])))
         axes1[i].plot(cms_07result[0], cms_07result[1], color = "grey", linewidth=7, linestyle='-')
-        axes1[i].errorbar(phi_07TeV_ptdep[i], dat_07TeV_ptdep[i]-min(dat_07TeV_ptdep[i]), yerr=(abs(err_07TeV_ptdep[2*i+1]),err_07TeV_ptdep[2*i]), color="grey", linestyle=' ', linewidth=7, capthick=3, capsize=15)
-        axes1[i].scatter(phi_07TeV_ptdep[i], dat_07TeV_ptdep[i]-min(dat_07TeV_ptdep[i]), edgecolors="grey", s=800, marker='o', facecolors='none', linewidths=7)
-        axes1[i].scatter(phi_07TeV_ptdep[i], dat_07TeV_ptdep[i]-min(dat_07TeV_ptdep[i]), s=800, marker='+', facecolors='grey', linewidths=7)
+        # axes1[i].errorbar(phi_07TeV_ptdep[i], dat_07TeV_ptdep[i]-min(dat_07TeV_ptdep[i]), yerr=(abs(err_07TeV_ptdep[2*i+1]),err_07TeV_ptdep[2*i]), color="grey", linestyle=' ', linewidth=7, capthick=3, capsize=15)
+        # axes1[i].scatter(phi_07TeV_ptdep[i], dat_07TeV_ptdep[i]-min(dat_07TeV_ptdep[i]), edgecolors="grey", s=800, marker='o', facecolors='none', linewidths=7)
+        # axes1[i].scatter(phi_07TeV_ptdep[i], dat_07TeV_ptdep[i]-min(dat_07TeV_ptdep[i]), s=800, marker='+', facecolors='grey', linewidths=7)
+        axes1[i].errorbar(phi_07TeV_ptdep[i], dat_07TeV_ptdep[i], yerr=(abs(err_07TeV_ptdep[2*i+1]),err_07TeV_ptdep[2*i]), color="grey", linestyle=' ', linewidth=7, capthick=3, capsize=15)
+        axes1[i].scatter(phi_07TeV_ptdep[i], dat_07TeV_ptdep[i], edgecolors="grey", s=800, marker='o', facecolors='none', linewidths=7)
+        axes1[i].scatter(phi_07TeV_ptdep[i], dat_07TeV_ptdep[i], s=800, marker='+', facecolors='grey', linewidths=7)
         st = i
         en = i+1
         # axes1[i].set_title(str(st)+r'$<p_{T, \, \mathrm{trig(assoc)}}<$'+str(en), size = 70, pad=30)
