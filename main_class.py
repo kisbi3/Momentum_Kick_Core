@@ -15,7 +15,8 @@ import class_pool as classes
 
 mpl.rcParams["text.usetex"] = True
 
-path = ['/home/jaesung/OneDrive/Code/WongCode/Momentum_Kick/13TeV_atlas/atlasgraphs', '/home/jaesung/OneDrive/Code/WongCode/Momentum_Kick/13TeV-Alice/HEPData-ins1840098-v1-csv', '/home/jaesung/OneDrive/Code/WongCode/Momentum_Kick/13TeV/HEPData-ins1397173-v1-csv']
+# path = ['/home/jaesung/OneDrive/Code/WongCode/Momentum_Kick/13TeV_atlas/atlasgraphs', '/home/jaesung/OneDrive/Code/WongCode/Momentum_Kick/13TeV-Alice/HEPData-ins1840098-v1-csv', '/home/jaesung/OneDrive/Code/WongCode/Momentum_Kick/13TeV/HEPData-ins1397173-v1-csv']
+path = ['./data/atldata/13TeV/', './data/alidata/', './data/cmsdata/']
 phi_13TeV_multi_atlas = []
 dat_13TeV_multi_atlas = []
 # 순서 : alice, alice, alice, ..., cms, cms, cms, ....., atlas, alice, cms
@@ -32,23 +33,23 @@ for i in range(5):
     start = 10*i + 90
     end = 10*i + 100
     if start == 130:
-        phi_13TeV_multi_atlas.append(np.loadtxt(path[0]+f'/13TeV_{start}~.csv',delimiter=',',usecols=[0], skiprows=3, max_rows=12))
-        dat_13TeV_multi_atlas.append(np.loadtxt(path[0]+f'/13TeV_{start}~.csv',delimiter=',',usecols=[1], skiprows=3, max_rows=12))
+        phi_13TeV_multi_atlas.append(np.loadtxt(path[0]+f'{start}~.csv',delimiter=',',usecols=[0], skiprows=3, max_rows=12))
+        dat_13TeV_multi_atlas.append(np.loadtxt(path[0]+f'{start}~.csv',delimiter=',',usecols=[1], skiprows=3, max_rows=12))
     else:
-        phi_13TeV_multi_atlas.append(np.loadtxt(path[0]+f'/13TeV_{start}~{end}.csv',delimiter=',',usecols=[0], skiprows=3, max_rows=12))
-        dat_13TeV_multi_atlas.append(np.loadtxt(path[0]+f'/13TeV_{start}~{end}.csv',delimiter=',',usecols=[1], skiprows=3, max_rows=12))
+        phi_13TeV_multi_atlas.append(np.loadtxt(path[0]+f'{start}~{end}.csv',delimiter=',',usecols=[0], skiprows=3, max_rows=12))
+        dat_13TeV_multi_atlas.append(np.loadtxt(path[0]+f'{start}~{end}.csv',delimiter=',',usecols=[1], skiprows=3, max_rows=12))
     dat_13TeV_multi_atlas[i] -= min(dat_13TeV_multi_atlas[i])
 for i in range(3):
     if i==0:
         '''ALICE data, 1~2, 2~3, 3~4'''
         for j in range(3):
             skip = 38*j+129
-            phi_13TeV_ptdep.append(np.loadtxt(path[1]+'/1-NTRIGDN-DPHI.csv',delimiter=',',usecols=[0], skiprows=skip, max_rows=13))
-            dat_13TeV_ptdep.append(np.loadtxt(path[1]+'/1-NTRIGDN-DPHI.csv',delimiter=',',usecols=[3], skiprows=skip, max_rows=13))
-            err_sta1 = np.loadtxt(path[1]+'/1-NTRIGDN-DPHI.csv',delimiter=',',usecols=[4],skiprows=skip, max_rows=13)
-            err_sta2 = np.loadtxt(path[1]+'/1-NTRIGDN-DPHI.csv',delimiter=',',usecols=[5],skiprows=skip, max_rows=13)
-            err_sys1 = np.loadtxt(path[1]+'/1-NTRIGDN-DPHI.csv',delimiter=',',usecols=[6],skiprows=skip, max_rows=13)
-            err_sys2 = np.loadtxt(path[1]+'/1-NTRIGDN-DPHI.csv',delimiter=',',usecols=[7],skiprows=skip, max_rows=13)
+            phi_13TeV_ptdep.append(np.loadtxt(path[1]+'1-NTRIGDN-DPHI.csv',delimiter=',',usecols=[0], skiprows=skip, max_rows=13))
+            dat_13TeV_ptdep.append(np.loadtxt(path[1]+'1-NTRIGDN-DPHI.csv',delimiter=',',usecols=[3], skiprows=skip, max_rows=13))
+            err_sta1 = np.loadtxt(path[1]+'1-NTRIGDN-DPHI.csv',delimiter=',',usecols=[4],skiprows=skip, max_rows=13)
+            err_sta2 = np.loadtxt(path[1]+'1-NTRIGDN-DPHI.csv',delimiter=',',usecols=[5],skiprows=skip, max_rows=13)
+            err_sys1 = np.loadtxt(path[1]+'1-NTRIGDN-DPHI.csv',delimiter=',',usecols=[6],skiprows=skip, max_rows=13)
+            err_sys2 = np.loadtxt(path[1]+'1-NTRIGDN-DPHI.csv',delimiter=',',usecols=[7],skiprows=skip, max_rows=13)
             err_13TeV_ptdep.append((err_sta1**2+err_sys1**2)**0.5)
             err_13TeV_ptdep.append((err_sta2**2+err_sys2**2)**0.5)
             fitting_error.append((err_sta2**2+err_sys2**2)**0.5)
@@ -59,17 +60,17 @@ for i in range(3):
         for j in range(4):
             table = 2*j+25
             if j == 0:
-                phi_13TeV_ptdep.append(np.loadtxt(path[2]+f'/Table{table}.csv',delimiter=',',usecols=[0], skiprows=19, max_rows=11))
-                dat_13TeV_ptdep.append(np.loadtxt(path[2]+f'/Table{table}.csv',delimiter=',',usecols=[1], skiprows=19, max_rows=11))
-                err_13TeV_ptdep.append(np.loadtxt(path[2]+f'/Table{table}.csv',delimiter=',',usecols=[2], skiprows=19, max_rows=11))
-                err_13TeV_ptdep.append(np.loadtxt(path[2]+f'/Table{table}.csv',delimiter=',',usecols=[3], skiprows=19, max_rows=11))
-                fitting_error.append(np.loadtxt(path[2]+f'/Table{table}.csv',delimiter=',',usecols=[3], skiprows=19, max_rows=11))
+                phi_13TeV_ptdep.append(np.loadtxt(path[2]+f'Table{table}.csv',delimiter=',',usecols=[0], skiprows=19, max_rows=11))
+                dat_13TeV_ptdep.append(np.loadtxt(path[2]+f'Table{table}.csv',delimiter=',',usecols=[1], skiprows=19, max_rows=11))
+                err_13TeV_ptdep.append(np.loadtxt(path[2]+f'Table{table}.csv',delimiter=',',usecols=[2], skiprows=19, max_rows=11))
+                err_13TeV_ptdep.append(np.loadtxt(path[2]+f'Table{table}.csv',delimiter=',',usecols=[3], skiprows=19, max_rows=11))
+                fitting_error.append(np.loadtxt(path[2]+f'Table{table}.csv',delimiter=',',usecols=[3], skiprows=19, max_rows=11))
             else:                
-                phi_13TeV_ptdep.append(np.loadtxt(path[2]+f'/Table{table}.csv',delimiter=',',usecols=[0], skiprows=18, max_rows=13))
-                dat_13TeV_ptdep.append(np.loadtxt(path[2]+f'/Table{table}.csv',delimiter=',',usecols=[1], skiprows=18, max_rows=13))
-                err_13TeV_ptdep.append(np.loadtxt(path[2]+f'/Table{table}.csv',delimiter=',',usecols=[2], skiprows=18, max_rows=13))
-                err_13TeV_ptdep.append(np.loadtxt(path[2]+f'/Table{table}.csv',delimiter=',',usecols=[3], skiprows=18, max_rows=13))
-                fitting_error.append(np.loadtxt(path[2]+f'/Table{table}.csv',delimiter=',',usecols=[3], skiprows=18, max_rows=13))
+                phi_13TeV_ptdep.append(np.loadtxt(path[2]+f'Table{table}.csv',delimiter=',',usecols=[0], skiprows=18, max_rows=13))
+                dat_13TeV_ptdep.append(np.loadtxt(path[2]+f'Table{table}.csv',delimiter=',',usecols=[1], skiprows=18, max_rows=13))
+                err_13TeV_ptdep.append(np.loadtxt(path[2]+f'Table{table}.csv',delimiter=',',usecols=[2], skiprows=18, max_rows=13))
+                err_13TeV_ptdep.append(np.loadtxt(path[2]+f'Table{table}.csv',delimiter=',',usecols=[3], skiprows=18, max_rows=13))
+                fitting_error.append(np.loadtxt(path[2]+f'Table{table}.csv',delimiter=',',usecols=[3], skiprows=18, max_rows=13))
 
     '''7TeV'''
     if i==2:
@@ -77,19 +78,19 @@ for i in range(3):
         for j in range(4):
             table = 2*j+26
             if j == 0:
-                phi_07TeV_ptdep.append(np.loadtxt(path[2]+f'/Table{table}.csv',delimiter=',',usecols=[0], skiprows=19, max_rows=11))
-                dat_07TeV_ptdep.append(np.loadtxt(path[2]+f'/Table{table}.csv',delimiter=',',usecols=[1], skiprows=19, max_rows=11))
-                err_07TeV_ptdep.append(np.loadtxt(path[2]+f'/Table{table}.csv',delimiter=',',usecols=[2], skiprows=19, max_rows=11))
-                err_07TeV_ptdep.append(np.loadtxt(path[2]+f'/Table{table}.csv',delimiter=',',usecols=[3], skiprows=19, max_rows=11))
+                phi_07TeV_ptdep.append(np.loadtxt(path[2]+f'Table{table}.csv',delimiter=',',usecols=[0], skiprows=19, max_rows=11))
+                dat_07TeV_ptdep.append(np.loadtxt(path[2]+f'Table{table}.csv',delimiter=',',usecols=[1], skiprows=19, max_rows=11))
+                err_07TeV_ptdep.append(np.loadtxt(path[2]+f'Table{table}.csv',delimiter=',',usecols=[2], skiprows=19, max_rows=11))
+                err_07TeV_ptdep.append(np.loadtxt(path[2]+f'Table{table}.csv',delimiter=',',usecols=[3], skiprows=19, max_rows=11))
             else:                
-                phi_07TeV_ptdep.append(np.loadtxt(path[2]+f'/Table{table}.csv',delimiter=',',usecols=[0], skiprows=18, max_rows=13))
-                dat_07TeV_ptdep.append(np.loadtxt(path[2]+f'/Table{table}.csv',delimiter=',',usecols=[1], skiprows=18, max_rows=13))
-                err_07TeV_ptdep.append(np.loadtxt(path[2]+f'/Table{table}.csv',delimiter=',',usecols=[2], skiprows=18, max_rows=13))
-                err_07TeV_ptdep.append(np.loadtxt(path[2]+f'/Table{table}.csv',delimiter=',',usecols=[3], skiprows=18, max_rows=13))
+                phi_07TeV_ptdep.append(np.loadtxt(path[2]+f'Table{table}.csv',delimiter=',',usecols=[0], skiprows=18, max_rows=13))
+                dat_07TeV_ptdep.append(np.loadtxt(path[2]+f'Table{table}.csv',delimiter=',',usecols=[1], skiprows=18, max_rows=13))
+                err_07TeV_ptdep.append(np.loadtxt(path[2]+f'Table{table}.csv',delimiter=',',usecols=[2], skiprows=18, max_rows=13))
+                err_07TeV_ptdep.append(np.loadtxt(path[2]+f'Table{table}.csv',delimiter=',',usecols=[3], skiprows=18, max_rows=13))
 
 '''ATLAS data'''
-phi_13TeV_ptdep.append(np.loadtxt(path[0]+'/13TeV_90~.csv',delimiter=',',usecols=[0],skiprows=3,max_rows=12))
-dat_13TeV_ptdep.append(np.loadtxt(path[0]+'/13TeV_90~.csv',delimiter=',',usecols=[1],skiprows=3,max_rows=12))
+phi_13TeV_ptdep.append(np.loadtxt(path[0]+'90~.csv',delimiter=',',usecols=[0],skiprows=3,max_rows=12))
+dat_13TeV_ptdep.append(np.loadtxt(path[0]+'90~.csv',delimiter=',',usecols=[1],skiprows=3,max_rows=12))
 
 ''' table에 있는 delta phi_CZYAM값을 직접 이용하여 fitting하기 위함 '''
 ''' ALICE의 CZYAM을 알 수 없기 때문에 이를 통일하기 위해서 table의 delta phi_CZYAM를 이용하기 힘들어 보임. '''
@@ -100,32 +101,32 @@ fitting_error.append(np.zeros(len(phi_13TeV_ptdep[-1]))+0.000703141335931843)
 
 
 '''Yridge data append'''
-err_sta1=np.loadtxt(path[1]+'/Y^mathrm{ridge}.csv',delimiter=',',usecols=[4],skiprows=12,max_rows=7)
-err_sta2=np.loadtxt(path[1]+'/Y^mathrm{ridge}.csv',delimiter=',',usecols=[5],skiprows=12,max_rows=7)
-err_sys1=np.loadtxt(path[1]+'/Y^mathrm{ridge}.csv',delimiter=',',usecols=[6],skiprows=12,max_rows=7)
-err_sys2=np.loadtxt(path[1]+'/Y^mathrm{ridge}.csv',delimiter=',',usecols=[7],skiprows=12,max_rows=7)
-phi_13TeV_ptdep.append(np.loadtxt(path[1]+'/Y^mathrm{ridge}.csv',delimiter=',',usecols=[0],skiprows=12,max_rows=7))
-dat_13TeV_ptdep.append(np.loadtxt(path[1]+'/Y^mathrm{ridge}.csv',delimiter=',',usecols=[3],skiprows=12,max_rows=7))
+err_sta1=np.loadtxt(path[1]+'Y^mathrm{ridge}.csv',delimiter=',',usecols=[4],skiprows=12,max_rows=7)
+err_sta2=np.loadtxt(path[1]+'Y^mathrm{ridge}.csv',delimiter=',',usecols=[5],skiprows=12,max_rows=7)
+err_sys1=np.loadtxt(path[1]+'Y^mathrm{ridge}.csv',delimiter=',',usecols=[6],skiprows=12,max_rows=7)
+err_sys2=np.loadtxt(path[1]+'Y^mathrm{ridge}.csv',delimiter=',',usecols=[7],skiprows=12,max_rows=7)
+phi_13TeV_ptdep.append(np.loadtxt(path[1]+'Y^mathrm{ridge}.csv',delimiter=',',usecols=[0],skiprows=12,max_rows=7))
+dat_13TeV_ptdep.append(np.loadtxt(path[1]+'Y^mathrm{ridge}.csv',delimiter=',',usecols=[3],skiprows=12,max_rows=7))
 err_13TeV_ptdep.append((err_sta1**2+err_sys1**2)**0.5)
 err_13TeV_ptdep.append((err_sta2**2+err_sys2**2)**0.5)
 fitting_error.append((err_sta2**2+err_sys2**2)**0.5)
-err_sta1=np.loadtxt(path[2]+'/Table33.csv',delimiter=',',usecols=[2],skiprows=14,max_rows=9)
-err_sta2=np.loadtxt(path[2]+'/Table33.csv',delimiter=',',usecols=[3],skiprows=14,max_rows=9)
-err_sys1=np.loadtxt(path[2]+'/Table33.csv',delimiter=',',usecols=[4],skiprows=14,max_rows=9)
-err_sys2=np.loadtxt(path[2]+'/Table33.csv',delimiter=',',usecols=[5],skiprows=14,max_rows=9)
-phi_13TeV_ptdep.append(np.loadtxt(path[2]+'/Table33.csv',delimiter=',',usecols=[0],skiprows=14,max_rows=9))
-dat_13TeV_ptdep.append(np.loadtxt(path[2]+'/Table33.csv',delimiter=',',usecols=[1],skiprows=14,max_rows=9))
+err_sta1=np.loadtxt(path[2]+'Table33.csv',delimiter=',',usecols=[2],skiprows=14,max_rows=9)
+err_sta2=np.loadtxt(path[2]+'Table33.csv',delimiter=',',usecols=[3],skiprows=14,max_rows=9)
+err_sys1=np.loadtxt(path[2]+'Table33.csv',delimiter=',',usecols=[4],skiprows=14,max_rows=9)
+err_sys2=np.loadtxt(path[2]+'Table33.csv',delimiter=',',usecols=[5],skiprows=14,max_rows=9)
+phi_13TeV_ptdep.append(np.loadtxt(path[2]+'Table33.csv',delimiter=',',usecols=[0],skiprows=14,max_rows=9))
+dat_13TeV_ptdep.append(np.loadtxt(path[2]+'Table33.csv',delimiter=',',usecols=[1],skiprows=14,max_rows=9))
 err_13TeV_ptdep.append((err_sta1**2+err_sys1**2)**0.5)
 err_13TeV_ptdep.append((err_sta2**2+err_sys2**2)**0.5)
 fitting_error.append((err_sta2**2+err_sys2**2)**0.5)
 # fitting_error = err_13TeV_ptdep.insert(atlas_error_indexing, atlaserror)
 # fitting_error.insert(atlas_error_indexing, atlaserror)
-err_sta1=np.loadtxt(path[2]+'/Table34.csv',delimiter=',',usecols=[2],skiprows=14,max_rows=9)
-err_sta2=np.loadtxt(path[2]+'/Table34.csv',delimiter=',',usecols=[3],skiprows=14,max_rows=9)
-err_sys1=np.loadtxt(path[2]+'/Table34.csv',delimiter=',',usecols=[4],skiprows=14,max_rows=9)
-err_sys2=np.loadtxt(path[2]+'/Table34.csv',delimiter=',',usecols=[5],skiprows=14,max_rows=9)
-phi_07TeV_ptdep.append(np.loadtxt(path[2]+'/Table34.csv',delimiter=',',usecols=[0],skiprows=14,max_rows=9))
-dat_07TeV_ptdep.append(np.loadtxt(path[2]+'/Table34.csv',delimiter=',',usecols=[1],skiprows=14,max_rows=9))
+err_sta1=np.loadtxt(path[2]+'Table34.csv',delimiter=',',usecols=[2],skiprows=14,max_rows=9)
+err_sta2=np.loadtxt(path[2]+'Table34.csv',delimiter=',',usecols=[3],skiprows=14,max_rows=9)
+err_sys1=np.loadtxt(path[2]+'Table34.csv',delimiter=',',usecols=[4],skiprows=14,max_rows=9)
+err_sys2=np.loadtxt(path[2]+'Table34.csv',delimiter=',',usecols=[5],skiprows=14,max_rows=9)
+phi_07TeV_ptdep.append(np.loadtxt(path[2]+'Table34.csv',delimiter=',',usecols=[0],skiprows=14,max_rows=9))
+dat_07TeV_ptdep.append(np.loadtxt(path[2]+'Table34.csv',delimiter=',',usecols=[1],skiprows=14,max_rows=9))
 err_07TeV_ptdep.append((err_sta1**2+err_sys1**2)**0.5)
 err_07TeV_ptdep.append((err_sta2**2+err_sys2**2)**0.5)
 
@@ -135,17 +136,17 @@ pthigh = []
 ptloww_07 = []
 pthigh_07 = []
 
-ptloww_ali = np.loadtxt(path[1]+'/Y^mathrm{ridge}.csv',delimiter=',',usecols=[1],skiprows=12,max_rows=7)
-pthigh_ali = np.loadtxt(path[1]+'/Y^mathrm{ridge}.csv',delimiter=',',usecols=[2],skiprows=12,max_rows=7)
-ptloww_cms = np.loadtxt(path[2]+'/Table33.csv',delimiter=',',usecols=[6],skiprows=14,max_rows=9)
-pthigh_cms = np.loadtxt(path[2]+'/Table33.csv',delimiter=',',usecols=[7],skiprows=14,max_rows=9)
+ptloww_ali = np.loadtxt(path[1]+'Y^mathrm{ridge}.csv',delimiter=',',usecols=[1],skiprows=12,max_rows=7)
+pthigh_ali = np.loadtxt(path[1]+'Y^mathrm{ridge}.csv',delimiter=',',usecols=[2],skiprows=12,max_rows=7)
+ptloww_cms = np.loadtxt(path[2]+'Table33.csv',delimiter=',',usecols=[6],skiprows=14,max_rows=9)
+pthigh_cms = np.loadtxt(path[2]+'Table33.csv',delimiter=',',usecols=[7],skiprows=14,max_rows=9)
 
-ptloww.append(np.loadtxt(path[1]+'/Y^mathrm{ridge}.csv',delimiter=',',usecols=[1],skiprows=12,max_rows=7))
-pthigh.append(np.loadtxt(path[1]+'/Y^mathrm{ridge}.csv',delimiter=',',usecols=[2],skiprows=12,max_rows=7))
-ptloww.append(np.loadtxt(path[2]+'/Table33.csv',delimiter=',',usecols=[6],skiprows=14,max_rows=9))
-pthigh.append(np.loadtxt(path[2]+'/Table33.csv',delimiter=',',usecols=[7],skiprows=14,max_rows=9))
-ptloww_07.append(np.loadtxt(path[2]+'/Table34.csv',delimiter=',',usecols=[6],skiprows=14,max_rows=9))
-pthigh_07.append(np.loadtxt(path[2]+'/Table34.csv',delimiter=',',usecols=[7],skiprows=14,max_rows=9))
+ptloww.append(np.loadtxt(path[1]+'Y^mathrm{ridge}.csv',delimiter=',',usecols=[1],skiprows=12,max_rows=7))
+pthigh.append(np.loadtxt(path[1]+'Y^mathrm{ridge}.csv',delimiter=',',usecols=[2],skiprows=12,max_rows=7))
+ptloww.append(np.loadtxt(path[2]+'Table33.csv',delimiter=',',usecols=[6],skiprows=14,max_rows=9))
+pthigh.append(np.loadtxt(path[2]+'Table33.csv',delimiter=',',usecols=[7],skiprows=14,max_rows=9))
+ptloww_07.append(np.loadtxt(path[2]+'Table34.csv',delimiter=',',usecols=[6],skiprows=14,max_rows=9))
+pthigh_07.append(np.loadtxt(path[2]+'Table34.csv',delimiter=',',usecols=[7],skiprows=14,max_rows=9))
 
 
 '''Fitting with ATLAS Data'''
