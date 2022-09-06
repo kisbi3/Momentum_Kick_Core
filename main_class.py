@@ -12,6 +12,8 @@ import matplotlib.ticker as ticker
 # Functions Files
 import class_pool as classes
 
+#Check CM energy dependence
+
 
 mpl.rcParams["text.usetex"] = True
 
