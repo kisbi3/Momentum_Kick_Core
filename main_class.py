@@ -12,6 +12,7 @@ import matplotlib.ticker as ticker
 # Functions Files
 import class_pool as classes
 
+#Only pT dependence
 
 mpl.rcParams["text.usetex"] = True
 
