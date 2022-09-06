@@ -14,11 +14,16 @@ import class_pool as classes
 
 #Check CM energy dependence
 
+'''
+    다른 Center of mass Energy라고 하더라도 동일한 multiplicity라면 그래프를 동시에 그려서 비교할 수 있는가?
+    일단 동일한 multiplicity에 대해서 비교해보도록 하자.
+'''
+
 
 mpl.rcParams["text.usetex"] = True
 
 # path = ['/home/jaesung/OneDrive/Code/WongCode/Momentum_Kick/13TeV_atlas/atlasgraphs', '/home/jaesung/OneDrive/Code/WongCode/Momentum_Kick/13TeV-Alice/HEPData-ins1840098-v1-csv', '/home/jaesung/OneDrive/Code/WongCode/Momentum_Kick/13TeV/HEPData-ins1397173-v1-csv']
-path = ['./data/atldata/13TeV/', './data/alidata/', './data/cmsdata/']
+path = ['./data/atldata/13TeV/', './data/alidata/', './data/cmsdata/', './data/atldata/2.76TeV/', './data/atldata/5.02TeV/']
 phi_13TeV_multi_atlas = []
 dat_13TeV_multi_atlas = []
 # 순서 : alice, alice, alice, ..., cms, cms, cms, ....., atlas, alice, cms
@@ -31,6 +36,7 @@ dat_07TeV_ptdep = []
 err_07TeV_ptdep = []
 fitting_error = []
 # delta_phi_zyam = []
+'''append atlas data'''
 for i in range(5):
     start = 10*i + 90
     end = 10*i + 100
@@ -41,6 +47,7 @@ for i in range(5):
         phi_13TeV_multi_atlas.append(np.loadtxt(path[0]+f'{start}~{end}.csv',delimiter=',',usecols=[0], skiprows=3, max_rows=12))
         dat_13TeV_multi_atlas.append(np.loadtxt(path[0]+f'{start}~{end}.csv',delimiter=',',usecols=[1], skiprows=3, max_rows=12))
     dat_13TeV_multi_atlas[i] -= min(dat_13TeV_multi_atlas[i])
+'''append 13TeV pt dependence data'''
 for i in range(3):
     if i==0:
         '''ALICE data, 1~2, 2~3, 3~4'''
@@ -150,6 +157,32 @@ pthigh.append(np.loadtxt(path[2]+'Table33.csv',delimiter=',',usecols=[7],skiprow
 ptloww_07.append(np.loadtxt(path[2]+'Table34.csv',delimiter=',',usecols=[6],skiprows=14,max_rows=9))
 pthigh_07.append(np.loadtxt(path[2]+'Table34.csv',delimiter=',',usecols=[7],skiprows=14,max_rows=9))
 
+'''
+    Append data for check center of mass energy
+    data : ATLAS(2.76), ATLAS(5.02), ATLAS(13)
+    Only append 90<N_ch<100
+'''
+CMenergydep_phi = []
+CMenergydep_dat = {}        # CM energy와 data를 matching 시키기 위함.
+CMenergydep_err = []
+for i in range(3):
+    # 2.76TeV
+    if i==0:
+        CMenergydep_phi.append(np.loadtxt(path[3]+'90~100.csv',delimiter=',',usecols=[0],skiprows=1))
+        # CMenergydep_dat.append(np.loadtxt(path[3]+'90~100.csv',delimiter=',',usecols=[1],skiprows=1))
+        CMenergydep_dat.update({'2.76': np.loadtxt(path[3]+'90~100.csv',delimiter=',',usecols=[1],skiprows=1)})
+        CMenergydep_err.append(np.loadtxt(path[3]+'90~100.csv',delimiter=',',usecols=[2],skiprows=1))
+        CMenergydep_err.append(np.loadtxt(path[3]+'90~100.csv',delimiter=',',usecols=[3],skiprows=1))
+    # 5.02TeV
+    elif i==1:
+        CMenergydep_phi.append(np.loadtxt(path[4]+'90~100.csv',delimiter=',',usecols=[0],skiprows=1,max_rows=12))
+        # CMenergydep_dat.append(np.loadtxt(path[4]+'90~100.csv',delimiter=',',usecols=[1],skiprows=1,max_rows=12))
+        CMenergydep_dat.update({'5.02': np.loadtxt(path[4]+'90~100.csv',delimiter=',',usecols=[1],skiprows=1)})
+    # 13TeV
+    elif i==2:
+        CMenergydep_phi.append(np.loadtxt(path[0]+'90~100.csv',delimiter=',',usecols=[0],skiprows=3,max_rows=12))
+        # CMenergydep_dat.append(np.loadtxt(path[0]+'90~100.csv',delimiter=',',usecols=[1],skiprows=3,max_rows=12))
+        CMenergydep_dat.update({'13000': np.loadtxt(path[0]+'90~100.csv',delimiter=',',usecols=[1],skiprows=3,max_rows=12)})
 
 '''Fitting with ATLAS Data'''
 # ptf = [(1, 2), (2, 3), (3, 4), (1, 2), (2, 3), (3, 4), (0.5, 5)]
@@ -241,7 +274,6 @@ for i in range(len(dat_07TeV_ptdep_fitting)-1):
 # # ptdep_result, ptdep_error = ptdep.fitting(fitting_error)         # error를 대입하려는 경우(absolute sigma)
 # ptdep_result, ptdep_error = ptdep.fitting(None)                  # error를 고려하지 않으려는 경우
 # # ptdep_result = [0.68893858, 0.58398214, 0.39126606, 1.31503716]
-
 # print(ptdep_result)
 # print(ptdep_error)
 
@@ -249,36 +281,12 @@ for i in range(len(dat_07TeV_ptdep_fitting)-1):
 ptf_07 = [(1, 2), (2, 3), (3, 4)]
 # etaf_07 = [(2, 4.8), (2, 4.8), (2, 4.8)]
 etaf_07 = [(2, 4), (2, 4), (2, 4)]
-
 # ptdep = classes.Fitting_gpu(7000, phi_07TeV_ptdep_fitting, dat_07TeV_ptdep_fitting, (ptloww_07, pthigh_07), None, ptf_07, etaf, boundary, initial, "pTdependence")
 # # ptdep_result, ptdep_error = ptdep.fitting(fitting_error)         # error를 대입하려는 경우(absolute sigma)
 # ptdep_result_07, ptdep_error_07 = ptdep.fitting(None)                  # error를 고려하지 않으려는 경우
 # # ptdep_result = [0.68893858, 0.58398214, 0.39126606, 1.31503716]
-
 # print(ptdep_result_07)
 # print(ptdep_error_07)
-
-'''
-FrNk의 크기(xx)에 따라 fitting이 전혀 다르게 되는 것 같은 느낌이 듦. 이 아래는 이를 체크해보기 위함.
-[   kick             Tem             xx              yy              zz      ]
-[0.8370979       1.00076857      10.             1.54066307      0.18506123]
-[0.838259744     0.955162987     4.99997430      1.00930624      9.12474390e-07]
-[0.929536242     1.21218695      2.99999981      0.152785945     1.77795470e-08]
-[0.90065667      1.28945833      14.99687732     1.47631147      0.38479797]
-'''
-
-'''
-    일단 결과는 다음과 같지만, alice의 pT distribution까지만 추가해서 fitting 해보자.
-    phi correlation만 가지고 fitting한 결과는 다음과 같다.
-[   kick             Tem             xx              yy              zz      ]
-[0.91627167      1.37536975      16.517866       1.45838023      0.4270991 ]
-'''
-
-'''
-                alice의 Yridge만 포함하여 fitting 해보자.
-
-'''
-
 
 '''multiplicity fitting'''
 # boundary2 = ((0.7, 0.4, 0, 0, 1, 100),(5, 0.7, 5, 10, 20, 300))
@@ -287,12 +295,19 @@ FrNk의 크기(xx)에 따라 fitting이 전혀 다르게 되는 것 같은 느�
 # multipl_result, multipl_error = multipl.fitting()
 # print(multipl_result)
 # print(multipl_error)
-
 # dist = []
 # for i in range(5):
 #     multi= 10*i + 95
 #     dist.append(Ridge(Aridge, *popt, multi, 2, 5))
 
+print(CMenergydep_dat)
+'''To Check Center of mass Energy'''
+ptf_CM = [(0.5, 5), (0.5, 5), (0.5, 5)]
+etaf_CM = [(2, 5), (2, 5), (2, 5)]
+ptdep = classes.Fitting_gpu(7000, CMenergydep_phi, CMenergydep_dat, None, None, ptf_CM, etaf_CM, boundary, initial, "CMenergy")
+ptdep_result_cm, ptdep_error_cm = ptdep.fitting(None)
+print(ptdep_result_cm)
+print(ptdep_error_cm)
 
 
 time_calculate = time.time()

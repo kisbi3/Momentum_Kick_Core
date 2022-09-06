@@ -108,6 +108,8 @@ class Fitting_gpu:
                 popt, pcov = scipy.optimize.curve_fit(self.fitting_func, xdata = self.phi_array, ydata = self.data, bounds=self.boundary, p0 = self.initial, sigma = error_array, absolute_sigma = True)
             elif self.mode == "Multiplicity":
                 popt, pcov = scipy.optimize.curve_fit(self.fitting_func__multi, xdata = self.phi_array, ydata = self.data, bounds=self.boundary, p0 = self.initial, sigma = error_array, absolute_sigma = True)
+            elif self.mode == "CMenergy":
+                popt, pcov = scipy.optimize.curve_fit(self.fitting_func__multi, xdata = self.phi_array, ydata = self.data, bounds=self.boundary, p0 = self.initial, sigma = error_array, absolute_sigma = True)
             elif self.mode == "Both":
                 pass    #temporarily
 
