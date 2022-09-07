@@ -28,10 +28,11 @@ def Aridge(pti, yi, T, m, md, a, sqrSnn, mp):  #P_T Initial, Rapidity Initial, T
         return pti*(x**a)*cp.exp(-cp.sqrt(m*m+pti*pti)/T)/cp.sqrt(md*md+pti*pti)
     except:
         print("Error in Function_cpu, Aridge")
-
+# Drawing Graph에서는 되는거 같은데 왜 안될까
 
 def Aridge_result(pti, yi, T, m, md, a, sqrSnn, mp):  #P_T Initial, Rapidity Initial, Temperature, pion mass, cut off parameter, fall of parameter, Squareroot(Snn), proton mass
-    print(lightcone(pti, yi, sqrSnn, mp, m))
+    # print(pti, yi, sqrSnn, mp, m)
+    # print(lightcone(pti, yi, sqrSnn, mp, m))
     x = 1-lightcone(pti, yi, sqrSnn, mp, m)
     x = cp.where(x>0, x, 0)
     # print(x)
