@@ -163,26 +163,28 @@ pthigh_07.append(np.loadtxt(path[2]+'Table34.csv',delimiter=',',usecols=[7],skip
     Only append 90<N_ch<100
 '''
 CMenergydep_phi = []
-CMenergydep_dat = {}        # CM energy와 data를 matching 시키기 위함.
+# 어차피 따로 fitting 해야 함
+# CMenergydep_dat = {}        # CM energy와 data를 matching 시키기 위함.
+CMenergydep_dat = []
 CMenergydep_err = []
 for i in range(3):
     # 2.76TeV
     if i==0:
         CMenergydep_phi.append(np.loadtxt(path[3]+'90~100.csv',delimiter=',',usecols=[0],skiprows=1))
-        # CMenergydep_dat.append(np.loadtxt(path[3]+'90~100.csv',delimiter=',',usecols=[1],skiprows=1))
-        CMenergydep_dat.update({'2.76': np.loadtxt(path[3]+'90~100.csv',delimiter=',',usecols=[1],skiprows=1)})
+        CMenergydep_dat.append(np.loadtxt(path[3]+'90~100.csv',delimiter=',',usecols=[1],skiprows=1))
+        # CMenergydep_dat.update({'2.76': np.loadtxt(path[3]+'90~100.csv',delimiter=',',usecols=[1],skiprows=1)})
         CMenergydep_err.append(np.loadtxt(path[3]+'90~100.csv',delimiter=',',usecols=[2],skiprows=1))
         CMenergydep_err.append(np.loadtxt(path[3]+'90~100.csv',delimiter=',',usecols=[3],skiprows=1))
     # 5.02TeV
     elif i==1:
         CMenergydep_phi.append(np.loadtxt(path[4]+'90~100.csv',delimiter=',',usecols=[0],skiprows=1,max_rows=12))
-        # CMenergydep_dat.append(np.loadtxt(path[4]+'90~100.csv',delimiter=',',usecols=[1],skiprows=1,max_rows=12))
-        CMenergydep_dat.update({'5.02': np.loadtxt(path[4]+'90~100.csv',delimiter=',',usecols=[1],skiprows=1)})
+        CMenergydep_dat.append(np.loadtxt(path[4]+'90~100.csv',delimiter=',',usecols=[1],skiprows=1,max_rows=12))
+        # CMenergydep_dat.update({'5.02': np.loadtxt(path[4]+'90~100.csv',delimiter=',',usecols=[1],skiprows=1)})
     # 13TeV
     elif i==2:
         CMenergydep_phi.append(np.loadtxt(path[0]+'90~100.csv',delimiter=',',usecols=[0],skiprows=3,max_rows=12))
-        # CMenergydep_dat.append(np.loadtxt(path[0]+'90~100.csv',delimiter=',',usecols=[1],skiprows=3,max_rows=12))
-        CMenergydep_dat.update({'13000': np.loadtxt(path[0]+'90~100.csv',delimiter=',',usecols=[1],skiprows=3,max_rows=12)})
+        CMenergydep_dat.append(np.loadtxt(path[0]+'90~100.csv',delimiter=',',usecols=[1],skiprows=3,max_rows=12))
+        # CMenergydep_dat.update({'13000': np.loadtxt(path[0]+'90~100.csv',delimiter=',',usecols=[1],skiprows=3,max_rows=12)})
 
 '''Fitting with ATLAS Data'''
 # ptf = [(1, 2), (2, 3), (3, 4), (1, 2), (2, 3), (3, 4), (0.5, 5)]
@@ -300,12 +302,19 @@ etaf_07 = [(2, 4), (2, 4), (2, 4)]
 #     multi= 10*i + 95
 #     dist.append(Ridge(Aridge, *popt, multi, 2, 5))
 
-print(CMenergydep_dat)
+
 '''To Check Center of mass Energy'''
-ptf_CM = [(0.5, 5), (0.5, 5), (0.5, 5)]
-etaf_CM = [(2, 5), (2, 5), (2, 5)]
-ptdep = classes.Fitting_gpu(7000, CMenergydep_phi, CMenergydep_dat, None, None, ptf_CM, etaf_CM, boundary, initial, "CMenergy")
-ptdep_result_cm, ptdep_error_cm = ptdep.fitting(None)
+sqrSnn = [2.76, 5.02, 13]
+ptf_CM = [(0.5, 5)]
+etaf_CM = [(2, 5)]
+ptdep_result_cm = []
+ptdep_error_cm = []
+for i in range(len(sqrSnn)):
+    print(f"sqrSnn = {sqrSnn[i]}")
+    ptdep = classes.Fitting_gpu(sqrSnn[i], CMenergydep_phi[i], CMenergydep_dat[i], None, None, ptf_CM, etaf_CM, boundary, initial, "CMenergy")
+    result, error = ptdep.fitting(None)
+    ptdep_result_cm.append(result)
+    ptdep_error_cm.append(error)
 print(ptdep_result_cm)
 print(ptdep_error_cm)
 

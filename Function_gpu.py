@@ -31,8 +31,10 @@ def Aridge(pti, yi, T, m, md, a, sqrSnn, mp):  #P_T Initial, Rapidity Initial, T
 
 
 def Aridge_result(pti, yi, T, m, md, a, sqrSnn, mp):  #P_T Initial, Rapidity Initial, Temperature, pion mass, cut off parameter, fall of parameter, Squareroot(Snn), proton mass
+    print(lightcone(pti, yi, sqrSnn, mp, m))
     x = 1-lightcone(pti, yi, sqrSnn, mp, m)
     x = cp.where(x>0, x, 0)
+    # print(x)
     # print(x)
     try:
         return (x**a)*cp.exp(-cp.sqrt(m*m+pti*pti)/T)/cp.sqrt(md*md+pti*pti)
@@ -51,7 +53,10 @@ def Ridge_dist(Aridge, ptf, etaf, phif, q, T, sqrSnn, mp, m, mb, md, a):  #Aridg
     yf = cp.log((Energy+ptf*cp.sinh(etaf))/(Energy-ptf*cp.sinh(etaf)))/2
     
     try:
-        return (Aridge*Aridge_result(pti, yi, T, m, md, a, sqrSnn, mp))*cp.sqrt(1.-((mb*mb)/((mb*mb+ptf*ptf)*cp.cosh(yf)*cp.cosh(yf))))*(Energy/Energy_i)   # E/Ei 임을 명심하자.
+        result = (Aridge*Aridge_result(pti, yi, T, m, md, a, sqrSnn, mp))*cp.sqrt(1.-((mb*mb)/((mb*mb+ptf*ptf)*cp.cosh(yf)*cp.cosh(yf))))*(Energy/Energy_i)
+        # print(cp.sqrt(1.-((mb*mb)/((mb*mb+ptf*ptf)*cp.cosh(yf)*cp.cosh(yf))))*(Energy/Energy_i))
+        # print(Aridge_result(pti, yi, T, m, md, a, sqrSnn, mp))
+        return result   # E/Ei 임을 명심하자.
     except:
         print("Error in Function_gpu, Ridge_dist")
         exit(0)

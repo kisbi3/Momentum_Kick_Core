@@ -30,25 +30,30 @@ class Fitting_gpu:
     def __init__(self, sqrSnn, phi_array, data, pt_range, multi, ptf, etaf, boundary, initial, mode):
         self.sqrSnn = sqrSnn
         # array or list (2d)
-        self.Number_of_Array = len(phi_array)      # Number of Arrays
-        array_length = []
-        total_length = 0
-        dist_phi_array = np.array([])
-        dist_dat_array = np.array([])
-        for i in range(len(phi_array)):
-            array_length.append(len(phi_array[i]))
-            total_length += len(phi_array[i])
-            if i==0:
-                dist_phi_array = phi_array[i]
-                dist_dat_array = data[i]
-            else:
-                dist_phi_array = np.concatenate((dist_phi_array, phi_array[i]))
-                dist_dat_array = np.concatenate((dist_dat_array, data[i]))
-        self.array_length = array_length
-        self.phi_array = dist_phi_array
+        if mode == "CMenergy":
+            self.array_length = 1
+            self.phi_array = phi_array
+            self.data = data
 
-        # self.data = np.array(data).flatten().tolist()
-        self.data = dist_dat_array
+        else:
+            self.Number_of_Array = len(phi_array)      # Number of Arrays
+            array_length = []
+            total_length = 0
+            dist_phi_array = np.array([])
+            dist_dat_array = np.array([])
+            for i in range(len(phi_array)):
+                array_length.append(len(phi_array[i]))
+                total_length += len(phi_array[i])
+                if i==0:
+                    dist_phi_array = phi_array[i]
+                    dist_dat_array = data[i]
+                else:
+                    dist_phi_array = np.concatenate((dist_phi_array, phi_array[i]))
+                    dist_dat_array = np.concatenate((dist_dat_array, data[i]))
+            self.array_length = array_length
+            self.phi_array = dist_phi_array
+            self.data = dist_dat_array
+        
         # Multiplicity (tuple or list or array)
         self.multi = multi
         # [ptf_start, ptf_end] (tuple or list)
@@ -65,15 +70,24 @@ class Fitting_gpu:
         # mode : Multiplciity, pTdependence, Both
         self.mode = mode
         # Yridge ([pt_low : array], [pt_high : array]) : tuple
-        self.pt_range = pt_range
-        '''number of pt distribution data ex) 13TeV : ALICE + CMS = 2, 7 TeV : CMS = 1'''
-        self.ptdis_number = len(pt_range[0])
-        ''' Line 70~87 to be deleted '''
+        if pt_range is None:
+            self.ptdis_number = None
+
+        else:
+            self.pt_range = pt_range
+            '''number of pt distribution data ex) 13TeV : ALICE + CMS = 2, 7 TeV : CMS = 1'''
+            self.ptdis_number = len(pt_range[0])
+
 
         '''데이터 길이 확인하기 위함'''
-        if (len(self.phi_array) != len(self.data)) and (len(self.data) != len(self.ptf)) and (len(self.ptf) != len(self.etaf)):
-            print("phi array and data array have to be same length")
-            quit()
+        if mode == "CMenergy":
+            if (len(self.phi_array) != len(self.data)):
+                print("phi array and data array have to be same length")
+                quit()
+        else:
+            if (len(self.phi_array) != len(self.data)) and (len(self.data) != len(self.ptf)) and (len(self.ptf) != len(self.etaf)):
+                print("phi array and data array have to be same length")
+                quit()
     
     def __FrNk(self, xx, yy, zz, pt):
         # return xx+yy*pt*pt
@@ -90,6 +104,8 @@ class Fitting_gpu:
                 popt, pcov = scipy.optimize.curve_fit(self.fitting_func, xdata = self.phi_array, ydata = self.data, bounds=self.boundary, p0 = self.initial)
             elif self.mode == "Multiplicity":
                 popt, pcov = scipy.optimize.curve_fit(self.fitting_func__multi, xdata = self.phi_array, ydata = self.data, bounds=self.boundary, p0 = self.initial)
+            elif self.mode == "CMenergy":
+                popt, pcov = scipy.optimize.curve_fit(self.fitting_func, xdata = self.phi_array, ydata = self.data, bounds=self.boundary, p0 = self.initial)
             elif self.mode == "Both":
                 pass    #temporarily
 
@@ -109,7 +125,7 @@ class Fitting_gpu:
             elif self.mode == "Multiplicity":
                 popt, pcov = scipy.optimize.curve_fit(self.fitting_func__multi, xdata = self.phi_array, ydata = self.data, bounds=self.boundary, p0 = self.initial, sigma = error_array, absolute_sigma = True)
             elif self.mode == "CMenergy":
-                popt, pcov = scipy.optimize.curve_fit(self.fitting_func__multi, xdata = self.phi_array, ydata = self.data, bounds=self.boundary, p0 = self.initial, sigma = error_array, absolute_sigma = True)
+                popt, pcov = scipy.optimize.curve_fit(self.fitting_func, xdata = self.phi_array, ydata = self.data, bounds=self.boundary, p0 = self.initial, sigma = error_array, absolute_sigma = True)
             elif self.mode == "Both":
                 pass    #temporarily
 
@@ -156,58 +172,64 @@ class Fitting_gpu:
         zz는 frnk에 추가적으로 들어갈 수 있는 parameter '''
 
     def fitting_func(self, given_array, kick, Tem, xx, yy, zz):
-    # def fitting_func(self, kick, Tem, xx, yy):
-        # phi_array = phi_dist.reshape((self.Number_of_Array,-1))
-        ''' delete Yridge array'''
-        numberof_ptdis = 0
-        for i in range(self.ptdis_number):
-            numberof_ptdis += len(self.pt_range[0][i])
-        # print(numberof_ptdis)
-        given_array = given_array[0:-numberof_ptdis]
-        # given_array = given_array[0:-14]      # fitting에 사용하는 데이터가 Yridge가 포함되어 있는 경우 활성화
-        # given_array = given_array[0:-5]      # CMS Yridge만 제거 있는하려는 경우 활성화
-        phi_array = []
-        start = 0
-        # end = self.array_length[0]
-        ''' Yridge 추가할 예정 '''
-        '''Yridge를 gpu에 할당, 나머지를 cpu에 할당할 예정'''
-        # 아직 안함
-        '''마지막 두개는 Yridge이므로 이 두개를 제외해야 함'''
-        '''Yridge는 너무 오차가 커서 fitting이 잘 안되는 것으로 보임'''
-        for i in range(self.Number_of_Array - self.ptdis_number):       # fitting에 사용하는 데이터가 Yridge가 포함되어 있는 경우 활성화
-        # for i in range(self.Number_of_Array-1):       # CMS Yridge만 제거 있는하려는 경우 활성화
-        # for i in range(self.Number_of_Array):         # Yridge 전부 없는경우 활성화
-            end = start + self.array_length[i]
-            phi_array.append(given_array[start : end])
-            start += self.array_length[i]
+        if self.ptdis_number is None:
+            phi_array = given_array
+        else:
+            ''' delete Yridge array'''
+            numberof_ptdis = 0
+            for i in range(self.ptdis_number):
+                numberof_ptdis += len(self.pt_range[0][i])
+            given_array = given_array[0:-numberof_ptdis]
+            phi_array = []
+            start = 0
+            for i in range(self.Number_of_Array - self.ptdis_number):       # fitting에 사용하는 데이터가 Yridge가 포함되어 있는 경우 활성화
+                end = start + self.array_length[i]
+                phi_array.append(given_array[start : end])
+                start += self.array_length[i]
 
         Aridge_bin = 500
         pti, yi = np.meshgrid(np.linspace(self.__pti[0], self.__pti[1], Aridge_bin), np.linspace(self.__yi[0], self.__yi[1], Aridge_bin))
         dyi = (self.__pti[1] - self.__pti[0])/Aridge_bin
         dpti = (self.__yi[1] - self.__yi[0])/Aridge_bin
         Aridge = cp.asarray(1/np.sum(cpu.Aridge(pti, yi, Tem, self.__m, self.__md, self.__a, self.sqrSnn, self.__mp)*dyi*dpti*2*np.pi))
-        result = []
-        result_dist = []
-        for i in range(len(phi_array)):
-            dist = self.__ptdep(phi_array[i], self.etaf[i], self.ptf[i], Aridge, kick, Tem, xx, yy, zz)
-            result_dist.append(dist-min(dist))
-            if i==0:
-                result = result_dist[i]
-            else:
-                result = np.concatenate((result, result_dist[i]))
-        result = np.concatenate((result, self.Yridge(Aridge, kick, Tem, xx, yy, zz)))       # fitting에 사용하는 데이터가 Yridge가 포함되어 있는 경우 활성화
-        self.__count = self.__count + 1
-        print(f"{self.__count}회", kick, Tem, xx, yy, zz, np.sum((result-self.data)**2))
+
+        if self.ptdis_number is None and self.array_length == 1:
+            deltapt = self.ptf[0][1] - self.ptf[0][0]
+            result_dist = deltapt*self.__ptdep(phi_array, self.etaf[0], self.ptf[0], Aridge, kick, Tem, xx, yy, zz)
+            result = result_dist - min(result_dist)
+            self.__count = self.__count + 1
+            print(result, self.data)
+            print(f"{self.__count}회", kick, Tem, xx, yy, zz, np.sum((result-self.data)**2))
+
+        else:
+            result = []
+            result_dist = []
+            for i in range(len(phi_array)):
+                dist = self.__ptdep(phi_array[i], self.etaf[i], self.ptf[i], Aridge, kick, Tem, xx, yy, zz)
+                result_dist.append(dist-min(dist))
+                if i==0:
+                    result = result_dist[i]
+                else:
+                    result = np.concatenate((result, result_dist[i]))
+            result = np.concatenate((result, self.Yridge(Aridge, kick, Tem, xx, yy, zz)))       # fitting에 사용하는 데이터가 Yridge가 포함되어 있는 경우 활성화
+            self.__count = self.__count + 1
+            print(f"{self.__count}회", kick, Tem, xx, yy, zz, np.sum((result-self.data)**2))
         return result
     
     def __ptdep(self, phi_array, etaf, ptf_dist, Aridge, kick, Tem, xx, yy, zz):
         bin = 300
+        detaf = (etaf[1]-etaf[0])/bin
+        delta_Deltaeta = 2*(etaf[1]-etaf[0])
         ptf, etaf, phif = cp.meshgrid(cp.linspace(ptf_dist[0], ptf_dist[1], bin), cp.linspace(etaf[0], etaf[1], bin), cp.asarray(phi_array))
         dptf = (ptf_dist[1]-ptf_dist[0])/bin
         deltapt = 1/(ptf_dist[1] - ptf_dist[0])       #pt normalize
-        detaf = (etaf[1]-etaf[0])/bin
-        delta_Deltaeta = 2*(etaf[1]-etaf[0])
-        dist = deltapt*cp.sum(self.__FrNk(xx, yy, zz, ptf)*ptf*gpu.Ridge_dist(Aridge, ptf, etaf, phif, kick, Tem, self.sqrSnn, self.__mp, self.__m, self.__mb, self.__md, self.__a), axis=0)*dptf*detaf/delta_Deltaeta
+        temp = self.__FrNk(xx, yy, zz, ptf)
+        # print(Aridge, ptf, etaf, phif, kick, Tem, self.sqrSnn, self.__mp, self.__m, self.__mb, self.__md, self.__a)
+        temp2 = gpu.Ridge_dist(Aridge, ptf, etaf, phif, kick, Tem, self.sqrSnn, self.__mp, self.__m, self.__mb, self.__md, self.__a)
+        distdist = cp.sum(temp*ptf*temp2, axis=0)
+        # print(temp2)
+        dist = deltapt*distdist*dptf*detaf/delta_Deltaeta
+
         return (4/3)*cp.asnumpy(cp.sum(dist, axis=(0)))
 
     def Yridge(self, Aridge, kick, Tem, xx, yy, zz):
