@@ -309,22 +309,15 @@ def drawgraph_ptdep_phicorr():
             '''cms plot 13TeV'''
             cms_result = cms.result_plot("pTdependence", None, ptf, (min(phi_13TeV_ptdep[i+3]), max(phi_13TeV_ptdep[i+3])))
             axes1[i].plot(cms_result[0], cms_result[1], color = "black", linewidth=7, linestyle='-')
-            # axes1[i].errorbar(phi_13TeV_ptdep[i+3], dat_13TeV_ptdep[i+3]-min(dat_13TeV_ptdep[i+3]), yerr=(abs(err_13TeV_ptdep[2*(i+3)+1]),err_13TeV_ptdep[2*(i+3)]), color="black", linestyle=' ', linewidth=7, capthick=3, capsize=15)
-            # axes1[i].scatter(phi_13TeV_ptdep[i+3], dat_13TeV_ptdep[i+3]-min(dat_13TeV_ptdep[i+3]), edgecolors="black", s=800, marker='o', facecolors='none', linewidths=7)
-            # axes1[i].scatter(phi_13TeV_ptdep[i+3], dat_13TeV_ptdep[i+3]-min(dat_13TeV_ptdep[i+3]), s=800, marker='+', facecolors='black', linewidths=7)
             axes1[i].errorbar(phi_13TeV_ptdep[i+3], dat_13TeV_ptdep[i+3], yerr=(abs(err_13TeV_ptdep[2*(i+3)+1]),err_13TeV_ptdep[2*(i+3)]), color="black", linestyle=' ', linewidth=7, capthick=3, capsize=15)
             axes1[i].scatter(phi_13TeV_ptdep[i+3], dat_13TeV_ptdep[i+3], edgecolors="black", s=800, marker='o', facecolors='none', linewidths=7)
             axes1[i].scatter(phi_13TeV_ptdep[i+3], dat_13TeV_ptdep[i+3], s=800, marker='+', facecolors='black', linewidths=7)
             '''cms plot 7TeV'''
             cms_07result = cms_07.result_plot("pTdependence", None, ptf, (min(phi_07TeV_ptdep[i]), max(phi_07TeV_ptdep[i])))
             axes1[i].plot(cms_07result[0], cms_07result[1], color = "grey", linewidth=7, linestyle='-')
-            # axes1[i].errorbar(phi_07TeV_ptdep[i], dat_07TeV_ptdep[i]-min(dat_07TeV_ptdep[i]), yerr=(abs(err_07TeV_ptdep[2*i+1]),err_07TeV_ptdep[2*i]), color="grey", linestyle=' ', linewidth=7, capthick=3, capsize=15)
-            # axes1[i].scatter(phi_07TeV_ptdep[i], dat_07TeV_ptdep[i]-min(dat_07TeV_ptdep[i]), edgecolors="grey", s=800, marker='o', facecolors='none', linewidths=7)
-            # axes1[i].scatter(phi_07TeV_ptdep[i], dat_07TeV_ptdep[i]-min(dat_07TeV_ptdep[i]), s=800, marker='+', facecolors='grey', linewidths=7)
             axes1[i].errorbar(phi_07TeV_ptdep[i], dat_07TeV_ptdep[i], yerr=(abs(err_07TeV_ptdep[2*i+1]),err_07TeV_ptdep[2*i]), color="grey", linestyle=' ', linewidth=7, capthick=3, capsize=15)
             axes1[i].scatter(phi_07TeV_ptdep[i], dat_07TeV_ptdep[i], edgecolors="grey", s=800, marker='o', facecolors='none', linewidths=7)
             axes1[i].scatter(phi_07TeV_ptdep[i], dat_07TeV_ptdep[i], s=800, marker='+', facecolors='grey', linewidths=7)
-            # axes1[i].set_title(str(st)+r'$<p_{T, \, \mathrm{trig(assoc)}}<$'+str(en), size = 70, pad=30)
             axes1[i].set_title(r'$0.1<p_{T, \, \mathrm{trig(assoc)}}<1$', size = 70, pad=30)
         elif i==4:
             atlas_result = atlas.result_plot("pTdependence", None, (0.5, 5), (min(phi_13TeV_ptdep[-1]), max(phi_13TeV_ptdep[-1])))
@@ -338,28 +331,16 @@ def drawgraph_ptdep_phicorr():
             axes1[i].plot(alice_result[0], alice_result[1], color = "red", linewidth=7, linestyle='-')
             axes1[i].plot(cms_result[0], cms_result[1], color = "black", linewidth=7, linestyle='-')
             '''alice plot'''
-            # print(i)
-            # print(dat_13TeV_ptdep[i-1])
-            # print(err_13TeV_ptdep[2*i-1])
-            # axes1[i].errorbar(phi_13TeV_ptdep[i-1], dat_13TeV_ptdep[i-1]-min(dat_13TeV_ptdep[i-1]), yerr=(abs(err_13TeV_ptdep[2*i-1]),err_13TeV_ptdep[2*i-2]), color="red", linestyle=' ', linewidth=7, capthick=3, capsize=15)
-            # axes1[i].scatter(phi_13TeV_ptdep[i-1], dat_13TeV_ptdep[i-1]-min(dat_13TeV_ptdep[i-1]), edgecolors="red", s=800, marker='o', facecolors='none', linewidths=7)
-            # axes1[i].scatter(phi_13TeV_ptdep[i-1], dat_13TeV_ptdep[i-1]-min(dat_13TeV_ptdep[i-1]), s=800, marker='+', facecolors='red', linewidths=7)
             axes1[i].errorbar(phi_13TeV_ptdep[i-1], dat_13TeV_ptdep[i-1], yerr=(abs(err_13TeV_ptdep[2*i-1]),err_13TeV_ptdep[2*i-2]), color="red", linestyle=' ', linewidth=7, capthick=3, capsize=15)
             axes1[i].scatter(phi_13TeV_ptdep[i-1], dat_13TeV_ptdep[i-1], edgecolors="red", s=800, marker='o', facecolors='none', linewidths=7)
             axes1[i].scatter(phi_13TeV_ptdep[i-1], dat_13TeV_ptdep[i-1], s=800, marker='+', facecolors='red', linewidths=7)
             '''cms plot 13TeV'''
-            # axes1[i].errorbar(phi_13TeV_ptdep[i+3], dat_13TeV_ptdep[i+3]-min(dat_13TeV_ptdep[i+3]), yerr=(abs(err_13TeV_ptdep[2*(i+3)+1]),err_13TeV_ptdep[2*(i+3)]), color="black", linestyle=' ', linewidth=7, capthick=3, capsize=15)
-            # axes1[i].scatter(phi_13TeV_ptdep[i+3], dat_13TeV_ptdep[i+3]-min(dat_13TeV_ptdep[i+3]), edgecolors="black", s=800, marker='o', facecolors='none', linewidths=7)
-            # axes1[i].scatter(phi_13TeV_ptdep[i+3], dat_13TeV_ptdep[i+3]-min(dat_13TeV_ptdep[i+3]), s=800, marker='+', facecolors='black', linewidths=7)
             axes1[i].errorbar(phi_13TeV_ptdep[i+3], dat_13TeV_ptdep[i+3], yerr=(abs(err_13TeV_ptdep[2*(i+3)+1]),err_13TeV_ptdep[2*(i+3)]), color="black", linestyle=' ', linewidth=7, capthick=3, capsize=15)
             axes1[i].scatter(phi_13TeV_ptdep[i+3], dat_13TeV_ptdep[i+3], edgecolors="black", s=800, marker='o', facecolors='none', linewidths=7)
             axes1[i].scatter(phi_13TeV_ptdep[i+3], dat_13TeV_ptdep[i+3], s=800, marker='+', facecolors='black', linewidths=7)
             '''cms plot 7TeV'''
             cms_07result = cms_07.result_plot("pTdependence", None, ptf, (min(phi_07TeV_ptdep_fitting[i-1]), max(phi_07TeV_ptdep_fitting[i-1])))
             axes1[i].plot(cms_07result[0], cms_07result[1], color = "grey", linewidth=7, linestyle='-')
-            # axes1[i].errorbar(phi_07TeV_ptdep[i], dat_07TeV_ptdep[i]-min(dat_07TeV_ptdep[i]), yerr=(abs(err_07TeV_ptdep[2*i+1]),err_07TeV_ptdep[2*i]), color="grey", linestyle=' ', linewidth=7, capthick=3, capsize=15)
-            # axes1[i].scatter(phi_07TeV_ptdep[i], dat_07TeV_ptdep[i]-min(dat_07TeV_ptdep[i]), edgecolors="grey", s=800, marker='o', facecolors='none', linewidths=7)
-            # axes1[i].scatter(phi_07TeV_ptdep[i], dat_07TeV_ptdep[i]-min(dat_07TeV_ptdep[i]), s=800, marker='+', facecolors='grey', linewidths=7)
             axes1[i].errorbar(phi_07TeV_ptdep[i], dat_07TeV_ptdep[i], yerr=(abs(err_07TeV_ptdep[2*i+1]),err_07TeV_ptdep[2*i]), color="grey", linestyle=' ', linewidth=7, capthick=3, capsize=15)
             axes1[i].scatter(phi_07TeV_ptdep[i], dat_07TeV_ptdep[i], edgecolors="grey", s=800, marker='o', facecolors='none', linewidths=7)
             axes1[i].scatter(phi_07TeV_ptdep[i], dat_07TeV_ptdep[i], s=800, marker='+', facecolors='grey', linewidths=7)
@@ -383,14 +364,6 @@ def drawgraph_ptdep_phicorr():
 def drawgraph_ptdep_Yridge():
     fig2, axis2 = plt.subplots(nrows=1, ncols=1,figsize=(40,20))
 
-    '''Scatter'''
-    # alice_Yridge = alice.Yridge((ptloww_ali, pthigh_ali), "Subtract")
-    # cms_Yridge = cms.Yridge((ptloww_cms, pthigh_cms), "Subtract")
-    # axis2.scatter(alice_Yridge[0], alice_Yridge[1], edgecolor = "red", marker='s', facecolors='none', s=800, linewidth=5, zorder=1)
-    # axis2.scatter(alice_Yridge[0], alice_Yridge[1], color = "red", marker='+', s=800, linewidth=5, zorder=1)
-    # axis2.scatter(cms_Yridge[0], cms_Yridge[1], edgecolor = "black", marker='s', facecolors='none', s=800, linewidth=5, zorder=1)
-    # axis2.scatter(cms_Yridge[0], cms_Yridge[1], color = "black", marker='+', s=800, linewidth=5, zorder=1)
-
     '''Line'''
     alice_Yridge = alice.Yridge_line("Subtract")
     cms_Yridge = cms.Yridge_line("Subtract")
@@ -398,17 +371,12 @@ def drawgraph_ptdep_Yridge():
     axis2.plot(alice_Yridge[0], alice_Yridge[1], color = "red", linewidth=7, linestyle='-')
     axis2.plot(cms_Yridge[0], cms_Yridge[1], color = "black", linewidth=7, linestyle='-')
     axis2.plot(cms_07Yridge[0], cms_07Yridge[1], color = "grey", linewidth=7, linestyle='-')
-
-
-    # print(abs(err_13TeV_ptdep[15]),err_13TeV_ptdep[14])
-    # print(Yridge_dat)
     axis2.errorbar(Yridge_phi[0], Yridge_dat[0], yerr=(abs(err_13TeV_ptdep[15]),err_13TeV_ptdep[14]), color="red", linestyle=' ', linewidth=5, capthick=3, capsize=15, zorder=0)
     axis2.errorbar(Yridge_phi[1], Yridge_dat[1], yerr=(abs(err_13TeV_ptdep[17]),err_13TeV_ptdep[16]), color="black", linestyle=' ', linewidth=5, capthick=3, capsize=15, zorder=0)
     axis2.scatter(Yridge_phi[0], Yridge_dat[0], edgecolors="red", s=800, marker='o', facecolors='none', linewidths=5, zorder=0)
     axis2.scatter(Yridge_phi[0], Yridge_dat[0], s=800, marker='+', facecolors='red', linewidths=5, zorder=0)
     axis2.scatter(Yridge_phi[1], Yridge_dat[1], edgecolors="black", s=800, marker='o', facecolors='none', linewidths=5, zorder=0)
     axis2.scatter(Yridge_phi[1], Yridge_dat[1], s=800, marker='+', facecolors='black', linewidths=5, zorder=0)
-    # print(Yridge_phi07, Yridge_dat07, err_07TeV_ptdep[-2], err_07TeV_ptdep[-1])
     axis2.errorbar(Yridge_phi07, Yridge_dat07, yerr=(abs(err_07TeV_ptdep[-2]),err_07TeV_ptdep[-1]), color="grey", linestyle=' ', linewidth=5, capthick=3, capsize=15, zorder=0)
     axis2.scatter(Yridge_phi07, Yridge_dat07, edgecolors="grey", s=800, marker='o', facecolors='none', linewidths=5, zorder=0)
     axis2.scatter(Yridge_phi07, Yridge_dat07, s=800, marker='+', facecolors='grey', linewidths=5, zorder=0)
