@@ -233,30 +233,6 @@ class Fitting_gpu:
         etaf_range = [(1.6, 1.8), (2, 4)]
         bin = 300
 
-        # '''CZAYM calculate'''
-        # for i in range(len(self.pt_range[0])):
-        #     for j in range(len(self.pt_range[0][i])):
-        #         phif = self.__Yridge_phif_end
-        #         ptf, etaf = cp.meshgrid(cp.linspace(self.pt_range[0][i][j], self.pt_range[1][i][j], bin), cp.linspace(etaf_range[i][0], etaf_range[i][1], bin))
-        #         dptf = (self.pt_range[1][i][j] - self.pt_range[0][i][j])/bin
-        #         deltapt = 1/(self.pt_range[1][i][j] - self.pt_range[0][i][j])       #pt normalize
-        #         detaf = (etaf_range[i][1]-etaf_range[i][0])/bin
-        #         delta_Deltaeta = 2*(etaf_range[i][1]-etaf_range[i][0])
-        #         result = deltapt*(4/3)*cp.sum(self.__FrNk(xx, yy, zz, ptf)*ptf*gpu.Ridge_dist(Aridge, ptf, etaf, phif, kick, Tem, self.sqrSnn, self.__mp, self.__m, self.__mb, self.__md, self.__a))*dptf*detaf/delta_Deltaeta
-        #         CZYAM = np.append(CZYAM, cp.asnumpy(result*phif*2))
-        
-        # for i in range(len(self.pt_range[0])):
-        #     for j in range(len(self.pt_range[0][i])):
-        #         ptf, etaf, phif = cp.meshgrid(cp.linspace(self.pt_range[0][i][j], self.pt_range[1][i][j], bin), cp.linspace(etaf_range[i][0], etaf_range[i][1], bin), cp.linspace(self.__Yridge_phif_start, self.__Yridge_phif_end, bin))
-        #         dptf = (self.pt_range[1][i][j]- self.pt_range[0][i][j])/bin
-        #         detaf = (etaf_range[i][1]-etaf_range[i][0])/bin
-        #         deltapt = 1/(self.pt_range[1][i][j] - self.pt_range[0][i][j])       #pt normalize
-        #         dphif = (self.__Yridge_phif_end - self.__Yridge_phif_start)/bin
-        #         delta_Deltaeta = 2*(etaf_range[i][1]-etaf_range[i][0])
-        #         result = deltapt*(4/3)*cp.sum(self.__FrNk(xx, yy, zz, ptf)*ptf*gpu.Ridge_dist(Aridge, ptf, etaf, phif, kick, Tem, self.sqrSnn, self.__mp, self.__m, self.__mb, self.__md, self.__a))*dptf*detaf*dphif/delta_Deltaeta
-        #         results = np.append(results, cp.asnumpy(result))
-        # print(results-CZYAM)
-
         ''' Yridge 계산 최적화(1회 계산당 약 0.5초 절약)'''
         for i in range(len(self.pt_range[0])):
             for j in range(len(self.pt_range[0][i])):
@@ -270,30 +246,9 @@ class Fitting_gpu:
                 result = result - min(result);    result = cp.sum(result)
                 results = np.append(results, cp.asnumpy(result))                
         
-        '''ALICE(Subtract) + CMS(Remove) Yridge'''
-        # result_alice = results[0:5]-CZYAM[0:5]
-        # result_cms = results[5::]
-        # result_total = np.append(result_alice, result_cms)
-        # return result_total
-
-        '''ALICE(Subtract) + CMS(Subtract) Yridge'''
-        # result_alice = results[0:5]-CZYAM[0:5]
-        # result_cms = results[5::]
-        # result_total = np.append(result_alice, result_cms)
-        # return results-CZYAM
-
-        # result_alice = results[0:5]
-        # result_cms = results[5::]/1.18
-        # result_total = np.append(result_alice, result_cms)
-        # print(result_total)
-        # return result_total
 
         return results
 
-        '''ALICE Yridge'''
-        # result_alice = results[0:5]-CZYAM[0:5]
-        # return result_alice
-        # return results-CZYAM
 
 
 
@@ -455,19 +410,6 @@ class Drawing_Graphs:
             CZYAM = np.array([])
             ptrange_avg = np.array([])
             bin = 300
-
-
-            # for i in range(len(pt_range[0])):
-            #     # for j in range(len(pt_range[0][i])):
-            #     ptf, phif, etaf = cp.meshgrid(cp.linspace(pt_range[0][i], pt_range[1][i], bin), cp.linspace(self.__Yridge_phif_start, self.__Yridge_phif_end, bin), cp.linspace(self.etaf[0], self.etaf[1], bin))
-            #     dptf = (pt_range[1][i] - pt_range[0][i])/bin
-            #     detaf = (self.etaf[1] - self.etaf[0])/bin
-            #     dphif = (self.__Yridge_phif_end - self.__Yridge_phif_start)/bin
-            #     delta_Deltaeta = 2*(self.etaf[1]-self.etaf[0])
-            #     result = (4/3*pt_normal)*cp.sum(self.__FrNk(xx, yy, zz, ptf)*ptf*gpu.Ridge_dist(Aridge, ptf, etaf, phif, kick, Tem, self.sqrSnn, self.__mp, self.__m, self.__mb, self.__md, self.__a), axis=(2,1))*dptf*detaf*dphif/delta_Deltaeta
-            #     result = result - min(result);    result = cp.sum(result)
-            #     ptrange_avg = np.append(ptrange_avg, (pt_range_cpu[0][i]+pt_range_cpu[1][i])/2)
-            #     results = np.append(results, cp.asnumpy(result))    
             
             '''CZYAM calculate'''
             for i in range(len(pt_range[0])):
