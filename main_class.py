@@ -234,8 +234,8 @@ Error : 4.456e-05
 # del dat_13TeV_ptdep_fitting[6]                      # delete ATLAS data
 
 '''[:] 는 deep copy를 위해 필요함'''
-phi_13TeV_ptdep_fitting = phi_13TeV_ptdep[0:-1]          # fitting에 사용하는 데이터에서 Yridge를 포함하려는 경우
-dat_13TeV_ptdep_fitting = dat_13TeV_ptdep[0:-1]          # fitting에 사용하는 데이터에서 Yridge를 포함하려는 경우
+phi_13TeV_ptdep_fitting = phi_13TeV_ptdep[:]          # fitting에 사용하는 데이터에서 Yridge를 포함하려는 경우
+dat_13TeV_ptdep_fitting = dat_13TeV_ptdep[:]          # fitting에 사용하는 데이터에서 Yridge를 포함하려는 경우
 del phi_13TeV_ptdep_fitting[7]                        # delete ATLAS phi
 del dat_13TeV_ptdep_fitting[7]                        # delete ATLAS data
 del phi_13TeV_ptdep_fitting[3]                        # delete 0.1<pT<1 phi
@@ -247,7 +247,7 @@ dat_07TeV_ptdep_fitting = dat_07TeV_ptdep[1::]
     최솟값인 부분을 찾아서 fitting 데이터 자르기(양쪽 끝 자르기)
     Yridge가 있는 경우를 상정하므로 Yridge 데이터를 fitting하지 않으려는 경우, 이 부분을 다시 세팅해야 함
 '''
-for i in range(len(dat_13TeV_ptdep_fitting)-1):
+for i in range(len(dat_13TeV_ptdep_fitting)-2):
     argmin = np.argmin(dat_13TeV_ptdep_fitting[i])
     if argmin == 0:
         pass
@@ -307,20 +307,20 @@ etaf_07 = [(2, 4), (2, 4), (2, 4)]
 
 '''To Check Center of mass Energy'''
 ''' Multiplicity : 90~100'''
-# sqrSnn = [2760, 5020, 13000]
-# ptf_CM = [(0.5, 5)]
-# etaf_CM = [(2, 5)]
-# ptdep_result_cm = []
-# ptdep_error_cm = []
-# for i in range(len(sqrSnn)):
-#     print(f"sqrSnn = {sqrSnn[i]}")
-#     ptdep = classes.Fitting_gpu(sqrSnn[i], CMenergydep_phi[i], CMenergydep_dat[i]-min(CMenergydep_dat[i]), None, None, ptf_CM, etaf_CM, boundary, initial, "CMenergy")
-#     result, error = ptdep.fitting(None)
-#     print(result)
-#     ptdep_result_cm.append(result)
-#     ptdep_error_cm.append(error)
-# print(ptdep_result_cm)
-# print(ptdep_error_cm)
+sqrSnn = [2760, 5020, 13000]
+ptf_CM = [(0.5, 5)]
+etaf_CM = [(2, 5)]
+ptdep_result_cm = []
+ptdep_error_cm = []
+for i in range(len(sqrSnn)):
+    print(f"sqrSnn = {sqrSnn[i]}")
+    ptdep = classes.Fitting_gpu(sqrSnn[i], CMenergydep_phi[i], CMenergydep_dat[i]-min(CMenergydep_dat[i]), None, None, ptf_CM, etaf_CM, boundary, initial, "CMenergy")
+    result, error = ptdep.fitting(None)
+    print(result)
+    ptdep_result_cm.append(result)
+    ptdep_error_cm.append(error)
+print(ptdep_result_cm)
+print(ptdep_error_cm)
 
 
 time_calculate = time.time()
