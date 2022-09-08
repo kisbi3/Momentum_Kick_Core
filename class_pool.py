@@ -187,18 +187,19 @@ class Fitting_gpu:
                 phi_array.append(given_array[start : end])
                 start += self.array_length[i]
 
-        Aridge_bin = 500
+        Aridge_bin = 1000
         pti, yi = np.meshgrid(np.linspace(self.__pti[0], self.__pti[1], Aridge_bin), np.linspace(self.__yi[0], self.__yi[1], Aridge_bin))
-        dyi = (self.__pti[1] - self.__pti[0])/Aridge_bin
-        dpti = (self.__yi[1] - self.__yi[0])/Aridge_bin
+        dpti = (self.__pti[1] - self.__pti[0])/Aridge_bin
+        dyi = (self.__yi[1] - self.__yi[0])/Aridge_bin
         Aridge = cp.asarray(1/np.sum(cpu.Aridge(pti, yi, Tem, self.__m, self.__md, self.__a, self.sqrSnn, self.__mp)*dyi*dpti*2*np.pi))
 
+        ''' CM energy dependence'''
         if self.ptdis_number is None and self.array_length == 1:
             deltapt = self.ptf[0][1] - self.ptf[0][0]
             result_dist = deltapt*self.__ptdep(phi_array, self.etaf[0], self.ptf[0], Aridge, kick, Tem, xx, yy, zz)
             result = result_dist - min(result_dist)
             self.__count = self.__count + 1
-            print(result, self.data)
+            # print(result, self.data)
             print(f"{self.__count}회", kick, Tem, xx, yy, zz, np.sum((result-self.data)**2))
 
         else:
@@ -223,13 +224,7 @@ class Fitting_gpu:
         ptf, etaf, phif = cp.meshgrid(cp.linspace(ptf_dist[0], ptf_dist[1], bin), cp.linspace(etaf[0], etaf[1], bin), cp.asarray(phi_array))
         dptf = (ptf_dist[1]-ptf_dist[0])/bin
         deltapt = 1/(ptf_dist[1] - ptf_dist[0])       #pt normalize
-        temp = self.__FrNk(xx, yy, zz, ptf)
-        # print(Aridge, ptf, etaf, phif, kick, Tem, self.sqrSnn, self.__mp, self.__m, self.__mb, self.__md, self.__a)
-        temp2 = gpu.Ridge_dist(Aridge, ptf, etaf, phif, kick, Tem, self.sqrSnn, self.__mp, self.__m, self.__mb, self.__md, self.__a)
-        distdist = cp.sum(temp*ptf*temp2, axis=0)
-        # print(temp2)
-        dist = deltapt*distdist*dptf*detaf/delta_Deltaeta
-
+        dist = deltapt*cp.sum(self.__FrNk(xx, yy, zz, ptf)*ptf*gpu.Ridge_dist(Aridge, ptf, etaf, phif, kick, Tem, self.sqrSnn, self.__mp, self.__m, self.__mb, self.__md, self.__a), axis=0)*dptf*detaf/delta_Deltaeta
         return (4/3)*cp.asnumpy(cp.sum(dist, axis=(0)))
 
     def Yridge(self, Aridge, kick, Tem, xx, yy, zz):
@@ -356,6 +351,9 @@ class Drawing_Graphs:
             return self.__Ridge_Multi(multi, ptf, phif)
         elif mode == "pTdependence":
             return self.__Ridge_ptdep(ptf, phif)
+        # elif mode == "CMenergy":
+        #     pass
+            # return self.__Ridge_ptdep(sqrsnn, ptf, phif)
         elif mode == "Both":
             pass
         else:
