@@ -193,16 +193,15 @@ class Fitting_gpu:
         dyi = (self.__yi[1] - self.__yi[0])/Aridge_bin
         Aridge = cp.asarray(1/np.sum(cpu.Aridge(pti, yi, Tem, self.__m, self.__md, self.__a, self.sqrSnn, self.__mp)*dyi*dpti*2*np.pi))
 
-        ''' CM energy dependence'''
         if self.ptdis_number is None and self.array_length == 1:
+            ''' CM energy dependence'''            
             deltapt = self.ptf[0][1] - self.ptf[0][0]
             result_dist = deltapt*self.__ptdep(phi_array, self.etaf[0], self.ptf[0], Aridge, kick, Tem, xx, yy, zz)
             result = result_dist - min(result_dist)
             self.__count = self.__count + 1
-            # print(result, self.data)
-            print(f"{self.__count}회", kick, Tem, xx, yy, zz, np.sum((result-self.data)**2))
-
+            
         else:
+            ''' Only pT dependence'''
             result = []
             result_dist = []
             for i in range(len(phi_array)):
@@ -214,6 +213,7 @@ class Fitting_gpu:
                     result = np.concatenate((result, result_dist[i]))
             result = np.concatenate((result, self.Yridge(Aridge, kick, Tem, xx, yy, zz)))       # fitting에 사용하는 데이터가 Yridge가 포함되어 있는 경우 활성화
             self.__count = self.__count + 1
+        if self.__count == 1 or self.__count%10==0:
             print(f"{self.__count}회", kick, Tem, xx, yy, zz, np.sum((result-self.data)**2))
         return result
     

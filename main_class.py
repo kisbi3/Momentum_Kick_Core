@@ -139,9 +139,9 @@ def Yridge_append():
 Yridge_append()
 
 '''Yridge pt range'''
+ptloww = []
+pthigh = []
 def Yridge_ptrange():
-    ptloww = []
-    pthigh = []
     ptloww_07 = []
     pthigh_07 = []
     ptloww_ali = np.loadtxt(path[1]+'Y^mathrm{ridge}.csv',delimiter=',',usecols=[1],skiprows=12,max_rows=7)
@@ -219,16 +219,16 @@ for i in range(len(dat_07TeV_ptdep_fitting)-1):
         phi_07TeV_ptdep_fitting[i] = phi_07TeV_ptdep_fitting[i][len(phi_07TeV_ptdep_fitting[i])-argmin-1:argmin+1]
 
 '''Fitting 13TeV data'''
-# ptf = [(1, 2), (2, 3), (3, 4), (1, 2), (2, 3), (3, 4)]
-# etaf = [(1.6, 1.8), (1.6, 1.8), (1.6, 1.8), (2, 4), (2, 4), (2, 4)]
-# '''boundary conditions'''
-# boundary = ((0., 0., 0, 0, 0),(5, 3., 20, 10, 10))
-# '''initial parameters'''
-# initial = (1., 0.5, 2, 3, 0)
-# ptdep = classes.Fitting_gpu(13000, phi_13TeV_ptdep_fitting, dat_13TeV_ptdep_fitting, (ptloww, pthigh), None, ptf, etaf, boundary, initial, "pTdependence")
-# ptdep_result, ptdep_error = ptdep.fitting(None)                  # error를 고려하지 않으려는 경우
-# print(ptdep_result)
-# print(ptdep_error)
+ptf = [(1, 2), (2, 3), (3, 4), (1, 2), (2, 3), (3, 4)]
+etaf = [(1.6, 1.8), (1.6, 1.8), (1.6, 1.8), (2, 4), (2, 4), (2, 4)]
+'''boundary conditions'''
+boundary = ((0., 0., -20, -10, -10),(5, 3., 20, 10, 10))
+'''initial parameters'''
+initial = (1., 0.5, 2, 3, 0)
+ptdep = classes.Fitting_gpu(13000, phi_13TeV_ptdep_fitting, dat_13TeV_ptdep_fitting, (ptloww, pthigh), None, ptf, etaf, boundary, initial, "pTdependence")
+ptdep_result, ptdep_error = ptdep.fitting(None)                  # error를 고려하지 않으려는 경우
+print(ptdep_result)
+print(ptdep_error)
 
 '''Fitting 7TeV data'''
 # ptf = [(1, 2), (2, 3), (3, 4)]
@@ -257,27 +257,29 @@ for i in range(len(dat_07TeV_ptdep_fitting)-1):
 
 '''To Check Center of mass Energy dependence'''
 ''' Multiplicity : 90~100'''
-ptdep_result_cm = []
-ptdep_error_cm = []
-def cmenergdep():
-    sqrSnn = [2760, 5020, 13000]
-    ptf = [(0.5, 5)]
-    etaf = [(2, 5)]
-    '''boundary conditions'''
-    boundary = ((0., 0., 0, 0, 0),(5, 3., 20, 10, 10))
-    '''initial parameters'''
-    initial = (1., 0.5, 2, 3, 0)
-    for i in range(len(sqrSnn)):
-        print(f"sqrSnn = {sqrSnn[i]}")
-        ptdep = classes.Fitting_gpu(sqrSnn[i], CMenergydep_phi[i], CMenergydep_dat[i]-min(CMenergydep_dat[i]), None, None, ptf, etaf, boundary, initial, "CMenergy")
-        result, error = ptdep.fitting(None)
-        print(result)
-        ptdep_result_cm.append(result)
-        ptdep_error_cm.append(error)
-cmenergdep()
-print(ptdep_result_cm)
-print(ptdep_error_cm)
+# ptdep_result_cm = []
+# ptdep_error_cm = []
+# def cmenergdep():
+#     sqrSnn = [2760, 5020, 13000]
+#     ptf = [(0.5, 5)]
+#     etaf = [(2, 5)]
+#     '''boundary conditions'''
+#     boundary = ((0.0, 0.8, -30, -10, -10),(5, 2., 30, 10, 10))
+#     '''initial parameters'''
+#     initial = (1., 1., 2, 3, 0)
+#     for i in range(len(sqrSnn)):
+#         print(f"\n**********\n sqrSnn = {sqrSnn[i]*0.001} Start \n\n**********\n")
+#         ptdep = classes.Fitting_gpu(sqrSnn[i], CMenergydep_phi[i], CMenergydep_dat[i]-min(CMenergydep_dat[i]), None, None, ptf, etaf, boundary, initial, "CMenergy")
+#         result, error = ptdep.fitting(None)
+#         print(result)
+#         ptdep_result_cm.append(result)
+#         ptdep_error_cm.append(error)
+#         print(f"\n**********\n sqrSnn = {sqrSnn[i]*0.001} End \n**********\n")
+# cmenergdep()
+# print(ptdep_result_cm)
+# print(ptdep_error_cm)
 
+ptdep_result_cm = [0,0,0,0,0]
 
 time_calculate = time.time()
 print(f"calculate end : {time_calculate-time_start:.3f} sec")
