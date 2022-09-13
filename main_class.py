@@ -140,9 +140,9 @@ def Yridge_append():
 '''Yridge pt range'''
 ptloww = []
 pthigh = []
+ptloww_07 = []
+pthigh_07 = []
 def Yridge_ptrange():
-    ptloww_07 = []
-    pthigh_07 = []
     ptloww_ali = np.loadtxt(path[1]+'Y^mathrm{ridge}.csv',delimiter=',',usecols=[1],skiprows=12,max_rows=7)
     pthigh_ali = np.loadtxt(path[1]+'Y^mathrm{ridge}.csv',delimiter=',',usecols=[2],skiprows=12,max_rows=7)
     ptloww_cms = np.loadtxt(path[2]+'Table33.csv',delimiter=',',usecols=[6],skiprows=14,max_rows=9)
@@ -194,39 +194,45 @@ dat_07TeV_ptdep_fitting = dat_07TeV_ptdep[1::]
     최솟값인 부분을 찾아서 fitting 데이터 자르기(양쪽 끝 자르기)
     Yridge가 있는 경우를 상정하므로 Yridge 데이터를 fitting하지 않으려는 경우, 이 부분을 다시 세팅해야 함
 '''
-for i in range(len(dat_13TeV_ptdep_fitting)-2):
-    argmin = np.argmin(dat_13TeV_ptdep_fitting[i])
-    if argmin == 0:
-        pass
-    elif argmin == len(dat_13TeV_ptdep_fitting[i]):
-        pass
-    elif argmin<len(dat_13TeV_ptdep_fitting[i])/2:
-        dat_13TeV_ptdep_fitting[i] = dat_13TeV_ptdep_fitting[i][argmin:-argmin]
-        phi_13TeV_ptdep_fitting[i] = phi_13TeV_ptdep_fitting[i][argmin:-argmin]
-    elif argmin>len(dat_13TeV_ptdep_fitting[i])/2:
-        dat_13TeV_ptdep_fitting[i] = dat_13TeV_ptdep_fitting[i][len(dat_13TeV_ptdep_fitting[i])-argmin-1:argmin+1]
-        phi_13TeV_ptdep_fitting[i] = phi_13TeV_ptdep_fitting[i][len(phi_13TeV_ptdep_fitting[i])-argmin-1:argmin+1]
-for i in range(len(dat_07TeV_ptdep_fitting)-1):
-    argmin = np.argmin(dat_07TeV_ptdep_fitting[i])
-    if argmin == 0:
-        pass
-    elif argmin == len(dat_07TeV_ptdep_fitting[i]):
-        pass
-    elif argmin<len(dat_07TeV_ptdep_fitting[i])/2:
-        dat_07TeV_ptdep_fitting[i] = dat_07TeV_ptdep_fitting[i][argmin:-argmin]
-        phi_07TeV_ptdep_fitting[i] = phi_07TeV_ptdep_fitting[i][argmin:-argmin]
-    elif argmin>len(dat_07TeV_ptdep_fitting[i])/2:
-        dat_07TeV_ptdep_fitting[i] = dat_07TeV_ptdep_fitting[i][len(dat_07TeV_ptdep_fitting[i])-argmin-1:argmin+1]
-        phi_07TeV_ptdep_fitting[i] = phi_07TeV_ptdep_fitting[i][len(phi_07TeV_ptdep_fitting[i])-argmin-1:argmin+1]
+def datacut():
+    for i in range(len(dat_13TeV_ptdep_fitting)-2):
+        argmin = np.argmin(dat_13TeV_ptdep_fitting[i])
+        if argmin == 0:
+            pass
+        elif argmin == len(dat_13TeV_ptdep_fitting[i]):
+            pass
+        elif argmin<len(dat_13TeV_ptdep_fitting[i])/2:
+            dat_13TeV_ptdep_fitting[i] = dat_13TeV_ptdep_fitting[i][argmin:-argmin]
+            phi_13TeV_ptdep_fitting[i] = phi_13TeV_ptdep_fitting[i][argmin:-argmin]
+        elif argmin>len(dat_13TeV_ptdep_fitting[i])/2:
+            dat_13TeV_ptdep_fitting[i] = dat_13TeV_ptdep_fitting[i][len(dat_13TeV_ptdep_fitting[i])-argmin-1:argmin+1]
+            phi_13TeV_ptdep_fitting[i] = phi_13TeV_ptdep_fitting[i][len(phi_13TeV_ptdep_fitting[i])-argmin-1:argmin+1]
+    for i in range(len(dat_07TeV_ptdep_fitting)-1):
+        argmin = np.argmin(dat_07TeV_ptdep_fitting[i])
+        if argmin == 0:
+            pass
+        elif argmin == len(dat_07TeV_ptdep_fitting[i]):
+            pass
+        elif argmin<len(dat_07TeV_ptdep_fitting[i])/2:
+            dat_07TeV_ptdep_fitting[i] = dat_07TeV_ptdep_fitting[i][argmin:-argmin]
+            phi_07TeV_ptdep_fitting[i] = phi_07TeV_ptdep_fitting[i][argmin:-argmin]
+        elif argmin>len(dat_07TeV_ptdep_fitting[i])/2:
+            dat_07TeV_ptdep_fitting[i] = dat_07TeV_ptdep_fitting[i][len(dat_07TeV_ptdep_fitting[i])-argmin-1:argmin+1]
+            phi_07TeV_ptdep_fitting[i] = phi_07TeV_ptdep_fitting[i][len(phi_07TeV_ptdep_fitting[i])-argmin-1:argmin+1]
+datacut()
 
+total_boundary = ((0., 0., -20, -10, -10),(5, 3., 20, 10, 10))
+total_initial = (1., 0.5, 2, 3, 0)
 '''Fitting 13TeV data'''
 def fit_13tev():
     ptf = [(1, 2), (2, 3), (3, 4), (1, 2), (2, 3), (3, 4)]
     etaf = [(1.6, 1.8), (1.6, 1.8), (1.6, 1.8), (2, 4), (2, 4), (2, 4)]
     '''boundary conditions'''
-    boundary = ((0., 0., -20, -10, -10),(5, 3., 20, 10, 10))
+    # boundary = ((0., 0., -20, -10, -10),(5, 3., 20, 10, 10))
+    boundary = total_boundary
     '''initial parameters'''
-    initial = (1., 0.5, 2, 3, 0)
+    # initial = (1., 0.5, 2, 3, 0)
+    initial = total_initial
     ptdep = classes.Fitting_gpu(13000, phi_13TeV_ptdep_fitting, dat_13TeV_ptdep_fitting, (ptloww, pthigh), None, ptf, etaf, boundary, initial, "pTdependence")
     ptdep_result, ptdep_error = ptdep.fitting(None)                  # error를 고려하지 않으려는 경우
     print(ptdep_result)
@@ -237,9 +243,11 @@ def fit_7tev():
     ptf = [(1, 2), (2, 3), (3, 4)]
     etaf = [(2, 4), (2, 4), (2, 4)]
     '''boundary conditions'''
-    boundary = ((0., 0., 0, 0, 0),(5, 3., 20, 10, 10))
+    # boundary = ((0., 0., 0, 0, 0),(5, 3., 20, 10, 10))
+    boundary = total_boundary
     '''initial parameters'''
-    initial = (1., 0.5, 2, 3, 0)
+    # initial = (1., 0.5, 2, 3, 0)
+    initial = total_initial
     ptdep = classes.Fitting_gpu(7000, phi_07TeV_ptdep_fitting, dat_07TeV_ptdep_fitting, (ptloww_07, pthigh_07), None, ptf, etaf, boundary, initial, "pTdependence")
     ptdep_result_07, ptdep_error_07 = ptdep.fitting(None)                  # error를 고려하지 않으려는 경우
     print(ptdep_result_07)
@@ -261,29 +269,30 @@ def fit_multipl():
 
 '''To Check Center of mass Energy dependence'''
 ''' Multiplicity : 90~100'''
+ptdep_result_cm = []
+ptdep_error_cm = []
 def fit_cmenerg():
-    ptdep_result_cm = []
-    ptdep_error_cm = []
-    def cmenergdep():
-        sqrSnn_str = [2.76, 5.02, 13]
-        sqrSnn = [2760, 5020, 13000]
-        ptf = [(0.5, 5)]
-        etaf = [(2, 5)]
-        '''boundary conditions'''
-        boundary = ((0.0, 0.8, -30, -10, -10),(5, 2., 30, 10, 10))
-        '''initial parameters'''
-        initial = (1., 1., 2, 3, 0)
-        for i in range(len(sqrSnn)):
-            print(f"\n**********\n sqrSnn = {sqrSnn_str[i]} Start \n\n**********\n")
-            ptdep = classes.Fitting_gpu(sqrSnn[i], CMenergydep_phi[i], CMenergydep_dat[i]-min(CMenergydep_dat[i]), None, None, ptf, etaf, boundary, initial, "CMenergy")
-            result, error = ptdep.fitting(None)
-            print(result)
-            ptdep_result_cm.append(result)
-            ptdep_error_cm.append(error)
-            print(f"\n**********\n sqrSnn = {sqrSnn_str[i]} End \n**********\n")
-    cmenergdep()
+    sqrSnn_str = [2.76, 5.02, 13]
+    sqrSnn = [2760, 5020, 13000]
+    ptf = [(0.5, 5)]
+    etaf = [(2, 5)]
+    '''boundary conditions'''
+    # boundary = ((0.0, 0.8, -30, -10, -10),(5, 2., 30, 10, 10))
+    boundary = total_boundary
+    '''initial parameters'''
+    # initial = (1., 1., 2, 3, 0)
+    initial = total_initial
+    for i in range(len(sqrSnn)):
+        print(f"\n**********\n sqrSnn = {sqrSnn_str[i]} Start \n\n**********\n")
+        ptdep = classes.Fitting_gpu(sqrSnn[i], CMenergydep_phi[i], CMenergydep_dat[i]-min(CMenergydep_dat[i]), None, None, ptf, etaf, boundary, initial, "CMenergy")
+        result, error = ptdep.fitting(None)
+        print(result)
+        ptdep_result_cm.append(result)
+        ptdep_error_cm.append(error)
+        print(f"\n**********\n sqrSnn = {sqrSnn_str[i]} End \n**********\n")
     print(ptdep_result_cm)
     print(ptdep_error_cm)
+
 
 # fit_13tev()
 # fit_7tev()
