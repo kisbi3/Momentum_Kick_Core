@@ -221,7 +221,7 @@ def datacut():
             phi_07TeV_ptdep_fitting[i] = phi_07TeV_ptdep_fitting[i][len(phi_07TeV_ptdep_fitting[i])-argmin-1:argmin+1]
 datacut()
 
-total_boundary = ((0., 0., -20, -10, -10),(5, 3., 20, 10, 10))
+total_boundary = ((0., 0., 0, 0, 0),(5, 3., 20, 10, 10))
 total_initial = (1., 0.5, 2, 3, 0)
 '''Fitting 13TeV data'''
 def fit_13tev():
@@ -289,7 +289,7 @@ def fit_cmenerg():
         print(result)
         ptdep_result_cm.append(result)
         ptdep_error_cm.append(error)
-        print(f"\n**********\n sqrSnn = {sqrSnn_str[i]} End \n**********\n")
+        print(f"\n**********\n sqrSnn = {sqrSnn_str[i]} End \n\n**********\n")
     print(ptdep_result_cm)
     print(ptdep_error_cm)
 
@@ -297,10 +297,13 @@ def fit_cmenerg():
 # fit_13tev()
 # fit_7tev()
 # fit_multipl()
-fit_cmenerg()
+# fit_cmenerg()
 
 
-ptdep_result_cm = [0,0,0,0,0]
+ptdep_result_cm = [np.array([6.50898500e-02, 1.00053422e+00, 1.99918447e+01, 3.15781968e-12, 1.91795188e-28]),
+                   np.array([2.10274974e-01, 6.00607568e-02, 1.89447712e+01, 1.66079658e-02, 1.14899736e-06]), 
+                   np.array([1.00006451e+00, 1.15455510e+00, 1.76066500e+01, 5.72307164e-06, 1.36854475e+00])]
+
 
 time_calculate = time.time()
 print(f"calculate end : {time_calculate-time_start:.3f} sec")
@@ -456,7 +459,7 @@ def drawgraph_ptdep_frnk():
     fig3.savefig('./FrNk_Test.png')
     fig3.savefig('/home/jaesung/Dropbox/ohno/FrNk_Test.png')
 
-'''CM energy dependence phi correlation graph'''
+'''CM energy dependence phi correlation graph + CM energy frNk'''
 def drawgraph_cmdep_phicorr():
     fig3 = plt.figure()
     ax = plt.axes()
@@ -490,16 +493,62 @@ def drawgraph_cmdep_phicorr():
     fig3.savefig('./cmdep_phicorr.png')
     fig3.savefig('/home/jaesung/Dropbox/ohno/cmdep_phicorr.png')
 
-drawgraph_ptdep_phicorr()
+    fig3 = plt.figure()
+    ax = plt.axes()
+    fig3.set_size_inches(35, 16.534, forward=True)
+
+    def FrNk_func(pt, xx, yy, zz):
+        return xx*np.exp(-yy/pt-zz*pt)
+
+    AuAu_200GeV = [4, 0, 0]
+    PbPb_276TeV = [20.2, 1.395, 0.207]
+    pp_27TeV = [ptdep_result_cm[0][2], ptdep_result_cm[0][3], ptdep_result_cm[0][4]]
+    pp_50TeV = [ptdep_result_cm[1][2], ptdep_result_cm[1][3], ptdep_result_cm[1][4]]
+    pp_13TeV = [ptdep_result_cm[2][2], ptdep_result_cm[2][3], ptdep_result_cm[2][4]]
+    pp_13TeV_alicms = [ptdep_result[2], ptdep_result[3], ptdep_result[4]]
+    pp_07TeV = [ptdep_result_07[2], ptdep_result_07[3], ptdep_result_07[4]]
+    '''Hanul's pp 13TeV FrNk result plot [[pt(Average)], [FrNk]]'''
+    Hanul_FrNk = [[1.5, 2.5], [0.93, 1.37]]
+    Hanul_FrNk_error = [[0.5, 0.5], [0.5, 0.5]]
+    ptf = np.arange(0.01,4,0.01)
+
+    plt.plot(ptf, FrNk_func(ptf, *AuAu_200GeV), color = 'blueviolet', linewidth=7, label=r'$AuAu, \, 200\mathrm{GeV}$')
+    plt.plot(ptf, FrNk_func(ptf, *PbPb_276TeV), color = 'black', linewidth=7, label=r'$PbPb, \, 2.76\mathrm{TeV}$')
+    plt.plot(ptf, FrNk_func(ptf, *pp_13TeV_alicms), color = 'cyan', linewidth=7, label=r'$pp \mathrm{ALICE+CMS}, \, 13\mathrm{TeV}$')
+    plt.plot(ptf, FrNk_func(ptf, *pp_13TeV), color = 'blue', linewidth=7, label=r'$pp, \, 13\mathrm{TeV}$')
+    plt.plot(ptf, FrNk_func(ptf, *pp_50TeV), color = 'green', linewidth=7, label=r'$pp, \, 5.02\mathrm{TeV}$')
+    plt.plot(ptf, FrNk_func(ptf, *pp_27TeV), color = 'red', linewidth=7, label=r'$pp, \, 2.76\mathrm{TeV}$')
+    plt.plot(ptf, FrNk_func(ptf, *pp_07TeV), color = 'grey', linewidth=7, label=r'$pp, \, 7\mathrm{TeV}$')
+    plt.scatter(Hanul_FrNk[0], Hanul_FrNk[1], edgecolor = 'violet', facecolors='none', s=900, marker='o', linewidths=5, zorder=2, label=r'$pp, \, 13\mathrm{TeV}(\mathrm{Hanul})$')
+    plt.scatter(Hanul_FrNk[0], Hanul_FrNk[1], facecolors='violet', s=900, marker='+', linewidths=5, zorder=2)
+    plt.errorbar(Hanul_FrNk[0], Hanul_FrNk[1], xerr=Hanul_FrNk_error, color="violet", linestyle=' ', linewidth=7, capthick=3, capsize=15)
+
+    plt.xlabel(r'$p_T^{\mathrm{trig}}$',size=70)
+    plt.ylabel(r'$f_{R} \langle N_k \rangle $',size=70)
+    plt.xlim(0,4)
+
+    ax.yaxis.set_major_formatter(ticker.FuncFormatter(lambda y, _: '${:g}$'.format(y)))
+    plt.tick_params(axis='both',which='major',direction='in',width=2,length=30,labelsize=45, top='true')
+    plt.tick_params(axis='both',which='minor',direction='in',width=2,length=15,labelsize=45, top='true')
+
+    plt.grid(color='silver',linestyle=':',linewidth=5, zorder=0)
+    plt.legend(fontsize=45, loc='upper right')
+
+    plt.tight_layout()
+
+    fig3.savefig('./CMenerg_FrNk.png')
+    fig3.savefig('/home/jaesung/Dropbox/ohno/CMenerg_FrNk.png')
+
+# drawgraph_ptdep_phicorr()
 time_phicorr = time.time()
 print(f"Graph, Phi correlation end : {time_phicorr-time_calculate:.3f} sec")
-drawgraph_ptdep_Yridge()
+# drawgraph_ptdep_Yridge()
 time_yridge = time.time()
 print(f"Graph, Yridge end : {time_yridge-time_phicorr:.3f} sec")
-drawgraph_ptdep_frnk()
+# drawgraph_ptdep_frnk()
 time_frnk = time.time()
 print(f"FrNk end : {time_frnk-time_yridge:.3f} sec")
-# drawgraph_cmdep_phicorr()
+drawgraph_cmdep_phicorr()
 
 time_end = time.time()
 print(f"Total end : {time_end-time_start:.3f} sec")
