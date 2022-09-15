@@ -123,7 +123,7 @@ class Fitting_gpu:
             if self.mode == "pTdependence":
                 popt, pcov = scipy.optimize.curve_fit(self.fitting_func, xdata = self.phi_array, ydata = self.data, bounds=self.boundary, p0 = self.initial, sigma = error_array, absolute_sigma = True)
             elif self.mode == "Multiplicity":
-                popt, pcov = scipy.optimize.curve_fit(self.fitting_func__multi, xdata = self.phi_array, ydata = self.data, bounds=self.boundary, p0 = self.initial, sigma = error_array, absolute_sigma = True)
+                popt, pcov = scipy.optimize.curve_fit(self.fitting_func_multi, xdata = self.phi_array, ydata = self.data, bounds=self.boundary, p0 = self.initial, sigma = error_array, absolute_sigma = True)
             elif self.mode == "CMenergy":
                 popt, pcov = scipy.optimize.curve_fit(self.fitting_func, xdata = self.phi_array, ydata = self.data, bounds=self.boundary, p0 = self.initial, sigma = error_array, absolute_sigma = True)
             elif self.mode == "Both":
@@ -135,7 +135,7 @@ class Fitting_gpu:
         return popt, np.sqrt(np.diag(pcov))
 
     #   fitting parameters : kick, Tem, xx, yy, AA, BB
-    def fitting_func__multi(self, phi_dist, kick, Tem, xx, yy, AA, BB):
+    def fitting_func_multi(self, phi_dist, kick, Tem, xx, yy, AA, BB):
         phi_array = phi_dist.reshape((self.Number_of_Array,-1))
         phi_array = []
         for i in range(self.Number_of_Array):
@@ -196,6 +196,7 @@ class Fitting_gpu:
         if self.ptdis_number is None and self.array_length == 1:
             ''' CM energy dependence'''            
             deltapt = self.ptf[0][1] - self.ptf[0][0]
+            yy = zz = 0
             result_dist = deltapt*self.__ptdep(phi_array, self.etaf[0], self.ptf[0], Aridge, kick, Tem, xx, yy, zz)
             result = result_dist - min(result_dist)
             self.__count = self.__count + 1

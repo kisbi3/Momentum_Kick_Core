@@ -221,8 +221,8 @@ def datacut():
             phi_07TeV_ptdep_fitting[i] = phi_07TeV_ptdep_fitting[i][len(phi_07TeV_ptdep_fitting[i])-argmin-1:argmin+1]
 datacut()
 
-total_boundary = ((0., 0., 0, 0, 0),(5, 3., 20, 10, 10))
-total_initial = (1., 0.5, 2, 3, 0)
+total_boundary = ((0.5, .5, 0, 0, 0),(3, 2., 4, 1e-10, 1e-10))
+total_initial = (.7, 1., 1.5, 0, 0)
 '''Fitting 13TeV data'''
 def fit_13tev():
     ptf = [(1, 2), (2, 3), (3, 4), (1, 2), (2, 3), (3, 4)]
@@ -297,12 +297,12 @@ def fit_cmenerg():
 # fit_13tev()
 # fit_7tev()
 # fit_multipl()
-# fit_cmenerg()
+fit_cmenerg()
 
 
-ptdep_result_cm = [np.array([6.50898500e-02, 1.00053422e+00, 1.99918447e+01, 3.15781968e-12, 1.91795188e-28]),
-                   np.array([2.10274974e-01, 6.00607568e-02, 1.89447712e+01, 1.66079658e-02, 1.14899736e-06]), 
-                   np.array([1.00006451e+00, 1.15455510e+00, 1.76066500e+01, 5.72307164e-06, 1.36854475e+00])]
+# ptdep_result_cm = [np.array([6.50898500e-02, 1.00053422e+00, 1.99918447e+01, 3.15781968e-12, 1.91795188e-28]),
+#                    np.array([2.10274974e-01, 6.00607568e-02, 1.89447712e+01, 1.66079658e-02, 1.14899736e-06]), 
+#                    np.array([1.00006451e+00, 1.15455510e+00, 1.76066500e+01, 5.72307164e-06, 1.36854475e+00])]
 
 
 time_calculate = time.time()
@@ -514,10 +514,10 @@ def drawgraph_cmdep_phicorr():
 
     plt.plot(ptf, FrNk_func(ptf, *AuAu_200GeV), color = 'blueviolet', linewidth=7, label=r'$AuAu, \, 200\mathrm{GeV}$')
     plt.plot(ptf, FrNk_func(ptf, *PbPb_276TeV), color = 'black', linewidth=7, label=r'$PbPb, \, 2.76\mathrm{TeV}$')
-    plt.plot(ptf, FrNk_func(ptf, *pp_13TeV_alicms), color = 'cyan', linewidth=7, label=r'$pp \mathrm{ALICE+CMS}, \, 13\mathrm{TeV}$')
-    plt.plot(ptf, FrNk_func(ptf, *pp_13TeV), color = 'blue', linewidth=7, label=r'$pp, \, 13\mathrm{TeV}$')
-    plt.plot(ptf, FrNk_func(ptf, *pp_50TeV), color = 'green', linewidth=7, label=r'$pp, \, 5.02\mathrm{TeV}$')
-    plt.plot(ptf, FrNk_func(ptf, *pp_27TeV), color = 'red', linewidth=7, label=r'$pp, \, 2.76\mathrm{TeV}$')
+    plt.plot(ptf, FrNk_func(ptf, *pp_13TeV_alicms), color = 'cyan', linewidth=7, label=r'$pp \,\mathrm{(ALICE+CMS)}, \, 13\mathrm{TeV}$')
+    plt.plot(ptf, FrNk_func(ptf, *pp_13TeV), color = 'blue', linewidth=7, label=r'$pp, \, 13\mathrm{TeV} \,\,\mathrm{(ATLAS)} $')
+    plt.plot(ptf, FrNk_func(ptf, *pp_50TeV), color = 'green', linewidth=7, label=r'$pp, \, 5.02\mathrm{TeV}\,\,\mathrm{(ATLAS)}$')
+    plt.plot(ptf, FrNk_func(ptf, *pp_27TeV), color = 'red', linewidth=7, label=r'$pp, \, 2.76\mathrm{TeV}\,\,\mathrm{(ATLAS)}$')
     plt.plot(ptf, FrNk_func(ptf, *pp_07TeV), color = 'grey', linewidth=7, label=r'$pp, \, 7\mathrm{TeV}$')
     plt.scatter(Hanul_FrNk[0], Hanul_FrNk[1], edgecolor = 'violet', facecolors='none', s=900, marker='o', linewidths=5, zorder=2, label=r'$pp, \, 13\mathrm{TeV}(\mathrm{Hanul})$')
     plt.scatter(Hanul_FrNk[0], Hanul_FrNk[1], facecolors='violet', s=900, marker='+', linewidths=5, zorder=2)
