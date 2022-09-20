@@ -246,10 +246,13 @@ class Fitting_gpu:
                 result = deltapt*(4/3)*cp.sum(self.__FrNk(xx, yy, zz, ptf)*ptf*gpu.Ridge_dist(Aridge, ptf, etaf, phif, kick, Tem, self.sqrSnn, self.__mp, self.__m, self.__mb, self.__md, self.__a), axis=(2,1))*dptf*detaf*dphif/delta_Deltaeta
                 result = result - min(result);    result = cp.sum(result)
                 results = np.append(results, cp.asnumpy(result))                
-        
-
         return results
 
+    def Fixed_Temp(multi, meanpT):
+        # AuAu : 200GeV
+        AuAu_meanpT = 0.39
+        AuAu_Temp = 0.5
+        return (meanpT/AuAu_meanpT)*AuAu_Temp
 
 
 

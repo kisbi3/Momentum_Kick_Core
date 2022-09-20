@@ -1,0 +1,14 @@
+#: table_doi: 10.17182/hepdata.72491.v1/t1
+#: name: Table 1
+#: description: The average charged-particle multiplicity per unit of rapidity for ETARAP=0 as a function of the centre-of-mass energy.
+
+#: data_file: Table1.yaml
+#: keyword reactions: P P --> CHARGED X
+#: keyword observables: MULT
+#: keyword phrases: Inclusive | Proton-Proton Scattering
+#: keyword cmenergies: 13000.0
+#: RE,,,P P --> CHARGED X
+SQRT(S) [GREV],PT(P=3) [MEV],N(P=3),ETARAP(P=3),ETARAP AVERAGE,ETARAP AVERAGE LOW,ETARAP AVERAGE HIGH,(1/NEV)*DN(P=3)/DETARAP(P=3),stat +,stat -,sys +,sys -
+13000.0,> 500.0,>= 1.0,absolute(eta) < 2.5,0.0,-0.2,0.2,2.874,0.001,-0.001,0.033,-0.033
+13000.0,> 500.0,>= 1.0,absolute(eta) < 0.8,0.0,-0.2,0.2,3.488,0.001,-0.001,0.034,-0.034
+

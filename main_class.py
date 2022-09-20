@@ -22,12 +22,96 @@ import class_pool as classes
 
 mpl.rcParams["text.usetex"] = True
 
-path = ['./data/atldata/13TeV/', './data/alidata/', './data/cmsdata/', './data/atldata/2.76TeV/', './data/atldata/5.02TeV/']
-phi_13TeV_multi_atlas = []
-dat_13TeV_multi_atlas = []
+path = ['./data/atldata/13TeV/', './data/alidata/', './data/cmsdata/', './data/atldata/2.76TeV/', './data/atldata/5.02TeV/', './data/atldata/13TeV_distribution/', './data/atldata/']
 
-# 순서 : alice, alice, alice, ..., cms, cms, cms, ....., atlas, alice, cms
-# 마지막 두개는 Yridge
+
+'''Multiplicity Dependence'''
+phi_13TeV_multi_atlas = []
+phi_13TeV_multi_atlas_fitting = []
+dat_13TeV_multi_atlas = []
+dat_13TeV_multi_atlas_fitting = []
+multiplicity_atlas = []
+phi_13TeV_multi_cms = []
+phi_13TeV_multi_cms_fitting = []
+dat_13TeV_multi_cms = []
+dat_13TeV_multi_cms_fitting = []
+err_13TeV_multi_cms = []
+'''순서 : multiplicity, mean pT'''
+meanpTvsnch_13TeV=[]
+'''순서 : err+, err-'''
+meanpTvsnch_13TeV_err=[]
+'''순서 : Nch Low, Nch High'''
+meanpTvsnch_13TeV_nchrange=[]
+meanpTvsnch_13TeV.append(np.loadtxt(path[5]+'Table6.csv', delimiter=',', usecols=[0], skiprows=14))
+meanpTvsnch_13TeV.append(np.loadtxt(path[5]+'Table6.csv', delimiter=',', usecols=[3], skiprows=14))
+temp_sta1 = np.loadtxt(path[5]+'Table6.csv', delimiter=',', usecols=[4], skiprows=14)
+temp_sta2 = np.loadtxt(path[5]+'Table6.csv', delimiter=',', usecols=[5], skiprows=14)
+temp_sys1 = np.loadtxt(path[5]+'Table6.csv', delimiter=',', usecols=[6], skiprows=14)
+temp_sys2 = np.loadtxt(path[5]+'Table6.csv', delimiter=',', usecols=[7], skiprows=14)
+meanpTvsnch_13TeV_err.append((temp_sta1**2+temp_sys1**2)**0.5)
+meanpTvsnch_13TeV_err.append((temp_sta2**2+temp_sys2**2)**0.5)
+meanpTvsnch_13TeV_nchrange.append(np.loadtxt(path[5]+'Table6.csv', delimiter=',', usecols=[1], skiprows=14))
+meanpTvsnch_13TeV_nchrange.append(np.loadtxt(path[5]+'Table6.csv', delimiter=',', usecols=[2], skiprows=14))
+
+'''Multiplicity에 대한 associated yield
+   순서 : ALTAS, CMS                   '''
+Multi_N = []
+Multi_Y = []
+Multi_N.append(np.loadtxt(path[6]+'Multiplicity_yield.csv',delimiter=',',usecols=[0], skiprows=1))
+Multi_Y.append(np.loadtxt(path[6]+'Multiplicity_yield.csv',delimiter=',',usecols=[1], skiprows=1))
+Multi_N.append(np.loadtxt(path[2]+'Table35.csv',delimiter=',',usecols=[0],skiprows=14))
+Multi_Y.append(np.loadtxt(path[2]+'Table35.csv',delimiter=',',usecols=[1],skiprows=14))
+'''append atlas multiplicity data'''
+def atlas_multiplicity():
+    for i in range(9):
+        start = 10*i + 50
+        end = 10*i + 60
+        if start == 130:
+            phi_13TeV_multi_atlas.append(np.loadtxt(path[0]+f'{start}~.csv',delimiter=',',usecols=[0], skiprows=3, max_rows=12))
+            dat_13TeV_multi_atlas.append(np.loadtxt(path[0]+f'{start}~.csv',delimiter=',',usecols=[1], skiprows=3, max_rows=12))
+            '''multiplicity가 130이상이기 때문에 평균값보다 더 커서 변경할 수도 있어서 이렇게 두었음'''
+            multiplicity_atlas.append((start+140)/2)
+        else:
+            multiplicity_atlas.append((start+end)/2)
+            phi_13TeV_multi_atlas.append(np.loadtxt(path[0]+f'{start}~{end}.csv',delimiter=',',usecols=[0], skiprows=3, max_rows=12))
+            dat_13TeV_multi_atlas.append(np.loadtxt(path[0]+f'{start}~{end}.csv',delimiter=',',usecols=[1], skiprows=3, max_rows=12))
+        dat_13TeV_multi_atlas[i] -= min(dat_13TeV_multi_atlas[i])
+        # print(phi_13TeV_multi_atlas[i])
+        # print(dat_13TeV_multi_atlas[i])
+        check1 = int(np.where(dat_13TeV_multi_atlas[i]==0)[0])
+        check2 = int(len(dat_13TeV_multi_atlas[i])-check1)-1
+        # print(check1, check2)
+        if check1<check2:
+            phi_13TeV_multi_atlas_fitting.append(phi_13TeV_multi_atlas[i][check1:check2+1])
+            dat_13TeV_multi_atlas_fitting.append(dat_13TeV_multi_atlas[i][check1:check2+1])
+        elif check1>check2:
+            phi_13TeV_multi_atlas_fitting.append(phi_13TeV_multi_atlas[i][check2:check1+1])
+            dat_13TeV_multi_atlas_fitting.append(dat_13TeV_multi_atlas[i][check2:check1+1])
+atlas_multiplicity()
+'''append cms multiplicity data'''
+def cms_multiplicity():
+    '''아래 multiplicity는 사용할지 사용 안할지 모름.'''
+    multiplicity_cms = [57.5, 57.5, 57.5, 57.5, 92.5, 92.5, 92.5, 92.5, 127.5, 127.5, 127.5, 127.5]
+    for i in range(12):
+        '''80<N<105, 3<pT<4 의 데이터가 많이 이상하여 if문으로 빼서 따로 처리해야 할 수도'''
+        table = 2*i+9
+        phi_13TeV_multi_cms.append(np.loadtxt(path[2]+f'Table{table}.csv',delimiter=',',usecols=[0], skiprows=18, max_rows=13))
+        dat_13TeV_multi_cms.append(np.loadtxt(path[2]+f'Table{table}.csv',delimiter=',',usecols=[1], skiprows=18, max_rows=13))
+        err_13TeV_multi_cms.append(np.loadtxt(path[2]+f'Table{table}.csv',delimiter=',',usecols=[2], skiprows=18, max_rows=13))
+        err_13TeV_multi_cms.append(np.loadtxt(path[2]+f'Table{table}.csv',delimiter=',',usecols=[3], skiprows=18, max_rows=13))
+        dat_13TeV_multi_cms[i] -= min(dat_13TeV_multi_cms[i])
+        check1 = int(np.where(dat_13TeV_multi_cms[i]==0)[0][0])
+        check2 = int(len(dat_13TeV_multi_cms[i])-check1)-1
+        if check1<check2:
+            phi_13TeV_multi_cms_fitting.append(phi_13TeV_multi_cms[i][check1:check2+1])
+            dat_13TeV_multi_cms_fitting.append(dat_13TeV_multi_cms[i][check1:check2+1])
+        elif check1>check2:
+            phi_13TeV_multi_cms_fitting.append(phi_13TeV_multi_cms[i][check2:check1+1])
+            dat_13TeV_multi_cms_fitting.append(dat_13TeV_multi_cms[i][check2:check1+1])
+cms_multiplicity()
+
+
+'''pt dependence'''
 phi_13TeV_ptdep = []
 dat_13TeV_ptdep = []
 err_13TeV_ptdep = []
@@ -35,18 +119,8 @@ phi_07TeV_ptdep = []
 dat_07TeV_ptdep = []
 err_07TeV_ptdep = []
 fitting_error = []
-# delta_phi_zyam = []
-'''append atlas data'''
-for i in range(5):
-    start = 10*i + 90
-    end = 10*i + 100
-    if start == 130:
-        phi_13TeV_multi_atlas.append(np.loadtxt(path[0]+f'{start}~.csv',delimiter=',',usecols=[0], skiprows=3, max_rows=12))
-        dat_13TeV_multi_atlas.append(np.loadtxt(path[0]+f'{start}~.csv',delimiter=',',usecols=[1], skiprows=3, max_rows=12))
-    else:
-        phi_13TeV_multi_atlas.append(np.loadtxt(path[0]+f'{start}~{end}.csv',delimiter=',',usecols=[0], skiprows=3, max_rows=12))
-        dat_13TeV_multi_atlas.append(np.loadtxt(path[0]+f'{start}~{end}.csv',delimiter=',',usecols=[1], skiprows=3, max_rows=12))
-    dat_13TeV_multi_atlas[i] -= min(dat_13TeV_multi_atlas[i])
+# 순서 : alice, alice, alice, ..., cms, cms, cms, ....., atlas, alice, cms
+# 마지막 두개는 Yridge
 '''append 13TeV pt dependence data'''
 for i in range(3):
     if i==0:
@@ -143,10 +217,6 @@ pthigh = []
 ptloww_07 = []
 pthigh_07 = []
 def Yridge_ptrange():
-    ptloww_ali = np.loadtxt(path[1]+'Y^mathrm{ridge}.csv',delimiter=',',usecols=[1],skiprows=12,max_rows=7)
-    pthigh_ali = np.loadtxt(path[1]+'Y^mathrm{ridge}.csv',delimiter=',',usecols=[2],skiprows=12,max_rows=7)
-    ptloww_cms = np.loadtxt(path[2]+'Table33.csv',delimiter=',',usecols=[6],skiprows=14,max_rows=9)
-    pthigh_cms = np.loadtxt(path[2]+'Table33.csv',delimiter=',',usecols=[7],skiprows=14,max_rows=9)
     ptloww.append(np.loadtxt(path[1]+'Y^mathrm{ridge}.csv',delimiter=',',usecols=[1],skiprows=12,max_rows=7))
     pthigh.append(np.loadtxt(path[1]+'Y^mathrm{ridge}.csv',delimiter=',',usecols=[2],skiprows=12,max_rows=7))
     ptloww.append(np.loadtxt(path[2]+'Table33.csv',delimiter=',',usecols=[6],skiprows=14,max_rows=9))
@@ -254,18 +324,31 @@ def fit_7tev():
     print(ptdep_error_07)
 
 '''multiplicity fitting'''
+'''multiplicity파일 안에 에서는 multiplicity에 따른 associated yield 그래프를 이용해서 fitting한 후에 delta phi correlation에 적용만 하는 상태.'''
+'''이 파일에서는 multiplicity에 따른 mean pT를 확인하여 이에 따른 T를 계산하고, fitting할 것이다.'''
 def fit_multipl():
-    # boundary2 = ((0.7, 0.4, 0, 0, 1, 100),(5, 0.7, 5, 10, 20, 300))
-    # initial2 = (0.9, 0.65, 0.83, 0.5, 14, 250)
-    # multipl = classes.Fitting_gpu(phi_13TeV_multi_atlas, dat_13TeV_multi_atlas, 95, (0.5, 5), (2, 5), boundary2, initial2, "Multiplicity")
-    # multipl_result, multipl_error = multipl.fitting()
-    # print(multipl_result)
-    # print(multipl_error)
-    # dist = []
-    # for i in range(5):
-    #     multi= 10*i + 95
-    #     dist.append(Ridge(Aridge, *popt, multi, 2, 5))
-    pass
+    boundary = ((0, 0, 50),(500, 30, 400))      # fix parameters : kick, Tem, yy, zz
+    initial = (31.5451844, 1.24936717e+01, 2.45950926e+02)
+    Fixed_Temperature = classes.Fitting_gpu.Fixed_Temp(meanpTvsnch_13TeV[0], meanpTvsnch_13TeV[1])
+    Fixed_Temperature_fitting = []
+    Fixed_Temperature_fitting.extend([Fixed_Temperature[54], Fixed_Temperature[62], Fixed_Temperature[67], Fixed_Temperature[72]])
+    Fixed_Temperature_fitting.append((Fixed_Temperature[75]+Fixed_Temperature[76])/2)
+    Fixed_Temperature_fitting.extend([Fixed_Temperature[77], Fixed_Temperature[78], Fixed_Temperature[79], Fixed_Temperature[80]])
+    print(phi_13TeV_multi_atlas_fitting)
+    '''multiplicity에 대한 associated yield만 가지고 fitting하고 phi correlation그리기'''
+    multi_atlas = classes.Fitting_gpu(13000, phi_13TeV_multi_atlas_fitting, dat_13TeV_multi_atlas_fitting, None, multiplicity_atlas, (0.5, 5), (2, 5), boundary, initial, "Multiplicity")
+    multi_atlas_result, multi_atlas_error = multi_atlas.fitting()                  # error를 고려하지 않으려는 경우
+    kick = 0.798958702
+    Tem = 0.840820694
+    yy = 1.49370324
+    zz = 3.51939886e-12
+    multi_atlas_result = np.array([kick, Tem, multi_atlas_result[0], yy, zz, multi_atlas_result[1], multi_atlas_result[2]])
+    print('ATLAS results : ', multi_atlas_result)
+    print('ATLAS error : ', multi_atlas_error)
+    '''
+            ***Results : [0.798958702    0.840820694    5.38517847    1.49370324    3.51939886e-12    19.4957273e    117.807870]***
+    '''
+
 
 '''To Check Center of mass Energy dependence'''
 ''' Multiplicity : 90~100'''
@@ -297,7 +380,8 @@ def fit_cmenerg():
 # fit_13tev()
 # fit_7tev()
 # fit_multipl()
-fit_cmenerg()
+# fit_cmenerg()
+fit_multipl()
 
 
 # ptdep_result_cm = [np.array([6.50898500e-02, 1.00053422e+00, 1.99918447e+01, 3.15781968e-12, 1.91795188e-28]),
