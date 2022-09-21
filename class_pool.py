@@ -22,7 +22,6 @@ class Fitting_gpu:
     __m = 0.13957018  #m == mpi
     __mb = __m #mb==mpi, GeV
     __md = 1.   #GeV
-    # __sqrSnn = 13000.
     __mp = 0.938272046 #Proton mass, GeV
     __Yridge_phif_start = -1.18
     __Yridge_phif_end = 1.18
