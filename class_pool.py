@@ -103,6 +103,8 @@ class Fitting_gpu:
             if self.mode == "pTdependence":
                 popt, pcov = scipy.optimize.curve_fit(self.fitting_func, xdata = self.phi_array, ydata = self.data, bounds=self.boundary, p0 = self.initial)
             elif self.mode == "Multiplicity":
+                for Tem in Fixed_Temperature:
+                    pass
                 self.Fixed_Temperature = Fixed_Temperature
                 popt, pcov = scipy.optimize.curve_fit(self.fitting_func_multi, xdata = self.phi_array, ydata = self.data, bounds=self.boundary, p0 = self.initial)
             elif self.mode == "CMenergy":
