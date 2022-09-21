@@ -98,12 +98,13 @@ class Fitting_gpu:
     def __Nk(self, A, B, multi):
         return A*cp.exp(-B/multi)
 
-    def fitting(self, error):
+    def fitting(self, error, Fixed_Temperature):
         if error is None:
             if self.mode == "pTdependence":
                 popt, pcov = scipy.optimize.curve_fit(self.fitting_func, xdata = self.phi_array, ydata = self.data, bounds=self.boundary, p0 = self.initial)
             elif self.mode == "Multiplicity":
-                popt, pcov = scipy.optimize.curve_fit(self.fitting_func__multi, xdata = self.phi_array, ydata = self.data, bounds=self.boundary, p0 = self.initial)
+                self.Fixed_Temperature = Fixed_Temperature
+                popt, pcov = scipy.optimize.curve_fit(self.fitting_func_multi, xdata = self.phi_array, ydata = self.data, bounds=self.boundary, p0 = self.initial)
             elif self.mode == "CMenergy":
                 popt, pcov = scipy.optimize.curve_fit(self.fitting_func, xdata = self.phi_array, ydata = self.data, bounds=self.boundary, p0 = self.initial)
             elif self.mode == "Both":
@@ -123,6 +124,7 @@ class Fitting_gpu:
             if self.mode == "pTdependence":
                 popt, pcov = scipy.optimize.curve_fit(self.fitting_func, xdata = self.phi_array, ydata = self.data, bounds=self.boundary, p0 = self.initial, sigma = error_array, absolute_sigma = True)
             elif self.mode == "Multiplicity":
+                self.Fixed_Temperature = Fixed_Temperature
                 popt, pcov = scipy.optimize.curve_fit(self.fitting_func_multi, xdata = self.phi_array, ydata = self.data, bounds=self.boundary, p0 = self.initial, sigma = error_array, absolute_sigma = True)
             elif self.mode == "CMenergy":
                 popt, pcov = scipy.optimize.curve_fit(self.fitting_func, xdata = self.phi_array, ydata = self.data, bounds=self.boundary, p0 = self.initial, sigma = error_array, absolute_sigma = True)
@@ -134,37 +136,50 @@ class Fitting_gpu:
                 quit()
         return popt, np.sqrt(np.diag(pcov))
 
-    #   fitting parameters : kick, Tem, xx, yy, AA, BB
-    def fitting_func_multi(self, phi_dist, kick, Tem, xx, yy, AA, BB):
-        phi_array = phi_dist.reshape((self.Number_of_Array,-1))
+
+    def fitting_func_multi(self, phi_dist, kick, xx, yy, zz):
+        Tem = self.Fixed_Temperature
         phi_array = []
+        start = 0
         for i in range(self.Number_of_Array):
-            phi_array.append(phi_dist[self.array_length[i]*i : self.array_length[i]*(i+1)])
+            number = self.array_length[i]
+            phi_array.append(phi_dist[start : start + number])
+            start += number
         Aridge_bin = 1000
         pti, yi = np.meshgrid(np.linspace(self.__pti[0], self.__pti[1], Aridge_bin), np.linspace(self.__yi[0], self.__yi[1], Aridge_bin))
         dyi = (self.__pti[1] - self.__pti[0])/Aridge_bin
         dpti = (self.__yi[1] - self.__yi[0])/Aridge_bin
-        Aridge = cp.asarray(1/np.sum(cpu.Aridge(pti, yi, Tem, self.__m, self.__md, self.__a, self.sqrSnn, self.__mp)*dyi*dpti*2*np.pi))
+        # Aridge = []
+        # Aridge.append(cp.asarray(1/np.sum(cpu.Aridge(pti, yi, Tem[i], self.__m, self.__md, self.__a, self.sqrSnn, self.__mp)*dyi*dpti*2*np.pi)))
         result = np.array([])
         result_dist = []
         for i in range(len(phi_array)):
+            Aridge = cp.asarray(1/np.sum(cpu.Aridge(pti, yi, Tem[i], self.__m, self.__md, self.__a, self.sqrSnn, self.__mp)*dyi*dpti*2*np.pi))
             multi = 10*i + 95
-            dist = self.__multiplicity(multi, phi_array[i], self.etaf, Aridge, kick, Tem, xx, yy, AA, BB)
+            dist = self.__multiplicity(multi, phi_array[i], self.etaf, Aridge, kick, Tem[i], xx, yy, zz)
             result_dist.append(dist-min(dist))
             if i ==0:
                 result = result_dist[i]
             else:
                 result = np.concatenate((result, result_dist[i]))
-        print(kick, Tem, xx, yy, np.sum((result-self.data)**2))
+        self.__count = self.__count + 1
+        if self.__count == 1 or self.__count%10==0:
+            print(f"{self.__count}회", kick, xx, yy, zz, np.sum((result-self.data)**2))
+        # print(kick, xx, yy, np.sum((result-self.data)**2))
         return result
 
-    def __multiplicity(self, multi, phi_array, etaf, Aridge, kick, Tem, xx, yy, A, B):
+
+    def __multiplicity(self, multi, phi_array, etaf, Aridge, kick, Tem, xx, yy, zz):
         bin = 300
         ptf, etaf, phif = cp.meshgrid(cp.linspace(self.ptf[0], self.ptf[1], bin), cp.linspace(etaf[0], etaf[1], bin), cp.asarray(phi_array))
         dptf = (self.ptf[1] - self.ptf[0])/bin
         detaf = (etaf[1]-etaf[0])/bin
         delta_Deltaeta = 2*(etaf[1]-etaf[0])
-        dist = cp.sum((4/3)*self.__Fr(A, B, multi)*self.__Nk(xx, yy, ptf)*ptf*gpu.Ridge_dist(Aridge, ptf, etaf, phif, kick, Tem, self.sqrSnn, self.__mp, self.__m, self.__mb, self.__md, self.__a), axis=(0))*dptf*detaf/delta_Deltaeta
+        # dist = cp.sum((4/3)*self.__Fr(A, B, multi)*self.__Nk(xx, yy, ptf)*ptf*gpu.Ridge_dist(Aridge, ptf, etaf, phif, kick, Tem, self.sqrSnn, self.__mp, self.__m, self.__mb, self.__md, self.__a), axis=(0))*dptf*detaf/delta_Deltaeta
+        # deltapt = 1/(ptf_dist[1] - ptf_dist[0])       #pt normalize
+        '''ATLAS는 deltapt 없는듯. ATLAS로 시작하고 있으니 일단 1로 두자.'''
+        deltapt = 1
+        dist = deltapt*cp.sum(self.__FrNk(xx, yy, zz, ptf)*ptf*gpu.Ridge_dist(Aridge, ptf, etaf, phif, kick, Tem, self.sqrSnn, self.__mp, self.__m, self.__mb, self.__md, self.__a), axis=0)*dptf*detaf/delta_Deltaeta
         return cp.asnumpy(cp.sum(dist, axis=(0)))
     
 
@@ -320,16 +335,29 @@ class Drawing_Graphs:
             quit()
 
     def __Ridge_Multi(self, multi, ptf, phif):
+        # Aridge = self.__Aridge()
+        # bin = 300
+        # delta_Deltaeta = 2*(self.etaf[1]-self.etaf[0])
+        # dptf = (ptf[1]-ptf[0])/bin
+        # ptf, etaf, phif = cp.meshgrid(cp.linspace(ptf[0], ptf[1], bin), cp.linspace(self.etaf[0], self.etaf[1], bin), cp.linspace(phif[0], phif[1], bin))
+        # detaf = (self.etaf[1]-self.etaf[0])/bin
+        # dist = cp.sum((4/3)*self.__Fr(self.xx, self.yy, ptf)*self.__Nk(self.AA, self.BB, multi)*ptf*gpu.Ridge_dist(Aridge, ptf, etaf, phif, self.kick, self.Tem, self.sqrSnn, self.__mp, self.__m, self.__mb, self.__md, self.__a), axis=(0))*dptf*detaf/delta_Deltaeta
+        # Ridge_phi = cp.asnumpy(cp.sum(dist, axis=0))
+        # return cp.asnumpy(phif[0][0]), Ridge_phi-min(Ridge_phi)
+        kick = self.kick; Tem = self.Tem; xx = self.xx; yy = self.yy; zz = self.zz; AA = self.AA; BB = self.BB; etaf_range = self.etaf
         Aridge = self.__Aridge()
         bin = 300
-        delta_Deltaeta = 2*(self.etaf[1]-self.etaf[0])
-        dptf = (ptf[1]-ptf[0])/bin
-        ptf, etaf, phif = cp.meshgrid(cp.linspace(ptf[0], ptf[1], bin), cp.linspace(self.etaf[0], self.etaf[1], bin), cp.linspace(phif[0], phif[1], bin))
-        detaf = (self.etaf[1]-self.etaf[0])/bin
-        dist = cp.sum((4/3)*self.__Fr(self.xx, self.yy, ptf)*self.__Nk(self.AA, self.BB, multi)*ptf*gpu.Ridge_dist(Aridge, ptf, etaf, phif, self.kick, self.Tem, self.sqrSnn, self.__mp, self.__m, self.__mb, self.__md, self.__a), axis=(0))*dptf*detaf/delta_Deltaeta
-        Ridge_phi = cp.asnumpy(cp.sum(dist, axis=0))
+        delta_Deltaeta = 2*(etaf_range[1]-etaf_range[0])
+        dptf = (ptf_range[1]-ptf_range[0])/bin
+        ptf, etaf, phif = cp.meshgrid(cp.linspace(ptf_range[0], ptf_range[1], bin), cp.linspace(etaf_range[0], etaf_range[1], bin), cp.linspace(phif_range[0], phif_range[1], bin))
+        detaf = (etaf_range[1]-etaf_range[0])/bin
+        ridge_integrate = ptf*gpu.Ridge_dist(Aridge, ptf, etaf, phif, kick, Tem, self.__sqrSnn, self.__mp, self.__m, self.__mb, self.__md, self.__a)
+        ridge_integrate = ridge_integrate*self.__Fr(xx, yy, zz, ptf)*self.__Nk(AA, BB, multi)
+        dist_integrate = cp.sum(ridge_integrate, axis = 1)*(4/3)*dptf*detaf/delta_Deltaeta
+        Ridge_phi = cp.asnumpy(cp.sum(dist_integrate, axis = 0))
         return cp.asnumpy(phif[0][0]), Ridge_phi-min(Ridge_phi)
-        
+
+
     def __Ridge_ptdep(self, ptf_range, phif_range):
         kick = self.kick; Tem = self.Tem; xx = self.xx; yy = self.yy; zz = self.zz
         Aridge = self.__Aridge()
