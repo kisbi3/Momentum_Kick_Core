@@ -22,7 +22,6 @@ class Fitting_gpu:
     __m = 0.13957018  #m == mpi
     __mb = __m #mb==mpi, GeV
     __md = 1.   #GeV
-    # __sqrSnn = 13000.
     __mp = 0.938272046 #Proton mass, GeV
     __Yridge_phif_start = -1.18
     __Yridge_phif_end = 1.18
@@ -103,10 +102,25 @@ class Fitting_gpu:
             if self.mode == "pTdependence":
                 popt, pcov = scipy.optimize.curve_fit(self.fitting_func, xdata = self.phi_array, ydata = self.data, bounds=self.boundary, p0 = self.initial)
             elif self.mode == "Multiplicity":
-                for Tem in Fixed_Temperature:
-                    pass
-                self.Fixed_Temperature = Fixed_Temperature
-                popt, pcov = scipy.optimize.curve_fit(self.fitting_func_multi, xdata = self.phi_array, ydata = self.data, bounds=self.boundary, p0 = self.initial)
+                self.Fixed_Temperature = Fixed_Temperature                
+                totalresult = []
+                phi_array_sep = []; data_sep = []
+                start = 0
+                for i in range(self.Number_of_Array):
+                    number = self.array_length[i]
+                    phi_array_sep.append(self.phi_array[start : start + number])
+                    data_sep.append(self.data[start : start + number])
+                    start += number
+
+                for i in range(len(phi_array_sep)):
+                    '''Fitting하는 번호'''
+                    self.separate_number = i
+                    print(i)
+                    result_temp, pcov = scipy.optimize.curve_fit(self.fitting_func_multi, xdata = phi_array_sep[i], ydata = data_sep[i], bounds=self.boundary, p0 = self.initial)
+                    totalresult.append(result_temp)
+                popt = totalresult
+                
+
             elif self.mode == "CMenergy":
                 popt, pcov = scipy.optimize.curve_fit(self.fitting_func, xdata = self.phi_array, ydata = self.data, bounds=self.boundary, p0 = self.initial)
             elif self.mode == "Both":
@@ -139,39 +153,27 @@ class Fitting_gpu:
         return popt, np.sqrt(np.diag(pcov))
 
 
-    def fitting_func_multi(self, phi_dist, kick, xx, yy, zz):
+    def fitting_func_multi(self, phi_array, kick, xx, yy, zz):
+        yy = zz = 0
+        xx = 1
         Tem = self.Fixed_Temperature
-        phi_array = []
-        start = 0
-        for i in range(self.Number_of_Array):
-            number = self.array_length[i]
-            phi_array.append(phi_dist[start : start + number])
-            start += number
         Aridge_bin = 1000
         pti, yi = np.meshgrid(np.linspace(self.__pti[0], self.__pti[1], Aridge_bin), np.linspace(self.__yi[0], self.__yi[1], Aridge_bin))
         dyi = (self.__pti[1] - self.__pti[0])/Aridge_bin
         dpti = (self.__yi[1] - self.__yi[0])/Aridge_bin
         # Aridge = []
         # Aridge.append(cp.asarray(1/np.sum(cpu.Aridge(pti, yi, Tem[i], self.__m, self.__md, self.__a, self.sqrSnn, self.__mp)*dyi*dpti*2*np.pi)))
-        result = np.array([])
-        result_dist = []
-        for i in range(len(phi_array)):
-            Aridge = cp.asarray(1/np.sum(cpu.Aridge(pti, yi, Tem[i], self.__m, self.__md, self.__a, self.sqrSnn, self.__mp)*dyi*dpti*2*np.pi))
-            multi = 10*i + 95
-            dist = self.__multiplicity(multi, phi_array[i], self.etaf, Aridge, kick, Tem[i], xx, yy, zz)
-            result_dist.append(dist-min(dist))
-            if i ==0:
-                result = result_dist[i]
-            else:
-                result = np.concatenate((result, result_dist[i]))
+        number = self.separate_number
+        Aridge = cp.asarray(1/np.sum(cpu.Aridge(pti, yi, Tem[number], self.__m, self.__md, self.__a, self.sqrSnn, self.__mp)*dyi*dpti*2*np.pi))
+        result = self.__multiplicity(phi_array, self.etaf, Aridge, kick, Tem[number], xx, yy, zz)
         self.__count = self.__count + 1
         if self.__count == 1 or self.__count%10==0:
-            print(f"{self.__count}회", kick, xx, yy, zz, np.sum((result-self.data)**2))
+            print(f"{self.__count}회", kick, xx, yy, zz, np.sum((result-self.data[number])**2))
         # print(kick, xx, yy, np.sum((result-self.data)**2))
         return result
 
 
-    def __multiplicity(self, multi, phi_array, etaf, Aridge, kick, Tem, xx, yy, zz):
+    def __multiplicity(self, phi_array, etaf, Aridge, kick, Tem, xx, yy, zz):
         bin = 300
         ptf, etaf, phif = cp.meshgrid(cp.linspace(self.ptf[0], self.ptf[1], bin), cp.linspace(etaf[0], etaf[1], bin), cp.asarray(phi_array))
         dptf = (self.ptf[1] - self.ptf[0])/bin

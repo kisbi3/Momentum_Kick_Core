@@ -340,7 +340,7 @@ def fit_multipl():
     Fixed_Temperature = classes.Fitting_gpu.Fixed_Temp(meanpTvsnch_13TeV[0], meanpTvsnch_13TeV[1])
     Fixed_Temperature_fitting = []
     Fixed_Temperature_fitting.extend([Fixed_Temperature[54], Fixed_Temperature[62], Fixed_Temperature[67], Fixed_Temperature[72]])
-    Fixed_Temperature_fitting.append((Fixed_Temperature[75]+Fixed_Temperature[76])/2)
+    Fixed_Temperature_fitting.append((Fixed_Temperature[75] + Fixed_Temperature[76])/2)
     Fixed_Temperature_fitting.extend([Fixed_Temperature[77], Fixed_Temperature[78], Fixed_Temperature[79], Fixed_Temperature[80]])
     '''multiplicity에 대한 associated yield만 가지고 fitting하고 phi correlation그리기'''
     multi_atlas = classes.Fitting_gpu(13000, phi_13TeV_multi_atlas_fitting, dat_13TeV_multi_atlas_fitting, None, multiplicity_atlas, (0.5, 5), (2, 5), boundary, initial, "Multiplicity")
@@ -351,12 +351,17 @@ def fit_multipl():
     # zz = 3.51939886e-12
     # multi_atlas_result = np.array([kick, Tem, multi_atlas_result[0], yy, zz, multi_atlas_result[1], multi_atlas_result[2]])
     '''multi_atlas_result : Kick, xx, yy, zz'''
-    print('ATLAS results : ', result)
-    print('ATLAS error : ', multi_atlas_error)
+    # print('ATLAS results : ', result)
+
     # multi_atlas_result.append(result)
-    multi_atlas_result = result.tolist()
-    multi_atlas_result.append(Fixed_Temperature_fitting)
-    print(multi_atlas_result)
+    # multi_atlas_result = result.tolist()
+    for i in range(len(result)):
+        #            q                      T                   xx              yy          zz
+        temp = [result[i][0], Fixed_Temperature_fitting[i], result[i][1], result[i][2], result[i][3]]
+        multi_atlas_result.append(temp)
+    # multi_atlas_result.append(Fixed_Temperature_fitting)
+    print('ATLAS results : ', multi_atlas_result)
+    print('ATLAS error : ', multi_atlas_error)
     '''
             ***Results : [0.798958702    0.840820694    5.38517847    1.49370324    3.51939886e-12    19.4957273e    117.807870]***
     '''
@@ -645,18 +650,14 @@ def drawgraph_cmdep_phicorr():
 def drawgraph_multi_phicorr():
     fig1, axes1 = plt.subplots(nrows=3, ncols=3,figsize=(90,90),sharey='row', sharex='col')
     #그래프 그리기
-    parameters = []
-    for Tem in multi_atlas_result[-1]:
-        parameters.append([multi_atlas_result[0], Tem, multi_atlas_result[1:-2]])
-    # parameters = [multi_atlas_result[0], ]
-    print(parameters)
     # alice = classes.Drawing_Graphs((1.6, 1.8), *ptdep_alice_result, None, None)
     # cms = classes.Drawing_Graphs((2, 4), *multi_cms_result)
-    atlas = classes.Drawing_Graphs((2, 5), parameters)
-    # print(phi_13TeV_multi_atlas_fitting)
+    # atlas = classes.Drawing_Graphs((2, 5), *multi_atlas_result, None, None)
     for j in range(3):
         axes1[j][0].set_ylabel(r'$\frac{1}{N_{trig}}\frac{dN^{pair}}{d\Delta\phi}-C_{ZYAM}$', size = 150)
         for i in range(3):
+            print(multi_atlas_result[i+3*j])
+            atlas = classes.Drawing_Graphs(13000, (2, 5), *multi_atlas_result[i+3*j], None, None)
             multiplicity = (3*j+i)*10 + 55
             atlas_result = atlas.result_plot("Multiplicity", multiplicity, (0.5, 5), (min(phi_13TeV_multi_atlas_fitting[3*j+i]), max(phi_13TeV_multi_atlas_fitting[3*j+i])))
             axes1[j][i].scatter(phi_13TeV_multi_atlas[3*j+i], dat_13TeV_multi_atlas[3*j+i]-min(dat_13TeV_multi_atlas[3*j+i]), color = 'blue', s=2000, marker='o')
