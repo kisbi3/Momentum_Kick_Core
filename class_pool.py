@@ -156,7 +156,7 @@ class Fitting_gpu:
         return popt, np.sqrt(np.diag(pcov))
 
 
-    def fitting_func_multi(self, phi_array, kick, xx, yy, zz):
+    def fitting_func_multi(self, phi_array, kick):
         xx = 5.3; yy = 0; zz = 0.22
         Tem = self.Fixed_Temperature
         Aridge_bin = 1000
@@ -175,12 +175,12 @@ class Fitting_gpu:
         return result
 
 
-    def __multiplicity(self, phi_array, etaf, Aridge, kick, Tem, xx, yy, zz):
+    def __multiplicity(self, phi_array, etaf_range, Aridge, kick, Tem, xx, yy, zz):
         bin = 300
-        ptf, etaf, phif = cp.meshgrid(cp.linspace(self.ptf[0], self.ptf[1], bin), cp.linspace(etaf[0], etaf[1], bin), cp.asarray(phi_array))
+        ptf, etaf, phif = cp.meshgrid(cp.linspace(self.ptf[0], self.ptf[1], bin), cp.linspace(etaf_range[0], etaf_range[1], bin), cp.asarray(phi_array))
         dptf = (self.ptf[1] - self.ptf[0])/bin
-        detaf = (etaf[1]-etaf[0])/bin
-        delta_Deltaeta = 2*(etaf[1]-etaf[0])
+        detaf = (etaf_range[1]-etaf_range[0])/bin
+        delta_Deltaeta = 2*(etaf_range[1]-etaf_range[0])
         # dist = cp.sum((4/3)*self.__Fr(A, B, multi)*self.__Nk(xx, yy, ptf)*ptf*gpu.Ridge_dist(Aridge, ptf, etaf, phif, kick, Tem, self.sqrSnn, self.__mp, self.__m, self.__mb, self.__md, self.__a), axis=(0))*dptf*detaf/delta_Deltaeta
         # deltapt = 1/(ptf_dist[1] - ptf_dist[0])       #pt normalize
         '''ATLAS는 deltapt 없는듯. ATLAS로 시작하고 있으니 일단 1로 두자.'''

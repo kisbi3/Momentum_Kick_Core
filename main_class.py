@@ -341,8 +341,10 @@ def fit_7tev():
 '''multiplicity파일 안에 에서는 multiplicity에 따른 associated yield 그래프를 이용해서 fitting한 후에 delta phi correlation에 적용만 하는 상태.'''
 '''이 파일에서는 multiplicity에 따른 mean pT를 확인하여 이에 따른 T를 계산하고, fitting할 것이다.'''
 def fit_multipl():
-    boundary = ((0, 0, 0, 0),(20, 10, 1e-10, 1))      # fix parameters : kick, xx, yy, zz
-    initial = (5, 5.3, 0, 0.22)
+    # boundary = ((0, 0, 0, 0),(20, 10, 1e-10, 1))      # fix parameters : kick, xx, yy, zz
+    # initial = (5, 5.3, 0, 0.22)
+    boundary = (0,20)
+    initial = (5)
     Fixed_Temperature = classes.Fitting_gpu.Fixed_Temp(meanpTvsnch_13TeV[0], meanpTvsnch_13TeV[1])
     Fixed_Temperature_fitting = []
     Fixed_Temperature_fitting.extend([Fixed_Temperature[54], Fixed_Temperature[62], Fixed_Temperature[67], Fixed_Temperature[72]])
@@ -424,7 +426,7 @@ dat_13TeV_ptdep = dat_13TeV_ptdep[0:-2]
 
 
 # ptdep_result = [9.62040979e-01, 1.08113653e+00, 2.62053618e+00, 2.86583565e-01, 4.45772582e-04]
-# ptdep_result_07 = [1.68531124, 1.43640594, 7.85469003, 0.80428453, 0.88283783]
+ptdep_result_07 = [1.68531124, 1.43640594, 7.85469003, 0.80428453, 0.88283783]
 
 # fig1, axes1 = plt.subplots(nrows=1, ncols=5,figsize=(125,20))
 #그래프 그리기
@@ -435,6 +437,7 @@ dat_13TeV_ptdep = dat_13TeV_ptdep[0:-2]
 
 '''pT dependence phi correlation graph'''
 def drawgraph_ptdep_phicorr():
+    ptdep_result = [7.2022931371075884, 1.4384615384615385, 5.3, 0, 0.22]
     fig1, axes1 = plt.subplots(nrows=1, ncols=5,figsize=(125,20))
     alice = classes.Drawing_Graphs(13000, (1.6, 1.8), *ptdep_result, None, None)
     cms = classes.Drawing_Graphs(13000, (2, 4), *ptdep_result, None, None)
@@ -457,10 +460,12 @@ def drawgraph_ptdep_phicorr():
             axes1[i].scatter(phi_07TeV_ptdep[i], dat_07TeV_ptdep[i], s=800, marker='+', facecolors='grey', linewidths=7)
             axes1[i].set_title(r'$0.1<p_{T, \, \mathrm{trig(assoc)}}<1$', size = 70, pad=30)
         elif i==4:
-            atlas_result = atlas.result_plot("pTdependence", None, (0.5, 5), (min(phi_13TeV_ptdep[-1]), max(phi_13TeV_ptdep[-1])))
+            # atlas_result = atlas.result_plot("pTdependence", None, (0.5, 5), (min(phi_13TeV_ptdep[-1]), max(phi_13TeV_ptdep[-1])))
+            atlas_result = atlas.result_plot("pTdependence", None, (0.5, 5), (-0.6, 0.6))
             axes1[i].plot(atlas_result[0], atlas_result[1], color = "blue", linewidth=7, linestyle='-')
             axes1[i].scatter(phi_13TeV_ptdep[-1], dat_13TeV_ptdep[-1]-min(dat_13TeV_ptdep[-1]), facecolors='blue', edgecolors="blue", s=600, marker='o', linewidths=7)
             axes1[i].set_title(r'0.5$<p_{T, \, \mathrm{trig(assoc)}}<$5', size = 70, pad=30)
+            plt.ylim(0,0.016)
         else:
             ptf = (i, i+1)
             alice_result = alice.result_plot("pTdependence", None, ptf, (min(phi_13TeV_ptdep[i-1]), max(phi_13TeV_ptdep[i-1])))
@@ -706,7 +711,7 @@ def drawgraph_multi_phicorr():
 
 
 
-# drawgraph_ptdep_phicorr()
+drawgraph_ptdep_phicorr()
 time_phicorr = time.time()
 print(f"Graph, Phi correlation end : {time_phicorr-time_calculate:.3f} sec")
 # drawgraph_ptdep_Yridge()
@@ -718,7 +723,7 @@ print(f"FrNk end : {time_frnk-time_yridge:.3f} sec")
 # drawgraph_cmdep_phicorr()
 time_multi = time.time()
 print(f"Graph, Multiplicity end : {time_multi-time_frnk:.3f} sec")
-drawgraph_multi_phicorr()
+# drawgraph_multi_phicorr()
 
 time_end = time.time()
 print(f"Total end : {time_end-time_start:.3f} sec")
