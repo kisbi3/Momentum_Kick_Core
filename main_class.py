@@ -52,6 +52,8 @@ meanpTvsnch_13TeV_err.append((temp_sta1**2+temp_sys1**2)**0.5)
 meanpTvsnch_13TeV_err.append((temp_sta2**2+temp_sys2**2)**0.5)
 meanpTvsnch_13TeV_nchrange.append(np.loadtxt(path[5]+'Table6.csv', delimiter=',', usecols=[1], skiprows=14))
 meanpTvsnch_13TeV_nchrange.append(np.loadtxt(path[5]+'Table6.csv', delimiter=',', usecols=[2], skiprows=14))
+atlaserror = []     # Only 120<mutli<130, 130<multi
+
 
 '''Multiplicity에 대한 associated yield
    순서 : ALTAS, CMS                   '''
@@ -87,6 +89,10 @@ def atlas_multiplicity():
         elif check1>check2:
             phi_13TeV_multi_atlas_fitting.append(phi_13TeV_multi_atlas[i][check2:check1+1])
             dat_13TeV_multi_atlas_fitting.append(dat_13TeV_multi_atlas[i][check2:check1+1])
+    atlaserror.append(np.loadtxt(path[0]+f'120~130.csv',delimiter=',',usecols=[2], skiprows=3, max_rows=12))
+    atlaserror.append(np.loadtxt(path[0]+f'120~130.csv',delimiter=',',usecols=[3], skiprows=3, max_rows=12))
+    atlaserror.append(np.loadtxt(path[0]+f'130~.csv',delimiter=',',usecols=[2], skiprows=3, max_rows=12))
+    atlaserror.append(np.loadtxt(path[0]+f'130~.csv',delimiter=',',usecols=[3], skiprows=3, max_rows=12))
 atlas_multiplicity()
 '''append cms multiplicity data'''
 def cms_multiplicity():
@@ -335,14 +341,15 @@ def fit_7tev():
 '''multiplicity파일 안에 에서는 multiplicity에 따른 associated yield 그래프를 이용해서 fitting한 후에 delta phi correlation에 적용만 하는 상태.'''
 '''이 파일에서는 multiplicity에 따른 mean pT를 확인하여 이에 따른 T를 계산하고, fitting할 것이다.'''
 def fit_multipl():
-    boundary = ((0, 0, 0, 0),(3, 10, 10, 10))      # fix parameters : kick, xx, yy, zz
-    initial = (.7, 1.5, 0, 0)
+    boundary = ((0, 0, 0, 0),(20, 10, 1e-10, 1))      # fix parameters : kick, xx, yy, zz
+    initial = (5, 5.3, 0, 0.22)
     Fixed_Temperature = classes.Fitting_gpu.Fixed_Temp(meanpTvsnch_13TeV[0], meanpTvsnch_13TeV[1])
     Fixed_Temperature_fitting = []
     Fixed_Temperature_fitting.extend([Fixed_Temperature[54], Fixed_Temperature[62], Fixed_Temperature[67], Fixed_Temperature[72]])
     Fixed_Temperature_fitting.append((Fixed_Temperature[75] + Fixed_Temperature[76])/2)
     Fixed_Temperature_fitting.extend([Fixed_Temperature[77], Fixed_Temperature[78], Fixed_Temperature[79], Fixed_Temperature[80]])
     '''multiplicity에 대한 associated yield만 가지고 fitting하고 phi correlation그리기'''
+    print(phi_13TeV_multi_atlas_fitting)
     multi_atlas = classes.Fitting_gpu(13000, phi_13TeV_multi_atlas_fitting, dat_13TeV_multi_atlas_fitting, None, multiplicity_atlas, (0.5, 5), (2, 5), boundary, initial, "Multiplicity")
     result, multi_atlas_error = multi_atlas.fitting(None, Fixed_Temperature_fitting)                  # error를 고려하지 않으려는 경우
     # kick = 0.798958702
@@ -353,14 +360,14 @@ def fit_multipl():
     '''multi_atlas_result : Kick, xx, yy, zz'''
     # print('ATLAS results : ', result)
 
-    # multi_atlas_result.append(result)
-    # multi_atlas_result = result.tolist()
+    print('ATLAS results :')
     for i in range(len(result)):
         #            q                      T                   xx              yy          zz
-        temp = [result[i][0], Fixed_Temperature_fitting[i], result[i][1], result[i][2], result[i][3]]
+        # temp = [result[i][0], Fixed_Temperature_fitting[i], result[i][1], result[i][2], result[i][3]]
+        temp = [result[i][0], Fixed_Temperature_fitting[i], 5.3, 0, 0.22]
+        print(temp)
         multi_atlas_result.append(temp)
-    # multi_atlas_result.append(Fixed_Temperature_fitting)
-    print('ATLAS results : ', multi_atlas_result)
+    # print('ATLAS results : ', multi_atlas_result)
     print('ATLAS error : ', multi_atlas_error)
     '''
             ***Results : [0.798958702    0.840820694    5.38517847    1.49370324    3.51939886e-12    19.4957273e    117.807870]***
@@ -660,6 +667,7 @@ def drawgraph_multi_phicorr():
             atlas = classes.Drawing_Graphs(13000, (2, 5), *multi_atlas_result[i+3*j], None, None)
             multiplicity = (3*j+i)*10 + 55
             atlas_result = atlas.result_plot("Multiplicity", multiplicity, (0.5, 5), (min(phi_13TeV_multi_atlas_fitting[3*j+i]), max(phi_13TeV_multi_atlas_fitting[3*j+i])))
+            print((min(phi_13TeV_multi_atlas_fitting[3*j+i]), max(phi_13TeV_multi_atlas_fitting[3*j+i])))
             axes1[j][i].scatter(phi_13TeV_multi_atlas[3*j+i], dat_13TeV_multi_atlas[3*j+i]-min(dat_13TeV_multi_atlas[3*j+i]), color = 'blue', s=2000, marker='o')
             axes1[j][i].plot(atlas_result[0], atlas_result[1]-min(atlas_result[1]), color = 'blue', linewidth=14, linestyle = '-')
             if j==2:

@@ -111,12 +111,15 @@ class Fitting_gpu:
                     phi_array_sep.append(self.phi_array[start : start + number])
                     data_sep.append(self.data[start : start + number])
                     start += number
+                self.data_sep = data_sep
 
                 for i in range(len(phi_array_sep)):
                     '''Fitting하는 번호'''
                     self.separate_number = i
+                    print(data_sep[i])
                     print(i)
-                    result_temp, pcov = scipy.optimize.curve_fit(self.fitting_func_multi, xdata = phi_array_sep[i], ydata = data_sep[i], bounds=self.boundary, p0 = self.initial)
+                    self.__count = 0
+                    result_temp, pcov = scipy.optimize.curve_fit(self.fitting_func_multi, xdata = phi_array_sep[i], ydata = data_sep[i], bounds=self.boundary, p0 = self.initial, method='trf')
                     totalresult.append(result_temp)
                 popt = totalresult
                 
@@ -154,22 +157,21 @@ class Fitting_gpu:
 
 
     def fitting_func_multi(self, phi_array, kick, xx, yy, zz):
-        yy = zz = 0
-        xx = 1
+        xx = 5.3; yy = 0; zz = 0.22
         Tem = self.Fixed_Temperature
         Aridge_bin = 1000
         pti, yi = np.meshgrid(np.linspace(self.__pti[0], self.__pti[1], Aridge_bin), np.linspace(self.__yi[0], self.__yi[1], Aridge_bin))
         dyi = (self.__pti[1] - self.__pti[0])/Aridge_bin
         dpti = (self.__yi[1] - self.__yi[0])/Aridge_bin
-        # Aridge = []
-        # Aridge.append(cp.asarray(1/np.sum(cpu.Aridge(pti, yi, Tem[i], self.__m, self.__md, self.__a, self.sqrSnn, self.__mp)*dyi*dpti*2*np.pi)))
         number = self.separate_number
         Aridge = cp.asarray(1/np.sum(cpu.Aridge(pti, yi, Tem[number], self.__m, self.__md, self.__a, self.sqrSnn, self.__mp)*dyi*dpti*2*np.pi))
         result = self.__multiplicity(phi_array, self.etaf, Aridge, kick, Tem[number], xx, yy, zz)
+        result = result - np.min(result)
         self.__count = self.__count + 1
-        if self.__count == 1 or self.__count%10==0:
-            print(f"{self.__count}회", kick, xx, yy, zz, np.sum((result-self.data[number])**2))
-        # print(kick, xx, yy, np.sum((result-self.data)**2))
+        # if self.__count == 1 or self.__count%10==0:
+        print('result :', result)
+        # print('data : ', self.data_sep[number])
+        print(f"{self.__count}회", kick, xx, yy, zz, np.sum((result-self.data_sep[number])**2))
         return result
 
 
@@ -309,7 +311,7 @@ class Drawing_Graphs:
         # self.mode = mode
     
     def __Aridge(self):
-        Aridge_bin = 5000
+        Aridge_bin = 1000
         pti, yi = np.meshgrid(np.linspace(self.__pti[0], self.__pti[1], Aridge_bin), np.linspace(self.__yi[0], self.__yi[1], Aridge_bin))
         dyi = (self.__pti[1] - self.__pti[0])/Aridge_bin
         dpti = (self.__yi[1] - self.__yi[0])/Aridge_bin
@@ -338,25 +340,17 @@ class Drawing_Graphs:
             print("Maybe Typo")
             quit()
 
-    def __Ridge_Multi(self, multi, ptf, phif):
-        # Aridge = self.__Aridge()
-        # bin = 300
-        # delta_Deltaeta = 2*(self.etaf[1]-self.etaf[0])
-        # dptf = (ptf[1]-ptf[0])/bin
-        # ptf, etaf, phif = cp.meshgrid(cp.linspace(ptf[0], ptf[1], bin), cp.linspace(self.etaf[0], self.etaf[1], bin), cp.linspace(phif[0], phif[1], bin))
-        # detaf = (self.etaf[1]-self.etaf[0])/bin
-        # dist = cp.sum((4/3)*self.__Fr(self.xx, self.yy, ptf)*self.__Nk(self.AA, self.BB, multi)*ptf*gpu.Ridge_dist(Aridge, ptf, etaf, phif, self.kick, self.Tem, self.sqrSnn, self.__mp, self.__m, self.__mb, self.__md, self.__a), axis=(0))*dptf*detaf/delta_Deltaeta
-        # Ridge_phi = cp.asnumpy(cp.sum(dist, axis=0))
-        # return cp.asnumpy(phif[0][0]), Ridge_phi-min(Ridge_phi)
+    def __Ridge_Multi(self, multi, ptf, phif_range):
         kick = self.kick; Tem = self.Tem; xx = self.xx; yy = self.yy; zz = self.zz; AA = self.AA; BB = self.BB; etaf_range = self.etaf
         Aridge = self.__Aridge()
         bin = 300
         delta_Deltaeta = 2*(etaf_range[1]-etaf_range[0])
+        ptf_range = (0.5, 5)
         dptf = (ptf_range[1]-ptf_range[0])/bin
         ptf, etaf, phif = cp.meshgrid(cp.linspace(ptf_range[0], ptf_range[1], bin), cp.linspace(etaf_range[0], etaf_range[1], bin), cp.linspace(phif_range[0], phif_range[1], bin))
         detaf = (etaf_range[1]-etaf_range[0])/bin
-        ridge_integrate = ptf*gpu.Ridge_dist(Aridge, ptf, etaf, phif, kick, Tem, self.__sqrSnn, self.__mp, self.__m, self.__mb, self.__md, self.__a)
-        ridge_integrate = ridge_integrate*self.__Fr(xx, yy, zz, ptf)*self.__Nk(AA, BB, multi)
+        ridge_integrate = ptf*gpu.Ridge_dist(Aridge, ptf, etaf, phif, kick, Tem, self.sqrSnn, self.__mp, self.__m, self.__mb, self.__md, self.__a)
+        ridge_integrate = ridge_integrate*self.__FrNk(xx, yy, zz, ptf)
         dist_integrate = cp.sum(ridge_integrate, axis = 1)*(4/3)*dptf*detaf/delta_Deltaeta
         Ridge_phi = cp.asnumpy(cp.sum(dist_integrate, axis = 0))
         return cp.asnumpy(phif[0][0]), Ridge_phi-min(Ridge_phi)
