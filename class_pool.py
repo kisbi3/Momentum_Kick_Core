@@ -116,7 +116,6 @@ class Fitting_gpu:
                 for i in range(len(phi_array_sep)):
                     '''Fitting하는 번호'''
                     self.separate_number = i
-                    print(data_sep[i])
                     print(i)
                     self.__count = 0
                     result_temp, pcov = scipy.optimize.curve_fit(self.fitting_func_multi, xdata = phi_array_sep[i], ydata = data_sep[i], bounds=self.boundary, p0 = self.initial, method='trf')
@@ -169,8 +168,6 @@ class Fitting_gpu:
         result = result - np.min(result)
         self.__count = self.__count + 1
         # if self.__count == 1 or self.__count%10==0:
-        print('result :', result)
-        # print('data : ', self.data_sep[number])
         print(f"{self.__count}회", kick, xx, yy, zz, np.sum((result-self.data_sep[number])**2))
         return result
 
@@ -186,7 +183,7 @@ class Fitting_gpu:
         '''ATLAS는 deltapt 없는듯. ATLAS로 시작하고 있으니 일단 1로 두자.'''
         deltapt = 1
         dist = deltapt*cp.sum(self.__FrNk(xx, yy, zz, ptf)*ptf*gpu.Ridge_dist(Aridge, ptf, etaf, phif, kick, Tem, self.sqrSnn, self.__mp, self.__m, self.__mb, self.__md, self.__a), axis=0)*dptf*detaf/delta_Deltaeta
-        return cp.asnumpy(cp.sum(dist, axis=(0)))
+        return (4/3)*cp.asnumpy(cp.sum(dist, axis=(0)))
     
 
     ''' fitting parameters : kick, Tem, xx, yy, zz
