@@ -365,7 +365,7 @@ def fit_multipl():
     for i in range(len(result)):
         #            q                      T                   xx              yy          zz
         # temp = [result[i][0], Fixed_Temperature_fitting[i], result[i][1], result[i][2], result[i][3]]
-        temp = [result[i][0], Fixed_Temperature_fitting[i], 5.3, 0, 0.22]
+        temp = [result[i][0], Fixed_Temperature_fitting[i], 5.3, 8.5*10**(-35), 0.22]
         print(temp)
         multi_atlas_result.append(temp)
     # print('ATLAS results : ', multi_atlas_result)
@@ -663,7 +663,7 @@ def drawgraph_multi_phicorr():
     # cms = classes.Drawing_Graphs((2, 4), *multi_cms_result)
     # atlas = classes.Drawing_Graphs((2, 5), *multi_atlas_result, None, None)
     for j in range(3):
-        axes1[j][0].set_ylabel(r'$\frac{1}{N_{trig}}\frac{dN^{pair}}{d\Delta\phi}-C_{ZYAM}$', size = 150)
+        axes1[j][0].set_ylabel(r'$\frac{1}{N_{\mathrm{trig}}}\frac{dN^{\mathrm{pair}}}{d\Delta\phi}-C_{\mathrm{ZYAM}}$', size = 150)
         for i in range(3):
             atlas = classes.Drawing_Graphs(13000, (2, 5), *multi_atlas_result[i+3*j], None, None)
             multiplicity = (3*j+i)*10 + 55
@@ -687,15 +687,15 @@ def drawgraph_multi_phicorr():
     axes1[2][1].errorbar(phi_13TeV_multi_atlas[7], dat_13TeV_multi_atlas[7]-min(dat_13TeV_multi_atlas[7]), yerr=(abs(atlaserror[0]), atlaserror[1]), color="blue", linestyle=' ', linewidth=14, capthick=6, capsize=30, zorder=1)
     axes1[2][2].errorbar(phi_13TeV_multi_atlas[8], dat_13TeV_multi_atlas[8]-min(dat_13TeV_multi_atlas[8]), yerr=(abs(atlaserror[2]), atlaserror[3]), color="blue", linestyle=' ', linewidth=14, capthick=6, capsize=30, zorder=1)
 
-    axes1[0][0].text(-0.9, 0.0145, r'$50 \leq N^{rec}_{ch} < 60$', size = 150)
-    axes1[0][1].text(-0.9, 0.0145, r'$60 \leq N^{rec}_{ch} < 70$', size = 150)
-    axes1[0][2].text(-0.9, 0.0145, r'$70 \leq N^{rec}_{ch} < 80$', size = 150)
-    axes1[1][0].text(-0.9, 0.032, r'$80 \leq N^{rec}_{ch} < 90$', size = 150)
-    axes1[1][1].text(-0.9, 0.032, r'$90 \leq N^{rec}_{ch} < 100$', size = 150)
-    axes1[1][2].text(-0.9, 0.032, r'$100 \leq N^{rec}_{ch} < 110$', size = 150)
-    axes1[2][0].text(-0.9, 0.0625, r'$110 \leq N^{rec}_{ch} < 120$', size = 150)
-    axes1[2][1].text(-0.9, 0.0625, r'$120 \leq N^{rec}_{ch} < 130$', size = 150)
-    axes1[2][2].text(-0.9, 0.0625, r'$130 \leq N^{rec}_{ch}$', size = 150)
+    axes1[0][0].text(-0.9, 0.0145, r'$50 \leq N^{\mathrm{rec}}_{\mathrm{ch}} < 60$', size = 150)
+    axes1[0][1].text(-0.9, 0.0145, r'$60 \leq N^{\mathrm{rec}}_{\mathrm{ch}} < 70$', size = 150)
+    axes1[0][2].text(-0.9, 0.0145, r'$70 \leq N^{\mathrm{rec}}_{\mathrm{ch}} < 80$', size = 150)
+    axes1[1][0].text(-0.9, 0.032, r'$80 \leq N^{\mathrm{rec}}_{\mathrm{ch}} < 90$', size = 150)
+    axes1[1][1].text(-0.9, 0.032, r'$90 \leq N^{\mathrm{rec}}_{\mathrm{ch}} < 100$', size = 150)
+    axes1[1][2].text(-0.9, 0.032, r'$100 \leq N^{\mathrm{rec}}_{\mathrm{ch}} < 110$', size = 150)
+    axes1[2][0].text(-0.9, 0.0625, r'$110 \leq N^{\mathrm{rec}}_{\mathrm{ch}} < 120$', size = 150)
+    axes1[2][1].text(-0.9, 0.0625, r'$120 \leq N^{\mathrm{rec}}_{\mathrm{ch}} < 130$', size = 150)
+    axes1[2][2].text(-0.9, 0.0625, r'$130 \leq N^{\mathrm{rec}}_{\mathrm{ch}}$', size = 150)
 
     axes1[0][0].set_ylim(-0.001,0.0159)
     axes1[1][0].set_ylim(-0.001,0.0349)
@@ -704,7 +704,46 @@ def drawgraph_multi_phicorr():
     fig1.tight_layout(h_pad = -1)
     fig1.savefig('./rezero_atlas_Nk.png')
 
+    ''' 파라미터들 정리해서 그림 형태로 저장'''
+    fig1 = plt.figure()
+    ax1 = plt.axes()
+    ax2 = ax1.twinx()
+    fig1.set_size_inches(35, 16.534, forward=True)
+    multiplicity_atlas = [55, 65, 75, 85, 95, 105, 115, 125, 135]
+    multiplicity_range = [[5,5,5,5,5,5,5,5,5],[5,5,5,5,5,5,5,5,5]]
+    q = []; T = []
+    for list in multi_atlas_result:
+        q.append(list[0]);  T.append(list[1])
 
+    lns1 = ax1.scatter(multiplicity_atlas, q, edgecolor = 'blue', facecolors='none', s=900, marker='o', linewidths=5, zorder=2, label=r'$q\quad (\mathrm{left \, axis})$')
+    ax1.errorbar(multiplicity_atlas, q, xerr=multiplicity_range, color="blue", linestyle=' ', linewidth=7, capthick=3, capsize=15)
+    ax1.scatter(multiplicity_atlas, q, facecolors='blue', s=900, marker='+', linewidths=5, zorder=2)
+    lns2 = ax2.scatter(multiplicity_atlas, T, edgecolor = 'red', facecolors='none', s=900, marker='o', linewidths=5, zorder=2, label=r'$T\quad (\mathrm{right \, axis})$')
+    ax2.scatter(multiplicity_atlas, T, facecolors='red', s=900, marker='+', linewidths=5, zorder=2)
+    ax2.errorbar(multiplicity_atlas, T, xerr=multiplicity_range, color="red", linestyle=' ', linewidth=7, capthick=3, capsize=15)
+
+    ax1.set_xlabel(r'$N^{\mathrm{rec}}_{\mathrm{ch}}$',size=70)
+    ax1.set_xlim(50, 140)
+    ax1.set_ylabel(r'$ q(\mathrm{GeV}) $',size=70)
+    ax1.set_ylim(0.3, 1.8)
+    ax2.set_ylabel(r'$ T(\mathrm{GeV}) $',size=70)
+    ax2.set_ylim(1.325, 1.7)
+
+    ax1.yaxis.set_major_formatter(ticker.FuncFormatter(lambda y, _: '${:g}$'.format(y)))
+    ax1.tick_params(axis='both',which='major',direction='in',width=2,length=30,labelsize=45, top='true')
+    ax1.tick_params(axis='both',which='minor',direction='in',width=2,length=15,labelsize=45, top='true')
+    ax2.yaxis.set_major_formatter(ticker.FuncFormatter(lambda y, _: '${:g}$'.format(y)))
+    ax2.tick_params(axis='both',which='major',direction='in',width=2,length=30,labelsize=45, top='true')
+    ax2.tick_params(axis='both',which='minor',direction='in',width=2,length=15,labelsize=45, top='true')
+
+    ax1.grid(color='silver',linestyle=':',linewidth=5, zorder=0)
+
+    lns = [lns1, lns2]
+    labs = [l.get_label() for l in lns]
+    ax1.legend(lns, labs, fontsize=50, loc='upper left')
+
+    plt.tight_layout()
+    fig1.savefig('./parameters_multiplicity_dep.png')
 
 # drawgraph_ptdep_phicorr()
 time_phicorr = time.time()

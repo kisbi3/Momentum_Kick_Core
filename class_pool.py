@@ -156,7 +156,7 @@ class Fitting_gpu:
 
 
     def fitting_func_multi(self, phi_array, kick):
-        xx = 5.3; yy = 0; zz = 0.22
+        xx = 5.3; yy = 8.5*10**(-35); zz = 0.22
         Tem = self.Fixed_Temperature
         Aridge_bin = 1000
         pti, yi = np.meshgrid(np.linspace(self.__pti[0], self.__pti[1], Aridge_bin), np.linspace(self.__yi[0], self.__yi[1], Aridge_bin))
