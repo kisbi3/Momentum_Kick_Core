@@ -344,7 +344,7 @@ def fit_multipl():
     # boundary = ((0, 0, 0, 0),(20, 10, 1e-10, 1))      # fix parameters : kick, xx, yy, zz
     # initial = (5, 5.3, 0, 0.22)
     boundary = (0,20)
-    initial = (1)
+    initial = (2)
     Fixed_Temperature = classes.Fitting_gpu.Fixed_Temp(meanpTvsnch_13TeV[0], meanpTvsnch_13TeV[1])
     Fixed_Temperature_fitting = []
     Fixed_Temperature_fitting.extend([Fixed_Temperature[54], Fixed_Temperature[62], Fixed_Temperature[67], Fixed_Temperature[72]])
