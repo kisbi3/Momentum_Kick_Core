@@ -298,13 +298,14 @@ def datacut():
 datacut()
 
 ptdep_result = []
+# ptdep_result = [1.04435586e+00, 1.39798449e+00, 3.13646871e+00, 4.16055192e-05, 1.39096183e-01]
 ptdep_result_07 = []
 ptdep_result_cm = []
 ptdep_error_cm = []
 multi_atlas_result = []
 
-total_boundary = ((0.5, .5, 0, 0, 0),(3, 2., 4, 1e-10, 1e-10))
-total_initial = (.7, 1., 1.5, 0, 0)
+total_boundary = ((0.5, 1., 0, 0, 0),(4, 3., 5, 10, 10))
+total_initial = (4.,  2., 1.5, 0, 0)
 '''Fitting 13TeV data'''
 def fit_13tev():
     ptf = [(1, 2), (2, 3), (3, 4), (1, 2), (2, 3), (3, 4)]
@@ -315,11 +316,19 @@ def fit_13tev():
     '''initial parameters'''
     # initial = (1., 0.5, 2, 3, 0)
     initial = total_initial
+    del phi_13TeV_ptdep_fitting[-1]
+    del dat_13TeV_ptdep_fitting[-1]
+    del ptloww[-1]
+    del pthigh[-1]
     ptdep = classes.Fitting_gpu(13000, phi_13TeV_ptdep_fitting, dat_13TeV_ptdep_fitting, (ptloww, pthigh), None, ptf, etaf, boundary, initial, "pTdependence")
     result, ptdep_error = ptdep.fitting(None, None)                  # error를 고려하지 않으려는 경우
-    print(result)
-    print(ptdep_error)
-    ptdep_result.append(result)
+    print("pp 13TeV Fitting result : ", result)
+    print("pp 13TeV error", ptdep_error)
+    if len(result) == 4:
+        result_temp = [result[0], 1.514, result[1], result[2], result[3]]
+    elif len(result) == 5:
+        result_temp = [result[0], result[1], result[2], result[3], result[4]]
+    ptdep_result.extend(result_temp)
 
 '''Fitting 7TeV data'''
 def fit_7tev():
@@ -344,7 +353,7 @@ def fit_multipl():
     # boundary = ((0, 0, 0, 0),(20, 10, 1e-10, 1))      # fix parameters : kick, xx, yy, zz
     # initial = (5, 5.3, 0, 0.22)
     boundary = (0,20)
-    initial = (2)
+    initial = (1)
     Fixed_Temperature = classes.Fitting_gpu.Fixed_Temp(meanpTvsnch_13TeV[0], meanpTvsnch_13TeV[1])
     Fixed_Temperature_fitting = []
     Fixed_Temperature_fitting.extend([Fixed_Temperature[54], Fixed_Temperature[62], Fixed_Temperature[67], Fixed_Temperature[72]])
@@ -352,7 +361,7 @@ def fit_multipl():
     Fixed_Temperature_fitting.extend([Fixed_Temperature[77], Fixed_Temperature[78], Fixed_Temperature[79], Fixed_Temperature[80]])
     '''multiplicity에 대한 associated yield만 가지고 fitting하고 phi correlation그리기'''
     multi_atlas = classes.Fitting_gpu(13000, phi_13TeV_multi_atlas_fitting, dat_13TeV_multi_atlas_fitting, None, multiplicity_atlas, (0.5, 5), (2, 5), boundary, initial, "Multiplicity")
-    result, multi_atlas_error = multi_atlas.fitting(None, Fixed_Temperature_fitting)                  # error를 고려하지 않으려는 경우
+    result, multi_atlas_error = multi_atlas.fitting(None, (Fixed_Temperature_fitting, ptdep_result[2:]))                  # error를 고려하지 않으려는 경우
     # kick = 0.798958702
     # Tem = 0.840820694
     # yy = 1.49370324
@@ -364,8 +373,8 @@ def fit_multipl():
     print('ATLAS results :')
     for i in range(len(result)):
         #            q                      T                   xx              yy          zz
-        # temp = [result[i][0], Fixed_Temperature_fitting[i], result[i][1], result[i][2], result[i][3]]
-        temp = [result[i][0], Fixed_Temperature_fitting[i], 5.3, 8.5*10**(-35), 0.22]
+        temp = [result[i][0], Fixed_Temperature_fitting[i], ptdep_result[2], ptdep_result[3], ptdep_result[4]]
+        # temp = [result[i][0], Fixed_Temperature_fitting[i], 5.3, 8.5*10**(-35), 0.22]
         print(temp)
         multi_atlas_result.append(temp)
     # print('ATLAS results : ', multi_atlas_result)
@@ -400,7 +409,7 @@ def fit_cmenerg():
     print(ptdep_error_cm)
 
 
-# fit_13tev()
+fit_13tev()
 # fit_7tev()
 # fit_multipl()
 # fit_cmenerg()
@@ -462,7 +471,6 @@ def drawgraph_ptdep_phicorr():
             axes1[i].plot(atlas_result[0], atlas_result[1], color = "blue", linewidth=7, linestyle='-')
             axes1[i].scatter(phi_13TeV_ptdep[-1], dat_13TeV_ptdep[-1]-min(dat_13TeV_ptdep[-1]), facecolors='blue', edgecolors="blue", s=600, marker='o', linewidths=7)
             axes1[i].set_title(r'0.5$<p_{T, \, \mathrm{trig(assoc)}}<$5', size = 70, pad=30)
-            plt.ylim(0,0.016)
         else:
             ptf = (i, i+1)
             alice_result = alice.result_plot("pTdependence", None, ptf, (min(phi_13TeV_ptdep[i-1]), max(phi_13TeV_ptdep[i-1])))
@@ -725,7 +733,7 @@ def drawgraph_multi_phicorr():
     ax1.set_xlabel(r'$N^{\mathrm{rec}}_{\mathrm{ch}}$',size=70)
     ax1.set_xlim(50, 140)
     ax1.set_ylabel(r'$ q(\mathrm{GeV}) $',size=70)
-    ax1.set_ylim(0.3, 1.8)
+    ax1.set_ylim(0.3, 2.2)
     ax2.set_ylabel(r'$ T(\mathrm{GeV}) $',size=70)
     ax2.set_ylim(1.325, 1.7)
 
@@ -745,13 +753,13 @@ def drawgraph_multi_phicorr():
     plt.tight_layout()
     fig1.savefig('./parameters_multiplicity_dep.png')
 
-# drawgraph_ptdep_phicorr()
+drawgraph_ptdep_phicorr()
 time_phicorr = time.time()
 print(f"Graph, Phi correlation end : {time_phicorr-time_calculate:.3f} sec")
-# drawgraph_ptdep_Yridge()
+drawgraph_ptdep_Yridge()
 time_yridge = time.time()
 print(f"Graph, Yridge end : {time_yridge-time_phicorr:.3f} sec")
-# drawgraph_ptdep_frnk()
+drawgraph_ptdep_frnk()
 time_frnk = time.time()
 print(f"FrNk end : {time_frnk-time_yridge:.3f} sec")
 # drawgraph_cmdep_phicorr()

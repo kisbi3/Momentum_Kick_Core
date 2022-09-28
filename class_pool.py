@@ -97,12 +97,17 @@ class Fitting_gpu:
     def __Nk(self, A, B, multi):
         return A*cp.exp(-B/multi)
 
-    def fitting(self, error, Fixed_Temperature):
+    def fitting(self, error, Fixed_parameters):
         if error is None:
             if self.mode == "pTdependence":
                 popt, pcov = scipy.optimize.curve_fit(self.fitting_func, xdata = self.phi_array, ydata = self.data, bounds=self.boundary, p0 = self.initial)
             elif self.mode == "Multiplicity":
-                self.Fixed_Temperature = Fixed_Temperature                
+                # self.Fixed_Temperature = Fixed_Temperature
+                # print(Fixed_parameters)     
+                self.Fixed_Temperature = Fixed_parameters[0]
+                self.Fixed_xx = Fixed_parameters[1][0]
+                self.Fixed_yy = Fixed_parameters[1][1]
+                self.Fixed_zz = Fixed_parameters[1][2]
                 totalresult = []
                 phi_array_sep = []; data_sep = []
                 start = 0
@@ -142,7 +147,11 @@ class Fitting_gpu:
             if self.mode == "pTdependence":
                 popt, pcov = scipy.optimize.curve_fit(self.fitting_func, xdata = self.phi_array, ydata = self.data, bounds=self.boundary, p0 = self.initial, sigma = error_array, absolute_sigma = True)
             elif self.mode == "Multiplicity":
-                self.Fixed_Temperature = Fixed_Temperature
+                # self.Fixed_Temperature = Fixed_Temperature
+                self.Fixed_Temperature = Fixed_parameters[0]
+                self.Fixed_xx = Fixed_parameters[1][0]
+                self.Fixed_yy = Fixed_parameters[1][1]
+                self.Fixed_zz = Fixed_parameters[1][2]
                 popt, pcov = scipy.optimize.curve_fit(self.fitting_func_multi, xdata = self.phi_array, ydata = self.data, bounds=self.boundary, p0 = self.initial, sigma = error_array, absolute_sigma = True)
             elif self.mode == "CMenergy":
                 popt, pcov = scipy.optimize.curve_fit(self.fitting_func, xdata = self.phi_array, ydata = self.data, bounds=self.boundary, p0 = self.initial, sigma = error_array, absolute_sigma = True)
@@ -156,7 +165,8 @@ class Fitting_gpu:
 
 
     def fitting_func_multi(self, phi_array, kick):
-        xx = 5.3; yy = 8.5*10**(-35); zz = 0.22
+        # xx = 5.3; yy = 8.5*10**(-35); zz = 0.22
+        xx = self.Fixed_xx; yy = self.Fixed_yy; zz = self.Fixed_zz
         Tem = self.Fixed_Temperature
         Aridge_bin = 1000
         pti, yi = np.meshgrid(np.linspace(self.__pti[0], self.__pti[1], Aridge_bin), np.linspace(self.__yi[0], self.__yi[1], Aridge_bin))
@@ -167,8 +177,11 @@ class Fitting_gpu:
         result = self.__multiplicity(phi_array, self.etaf, Aridge, kick, Tem[number], xx, yy, zz)
         result = result - np.min(result)
         self.__count = self.__count + 1
-        # if self.__count == 1 or self.__count%10==0:
-        print(f"{self.__count}회", kick, xx, yy, zz, np.sum((result-self.data_sep[number])**2))
+        if self.__count == 1:
+            print("Count \t Kick \t\t xx \t\t yy \t zz \t\t Error")
+            print(f"{self.__count}회", kick, xx, yy, zz, np.sum((result-self.data_sep[number])**2))
+        elif self.__count%5==0:
+            print(f"{self.__count}회", kick, xx, yy, zz, np.sum((result-self.data_sep[number])**2))
         return result
 
 
@@ -308,7 +321,7 @@ class Drawing_Graphs:
         # self.mode = mode
     
     def __Aridge(self):
-        Aridge_bin = 1000
+        Aridge_bin = 5000
         pti, yi = np.meshgrid(np.linspace(self.__pti[0], self.__pti[1], Aridge_bin), np.linspace(self.__yi[0], self.__yi[1], Aridge_bin))
         dyi = (self.__pti[1] - self.__pti[0])/Aridge_bin
         dpti = (self.__yi[1] - self.__yi[0])/Aridge_bin
