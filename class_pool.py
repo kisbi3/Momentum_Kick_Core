@@ -540,6 +540,114 @@ class Drawing_Graphs:
         else:
             print("Error! in Drawing Yridge Graph, Maybe Typo")
 
+'''여러 에러들 계산 ex) R-squared'''
+class Error:
+    __yi = (-10,10)
+    __pti = (0,10)
+    __a = .5    #fall off parameter
+    __m = 0.13957018  #m == mpi
+    __mb = __m #mb==mpi, GeV
+    __md = 1.   #GeV
+    __mp = 0.938272046 #Proton mass, GeV
+
+    def __init__(self, phi_array, data, ptf, etaf):
+        # data
+        self.phi_array = phi_array
+        self.data = data
+        self.ptf = ptf
+        self.etaf = etaf
+
+    def __FrNk(self, xx, yy, pt):
+        return xx+yy*pt*pt
+
+    def R_squared(self, datatype, kick, Tem, xx, yy, zz):
+        if datatype=="pTdependence":
+            Rsq = self.fitting_func(self.phi_array, kick, Tem, xx, yy, zz)
+
+        return Rsq
+
+    def fitting_func_multi(self, phi_array, kick):
+        pass
+        # Aridge_bin = 1000
+        # pti, yi = np.meshgrid(np.linspace(self.__pti[0], self.__pti[1], Aridge_bin), np.linspace(self.__yi[0], self.__yi[1], Aridge_bin))
+        # dyi = (self.__pti[1] - self.__pti[0])/Aridge_bin
+        # dpti = (self.__yi[1] - self.__yi[0])/Aridge_bin
+        # Aridge = cp.asarray(1/np.sum(cpu.Aridge(pti, yi, Tem[number], self.__m, self.__md, self.__a, self.sqrSnn, self.__mp)*dyi*dpti*2*np.pi))
+        # result = self.__multiplicity(phi_array, self.etaf, Aridge, kick, Tem[number], xx, yy, zz)
+        # result = result - np.min(result)
+        # self.__count = self.__count + 1
+        # if self.__count == 1:
+        #     print("Count \t Kick \t\t xx \t\t yy \t zz \t\t Error")
+        #     print(f"{self.__count}회", kick, xx, yy, zz, np.sum((result-self.data_sep[number])**2))
+        # elif self.__count%5==0:
+        #     print(f"{self.__count}회", kick, xx, yy, zz, np.sum((result-self.data_sep[number])**2))
+        # return result
+
+
+    def __multiplicity(self, phi_array, etaf_range, Aridge, kick, Tem, xx, yy, zz):
+        bin = 300
+        ptf, etaf, phif = cp.meshgrid(cp.linspace(self.ptf[0], self.ptf[1], bin), cp.linspace(etaf_range[0], etaf_range[1], bin), cp.asarray(phi_array))
+        dptf = (self.ptf[1] - self.ptf[0])/bin
+        detaf = (etaf_range[1]-etaf_range[0])/bin
+        delta_Deltaeta = 2*(etaf_range[1]-etaf_range[0])
+        # dist = cp.sum((4/3)*self.__Fr(A, B, multi)*self.__Nk(xx, yy, ptf)*ptf*gpu.Ridge_dist(Aridge, ptf, etaf, phif, kick, Tem, self.sqrSnn, self.__mp, self.__m, self.__mb, self.__md, self.__a), axis=(0))*dptf*detaf/delta_Deltaeta
+        # deltapt = 1/(ptf_dist[1] - ptf_dist[0])       #pt normalize
+        '''ATLAS는 deltapt 없는듯. ATLAS로 시작하고 있으니 일단 1로 두자.'''
+        deltapt = 1
+        dist = deltapt*cp.sum(self.__FrNk(xx, yy, zz, ptf)*ptf*gpu.Ridge_dist(Aridge, ptf, etaf, phif, kick, Tem, self.sqrSnn, self.__mp, self.__m, self.__mb, self.__md, self.__a), axis=0)*dptf*detaf/delta_Deltaeta
+        return (4/3)*cp.asnumpy(cp.sum(dist, axis=(0)))
+    
+
+    ''' fitting parameters : kick, Tem, xx, yy, zz
+        zz는 frnk에 추가적으로 들어갈 수 있는 parameter '''
+
+    def fitting_func(self, given_array, kick, Tem, xx, yy, zz):
+        ptf_dist = self.ptf
+        Aridge_bin = 1000
+        pti, yi = np.meshgrid(np.linspace(self.__pti[0], self.__pti[1], Aridge_bin), np.linspace(self.__yi[0], self.__yi[1], Aridge_bin))
+        dpti = (self.__pti[1] - self.__pti[0])/Aridge_bin
+        dyi = (self.__yi[1] - self.__yi[0])/Aridge_bin
+        Aridge = cp.asarray(1/np.sum(cpu.Aridge(pti, yi, Tem, self.__m, self.__md, self.__a, self.sqrSnn, self.__mp)*dyi*dpti*2*np.pi))
+        deltapt = 1/(ptf_dist[1] - ptf_dist[0])
+        result = deltapt*self.__ptdep(given_array, self.etaf[0], self.ptf[0], Aridge, kick, Tem, xx, yy, zz)
+
+ 
+        return result
+    
+    def __ptdep(self, phi_array, etaf, ptf_dist, Aridge, kick, Tem, xx, yy, zz):
+        bin = 300
+        detaf = (etaf[1]-etaf[0])/bin
+        delta_Deltaeta = 2*(etaf[1]-etaf[0])
+        ptf, etaf, phif = cp.meshgrid(cp.linspace(ptf_dist[0], ptf_dist[1], bin), cp.linspace(etaf[0], etaf[1], bin), cp.asarray(phi_array))
+        dptf = (ptf_dist[1]-ptf_dist[0])/bin
+        deltapt = 1/(ptf_dist[1] - ptf_dist[0])       #pt normalize
+        dist = deltapt*cp.sum(self.__FrNk(xx, yy, zz, ptf)*ptf*gpu.Ridge_dist(Aridge, ptf, etaf, phif, kick, Tem, self.sqrSnn, self.__mp, self.__m, self.__mb, self.__md, self.__a), axis=0)*dptf*detaf/delta_Deltaeta
+        return (4/3)*cp.asnumpy(cp.sum(dist, axis=(0)))
+
+    def Yridge(self, Aridge, kick, Tem, xx, yy, zz):
+        results = np.array([])
+        CZYAM = np.array([])
+        etaf_range = [(1.6, 1.8), (2, 4)]
+        bin = 300
+
+        ''' Yridge 계산 최적화(1회 계산당 약 0.5초 절약)'''
+        for i in range(len(self.pt_range[0])):
+            for j in range(len(self.pt_range[0][i])):
+                ptf, phif, etaf = cp.meshgrid(cp.linspace(self.pt_range[0][i][j], self.pt_range[1][i][j], bin), cp.linspace(self.__Yridge_phif_start, self.__Yridge_phif_end, bin), cp.linspace(etaf_range[i][0], etaf_range[i][1], bin))
+                dptf = (self.pt_range[1][i][j] - self.pt_range[0][i][j])/bin
+                detaf = (etaf_range[i][1] - etaf_range[i][0])/bin
+                deltapt = 1/(self.pt_range[1][i][j] - self.pt_range[0][i][j])       #pt normalize
+                dphif = (self.__Yridge_phif_end - self.__Yridge_phif_start)/bin
+                delta_Deltaeta = 2*(etaf_range[i][1] - etaf_range[i][0])
+                result = deltapt*(4/3)*cp.sum(self.__FrNk(xx, yy, zz, ptf)*ptf*gpu.Ridge_dist(Aridge, ptf, etaf, phif, kick, Tem, self.sqrSnn, self.__mp, self.__m, self.__mb, self.__md, self.__a), axis=(2,1))*dptf*detaf*dphif/delta_Deltaeta
+                result = result - min(result);    result = cp.sum(result)
+                results = np.append(results, cp.asnumpy(result))                
+        return results
+
+
+
+
+
 
 '''알고리즘 직접 만든 코드. -> 최적화 하기 귀찮아서 일단 방치'''
 class optimize_gpu:
