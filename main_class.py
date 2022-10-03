@@ -299,12 +299,14 @@ datacut()
 
 ptdep_result = []
 # ptdep_result = [1.04435586e+00, 1.39798449e+00, 3.13646871e+00, 4.16055192e-05, 1.39096183e-01]
+# ptdep_result = [9.62260664e-01, 1.08168335e+00, 2.61768147e+00, 2.84798146e-01, 4.17974797e-04]
 ptdep_result_07 = []
 ptdep_result_cm = []
 ptdep_error_cm = []
 multi_atlas_result = []
+ptdep_Rsq = []
 
-total_boundary = ((0.5, 1., 0, 0, 0),(4, 3., 5, 10, 10))
+total_boundary = ((0.5, 1., 0, 0, 0),(5, 4., 5, 10, 10))
 total_initial = (4.,  2., 1.5, 0, 0)
 '''Fitting 13TeV data'''
 def fit_13tev():
@@ -315,6 +317,8 @@ def fit_13tev():
     boundary = total_boundary
     '''initial parameters'''
     # initial = (1., 0.5, 2, 3, 0)
+
+
     initial = total_initial
     del phi_13TeV_ptdep_fitting[-1]
     del dat_13TeV_ptdep_fitting[-1]
@@ -329,6 +333,15 @@ def fit_13tev():
     elif len(result) == 5:
         result_temp = [result[0], result[1], result[2], result[3], result[4]]
     ptdep_result.extend(result_temp)
+    # ptdep_result = [9.62260664e-01, 1.08168335e+00, 2.61768147e+00, 2.84798146e-01, 4.17974797e-04]
+
+    '''ptf 개수가 결국 phi array 개수이다. 이렇게 해야 자동으로 Yridge를 제외하고 배열을 대입한다.'''
+    for i in range(len(ptf)):
+        # print(i, phi_13TeV_ptdep_fitting[i], dat_13TeV_ptdep_fitting[i], ptf[i], etaf[i])
+        ptdep_error = classes.Error(13000, phi_13TeV_ptdep_fitting[i], dat_13TeV_ptdep_fitting[i], ptf[i], etaf[i])
+        Error_Rsq = ptdep_error.R_squared("pTdependence", *ptdep_result)
+        ptdep_Rsq.append(Error_Rsq)
+    print(ptdep_Rsq)
 
 '''Fitting 7TeV data'''
 def fit_7tev():
@@ -413,7 +426,7 @@ fit_13tev()
 # fit_7tev()
 # fit_multipl()
 # fit_cmenerg()
-fit_multipl()
+# fit_multipl()
 
 
 # ptdep_result_cm = [np.array([6.50898500e-02, 1.00053422e+00, 1.99918447e+01, 3.15781968e-12, 1.91795188e-28]),
@@ -495,6 +508,13 @@ def drawgraph_ptdep_phicorr():
             en = i+1
             # axes1[i].set_title(str(st)+r'$<p_{T, \, \mathrm{trig(assoc)}}<$'+str(en), size = 70, pad=30)
             axes1[i].set_title(str(st)+r'$<p_{T, \, \mathrm{trig(assoc)}}<$'+str(en), size = 70, pad=30)
+        axes1[1].text(-1.18, 0.0165, fr"ALICE R-squared : {round(ptdep_Rsq[0], 3)}", size = 60)
+        axes1[1].text(-1.18, 0.0155, fr" \ CMS \ R-squared : {round(ptdep_Rsq[3], 3)}", size = 60)
+        axes1[2].text(-1.18, 0.0089, fr"ALICE R-squared : {round(ptdep_Rsq[1], 3)}", size = 60)
+        axes1[2].text(-1.18, 0.0083, fr" \ CMS \ R-squared : {round(ptdep_Rsq[4], 3)}", size = 60)
+        axes1[3].text(-1.18, 0.0042, fr"ALICE R-squared : {round(ptdep_Rsq[2], 3)}", size = 60)
+        axes1[3].text(-1.18, 0.0039, fr"\ CMS \ R-squared : {round(ptdep_Rsq[5], 3)}", size = 60)
+
         axes1[i].set_xlabel(r'$\Delta\phi$', size=70)
         axes1[i].minorticks_on()
         axes1[i].tick_params(axis='both',which='major',direction='in',width=2,length=30,labelsize=45, top = 'true', right='true')
@@ -765,7 +785,7 @@ print(f"FrNk end : {time_frnk-time_yridge:.3f} sec")
 # drawgraph_cmdep_phicorr()
 time_multi = time.time()
 print(f"Graph, Multiplicity end : {time_multi-time_frnk:.3f} sec")
-drawgraph_multi_phicorr()
+# drawgraph_multi_phicorr()
 
 time_end = time.time()
 print(f"Total end : {time_end-time_start:.3f} sec")

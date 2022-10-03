@@ -101,6 +101,7 @@ class Fitting_gpu:
         if error is None:
             if self.mode == "pTdependence":
                 popt, pcov = scipy.optimize.curve_fit(self.fitting_func, xdata = self.phi_array, ydata = self.data, bounds=self.boundary, p0 = self.initial)
+                return popt, self.chisq_error
             elif self.mode == "Multiplicity":
                 # self.Fixed_Temperature = Fixed_Temperature
                 # print(Fixed_parameters)     
@@ -247,6 +248,7 @@ class Fitting_gpu:
             self.__count = self.__count + 1
         if self.__count == 1 or self.__count%10==0:
             print(f"{self.__count}회", kick, Tem, xx, yy, zz, np.sum((result-self.data)**2))
+        self.chisq_error = np.sum((result-self.data)**2)
         return result
     
     def __ptdep(self, phi_array, etaf, ptf_dist, Aridge, kick, Tem, xx, yy, zz):
@@ -541,6 +543,7 @@ class Drawing_Graphs:
             print("Error! in Drawing Yridge Graph, Maybe Typo")
 
 '''여러 에러들 계산 ex) R-squared'''
+'''각 데이터를 따로 입력해야 함!'''
 class Error:
     __yi = (-10,10)
     __pti = (0,10)
@@ -550,22 +553,35 @@ class Error:
     __md = 1.   #GeV
     __mp = 0.938272046 #Proton mass, GeV
 
-    def __init__(self, phi_array, data, ptf, etaf):
+    def __init__(self, sqrSnn, phi_array, data, ptf, etaf):
         # data
         self.phi_array = phi_array
         self.data = data
         self.ptf = ptf
         self.etaf = etaf
+        self.sqrSnn = sqrSnn
 
-    def __FrNk(self, xx, yy, pt):
-        return xx+yy*pt*pt
+
+    def __FrNk(self, xx, yy, zz, pt):
+        return xx*cp.exp(-yy/pt-zz*pt)
 
     def R_squared(self, datatype, kick, Tem, xx, yy, zz):
-        if datatype=="pTdependence":
-            Rsq = self.fitting_func(self.phi_array, kick, Tem, xx, yy, zz)
-
+        if datatype == "pTdependence":
+            mean = np.mean(self.data)
+            fitting_result = self.fitting_func(self.phi_array, kick, Tem, xx, yy, zz)
+            SSR = np.sum((self.data-fitting_result)*(self.data-fitting_result))
+            SST = np.sum((self.data-mean)*(self.data-mean))
+            Rsq = 1-(SSR/SST)
+        elif datatype == "Multiplicity":
+            '''일단 루프만 만들어 두기는 했지만 의미 없을듯?'''
+            mean = np.mean(self.data)
+            fitting_result = self.fitting_func_multi(self.phi_array, kick, Tem, xx, yy, zz)
+            SSR = np.sum((self.data-fitting_result)*(self.data-fitting_result))
+            SST = np.sum((self.data-mean)*(self.data-mean))
+            Rsq = 1-(SSR/SST)            
         return Rsq
 
+        
     def fitting_func_multi(self, phi_array, kick):
         pass
         # Aridge_bin = 1000
@@ -609,10 +625,8 @@ class Error:
         dyi = (self.__yi[1] - self.__yi[0])/Aridge_bin
         Aridge = cp.asarray(1/np.sum(cpu.Aridge(pti, yi, Tem, self.__m, self.__md, self.__a, self.sqrSnn, self.__mp)*dyi*dpti*2*np.pi))
         deltapt = 1/(ptf_dist[1] - ptf_dist[0])
-        result = deltapt*self.__ptdep(given_array, self.etaf[0], self.ptf[0], Aridge, kick, Tem, xx, yy, zz)
-
- 
-        return result
+        result = deltapt*self.__ptdep(given_array, self.etaf, self.ptf, Aridge, kick, Tem, xx, yy, zz)
+        return result-min(result)
     
     def __ptdep(self, phi_array, etaf, ptf_dist, Aridge, kick, Tem, xx, yy, zz):
         bin = 300
