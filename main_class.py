@@ -299,15 +299,15 @@ datacut()
 
 ptdep_result = []
 # ptdep_result = [1.04435586e+00, 1.39798449e+00, 3.13646871e+00, 4.16055192e-05, 1.39096183e-01]
-# ptdep_result = [9.62260664e-01, 1.08168335e+00, 2.61768147e+00, 2.84798146e-01, 4.17974797e-04]
+ptdep_result = [9.61957351e-01, 1.08075125e+00, 2.61749651e+00, 2.86233547e-01, 2.95346210e-06]
 ptdep_result_07 = []
 ptdep_result_cm = []
 ptdep_error_cm = []
 multi_atlas_result = []
 ptdep_Rsq = []
 
-total_boundary = ((0.5, 1., 0, 0, 0),(5, 4., 5, 10, 10))
-total_initial = (4.,  2., 1.5, 0, 0)
+total_boundary = ((0.5, 1., 0, 0, 0),(5, 4., 10, 10, 10))
+total_initial = (1.5,  2., 5., 0, 0)
 '''Fitting 13TeV data'''
 def fit_13tev():
     ptf = [(1, 2), (2, 3), (3, 4), (1, 2), (2, 3), (3, 4)]
@@ -422,9 +422,9 @@ def fit_cmenerg():
     print(ptdep_error_cm)
 
 
-fit_13tev()
+# fit_13tev()
 # fit_7tev()
-# fit_multipl()
+fit_multipl()
 # fit_cmenerg()
 # fit_multipl()
 
@@ -753,9 +753,10 @@ def drawgraph_multi_phicorr():
     ax1.set_xlabel(r'$N^{\mathrm{rec}}_{\mathrm{ch}}$',size=70)
     ax1.set_xlim(50, 140)
     ax1.set_ylabel(r'$ q(\mathrm{GeV}) $',size=70)
-    ax1.set_ylim(0.3, 2.2)
+    ax1.set_ylim(0.3, 1.8)
     ax2.set_ylabel(r'$ T(\mathrm{GeV}) $',size=70)
-    ax2.set_ylim(1.325, 1.7)
+    # ax2.set_ylim(1.325, 1.7)      # T 기준을 AuAu 200GeV로 할 경우
+    ax2.set_ylim(1.01, 1.16)        # T 기준을 pp 13TeV로 할 경우
 
     ax1.yaxis.set_major_formatter(ticker.FuncFormatter(lambda y, _: '${:g}$'.format(y)))
     ax1.tick_params(axis='both',which='major',direction='in',width=2,length=30,labelsize=45, top='true')
@@ -773,19 +774,19 @@ def drawgraph_multi_phicorr():
     plt.tight_layout()
     fig1.savefig('./parameters_multiplicity_dep.png')
 
-drawgraph_ptdep_phicorr()
+# drawgraph_ptdep_phicorr()
 time_phicorr = time.time()
 print(f"Graph, Phi correlation end : {time_phicorr-time_calculate:.3f} sec")
-drawgraph_ptdep_Yridge()
+# drawgraph_ptdep_Yridge()
 time_yridge = time.time()
 print(f"Graph, Yridge end : {time_yridge-time_phicorr:.3f} sec")
-drawgraph_ptdep_frnk()
+# drawgraph_ptdep_frnk()
 time_frnk = time.time()
 print(f"FrNk end : {time_frnk-time_yridge:.3f} sec")
 # drawgraph_cmdep_phicorr()
 time_multi = time.time()
 print(f"Graph, Multiplicity end : {time_multi-time_frnk:.3f} sec")
-# drawgraph_multi_phicorr()
+drawgraph_multi_phicorr()
 
 time_end = time.time()
 print(f"Total end : {time_end-time_start:.3f} sec")

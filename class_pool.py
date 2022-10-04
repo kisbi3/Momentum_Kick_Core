@@ -283,9 +283,12 @@ class Fitting_gpu:
 
     def Fixed_Temp(multi, meanpT):
         # AuAu : 200GeV
-        AuAu_meanpT = 0.39
-        AuAu_Temp = 0.5
-        return (meanpT/AuAu_meanpT)*AuAu_Temp
+        # AuAu_meanpT = 0.39
+        # AuAu_Temp = 0.5
+        pp13_highmulti_meanpT = 1.186
+        pp13_highmulti_Temp = 1.08075125
+        # return (meanpT/AuAu_meanpT)*AuAu_Temp
+        return (meanpT/pp13_highmulti_meanpT)*pp13_highmulti_Temp
 
 
 
