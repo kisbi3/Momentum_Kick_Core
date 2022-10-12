@@ -25,6 +25,10 @@ class Fitting_gpu:
     __mp = 0.938272046 #Proton mass, GeV
     __Yridge_phif_start = -1.18
     __Yridge_phif_end = 1.18
+    __error_temp = []
+    Mode = "Nothing"
+    def multiplicity_fitting_mode(self, mode):
+        self.Mode = mode
 
     def __init__(self, sqrSnn, phi_array, data, pt_range, multi, ptf, etaf, boundary, initial, mode):
         self.sqrSnn = sqrSnn
@@ -103,12 +107,41 @@ class Fitting_gpu:
                 popt, pcov = scipy.optimize.curve_fit(self.fitting_func, xdata = self.phi_array, ydata = self.data, bounds=self.boundary, p0 = self.initial)
                 return popt, self.chisq_error
             elif self.mode == "Multiplicity":
-                # self.Fixed_Temperature = Fixed_Temperature
-                # print(Fixed_parameters)     
-                self.Fixed_Temperature = Fixed_parameters[0]
-                self.Fixed_xx = Fixed_parameters[1][0]
-                self.Fixed_yy = Fixed_parameters[1][1]
-                self.Fixed_zz = Fixed_parameters[1][2]
+
+                print(self.Mode)
+                # 각 파라미터들을 고정시켜가며 어떤게 가장 dominant한지 확인하는 작업
+                # self.Mode = "Free kick"
+                if (self.Mode == "Free kick"):
+                    dist = Fixed_parameters[1]
+                    self.Fixed_Temperature = [dist, dist, dist, dist, dist, dist, dist, dist, dist]
+                    self.Fixed_xx = Fixed_parameters[2]
+                    self.Fixed_yy = Fixed_parameters[3]
+                    self.Fixed_zz = Fixed_parameters[4]
+                elif(self.Mode == "Free Tem"):
+                    self.Fixed_kick = Fixed_parameters[0]
+                    self.Fixed_xx = Fixed_parameters[2]
+                    self.Fixed_yy = Fixed_parameters[3]
+                    self.Fixed_zz = Fixed_parameters[4]
+                elif(self.Mode == "Free fRNk xx"):
+                    dist = Fixed_parameters[1]
+                    self.Fixed_kick = Fixed_parameters[0]
+                    self.Fixed_Temperature = [dist, dist, dist, dist, dist, dist, dist, dist, dist]
+                    self.Fixed_yy = Fixed_parameters[3]
+                    self.Fixed_zz = Fixed_parameters[4]
+
+
+                elif(self.Mode == "Nothing"):
+                    # Temperature를 pT mean으로 결정하는 경우
+                    self.Fixed_Temperature = Fixed_parameters[0]
+                    self.Fixed_xx = Fixed_parameters[1][0]
+                    self.Fixed_yy = Fixed_parameters[1][1]
+                    self.Fixed_zz = Fixed_parameters[1][2]
+
+                else:
+                    print("Error!! Mode 스펠링 체크 필요")
+                    print("Mode : ", self.Mode)
+                    exit()
+
                 totalresult = []
                 phi_array_sep = []; data_sep = []
                 start = 0
@@ -125,7 +158,10 @@ class Fitting_gpu:
                     print(i)
                     self.__count = 0
                     result_temp, pcov = scipy.optimize.curve_fit(self.fitting_func_multi, xdata = phi_array_sep[i], ydata = data_sep[i], bounds=self.boundary, p0 = self.initial, method='trf')
+                    print(result_temp)
                     totalresult.append(result_temp)
+                
+                print("Error : ", self.__error_temp)
                 popt = totalresult
                 
 
@@ -138,6 +174,7 @@ class Fitting_gpu:
                 print("Typo!")
                 quit()
 
+        # '''error가 있는 경우지만, 지금은 사용하지 않음(만들다 말았음)'''
         else:
             error_array = np.array([])
             for i in range(len(error)):
@@ -165,10 +202,24 @@ class Fitting_gpu:
         return popt, np.sqrt(np.diag(pcov))
 
 
-    def fitting_func_multi(self, phi_array, kick):
+    def fitting_func_multi(self, phi_array, Free):
         # xx = 5.3; yy = 8.5*10**(-35); zz = 0.22
-        xx = self.Fixed_xx; yy = self.Fixed_yy; zz = self.Fixed_zz
-        Tem = self.Fixed_Temperature
+        if (self.Mode == "Nothing"):
+            xx = self.Fixed_xx; yy = self.Fixed_yy; zz = self.Fixed_zz
+            Tem = self.Fixed_Temperature
+        elif (self.Mode=="Free kick"):
+            xx = self.Fixed_xx; yy = self.Fixed_yy; zz = self.Fixed_zz
+            Tem = self.Fixed_Temperature
+            kick = Free
+        elif (self.Mode=="Free Tem"):
+            xx = self.Fixed_xx; yy = self.Fixed_yy; zz = self.Fixed_zz
+            kick = self.Fixed_kick
+            Tem = Free
+        elif(self.Mode == "Free fRNk xx"):
+            xx = Free
+            yy = self.Fixed_yy; zz = self.Fixed_zz
+            kick = self.Fixed_kick
+            Tem = self.Fixed_Temperature           
         Aridge_bin = 1000
         pti, yi = np.meshgrid(np.linspace(self.__pti[0], self.__pti[1], Aridge_bin), np.linspace(self.__yi[0], self.__yi[1], Aridge_bin))
         dyi = (self.__pti[1] - self.__pti[0])/Aridge_bin
@@ -180,9 +231,13 @@ class Fitting_gpu:
         self.__count = self.__count + 1
         if self.__count == 1:
             print("Count \t Kick \t\t xx \t\t yy \t zz \t\t Error")
-            print(f"{self.__count}회", kick, xx, yy, zz, np.sum((result-self.data_sep[number])**2))
+            print(f"{self.__count}회", kick, Tem, xx, yy, zz, np.sum((result-self.data_sep[number])**2))
+            self.__error_temp.append(np.sum((result-self.data_sep[number])**2))
         elif self.__count%5==0:
-            print(f"{self.__count}회", kick, xx, yy, zz, np.sum((result-self.data_sep[number])**2))
+            print(f"{self.__count}회", kick, Tem, xx, yy, zz, np.sum((result-self.data_sep[number])**2))
+            # print(result)
+            # print(self.data_sep[number])
+        self.__error_temp[number] = np.sum((result-self.data_sep[number])**2)
         return result
 
 
@@ -281,12 +336,15 @@ class Fitting_gpu:
                 results = np.append(results, cp.asnumpy(result))                
         return results
 
-    def Fixed_Temp(multi, meanpT):
+    def Fixed_Temp(multi, meanpT, pp13_highmulti_Temp):
         # AuAu : 200GeV
         # AuAu_meanpT = 0.39
         # AuAu_Temp = 0.5
-        pp13_highmulti_meanpT = 1.186
-        pp13_highmulti_Temp = 1.08075125
+        '''Associated Yield를 이용해 도출한 mean pT'''
+        # pp13_highmulti_meanpT = 1.186
+        ''' 단순히 multiplicity로 도출'''
+        pp13_highmulti_meanpT = 1.209
+        # pp13_highmulti_Temp = 1.08075125
         # return (meanpT/AuAu_meanpT)*AuAu_Temp
         return (meanpT/pp13_highmulti_meanpT)*pp13_highmulti_Temp
 

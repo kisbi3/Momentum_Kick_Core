@@ -367,14 +367,23 @@ def fit_multipl():
     # initial = (5, 5.3, 0, 0.22)
     boundary = (0,20)
     initial = (1)
-    Fixed_Temperature = classes.Fitting_gpu.Fixed_Temp(meanpTvsnch_13TeV[0], meanpTvsnch_13TeV[1])
+    highmulti_Temp = ptdep_result[1]        # 만약, 13TeV fitting을 안돌릴 경우 여기에 상수를 대입해야 함.
+    Fixed_Temperature = classes.Fitting_gpu.Fixed_Temp(meanpTvsnch_13TeV[0], meanpTvsnch_13TeV[1], highmulti_Temp)
     Fixed_Temperature_fitting = []
     Fixed_Temperature_fitting.extend([Fixed_Temperature[54], Fixed_Temperature[62], Fixed_Temperature[67], Fixed_Temperature[72]])
     Fixed_Temperature_fitting.append((Fixed_Temperature[75] + Fixed_Temperature[76])/2)
     Fixed_Temperature_fitting.extend([Fixed_Temperature[77], Fixed_Temperature[78], Fixed_Temperature[79], Fixed_Temperature[80]])
     '''multiplicity에 대한 associated yield만 가지고 fitting하고 phi correlation그리기'''
     multi_atlas = classes.Fitting_gpu(13000, phi_13TeV_multi_atlas_fitting, dat_13TeV_multi_atlas_fitting, None, multiplicity_atlas, (0.5, 5), (2, 5), boundary, initial, "Multiplicity")
-    result, multi_atlas_error = multi_atlas.fitting(None, (Fixed_Temperature_fitting, ptdep_result[2:]))                  # error를 고려하지 않으려는 경우
+
+    multiplicity_fittingmode = "Free fRNk xx"
+    # multi_atlas.multiplicity_fitting_mode(multiplicity_fittingmode)                                                                        # Temperature를 pT mean으로 결정하는 경우
+    # result, multi_atlas_error = multi_atlas.fitting(None, (Fixed_Temperature_fitting, ptdep_result[2:]))                  # Temperature를 pT mean으로 결정하는 경우
+
+    multi_atlas.multiplicity_fitting_mode(multiplicity_fittingmode)                                   # 각 파라미터들을 고정시켜가며 어떤게 가장 dominant한지 확인하는 작업
+    result, multi_atlas_error = multi_atlas.fitting(None, ptdep_result)                  # 각 파라미터들을 고정시켜가며 어떤게 가장 dominant한지 확인하는 작업
+
+
     # kick = 0.798958702
     # Tem = 0.840820694
     # yy = 1.49370324
@@ -386,8 +395,16 @@ def fit_multipl():
     print('ATLAS results :')
     for i in range(len(result)):
         #            q                      T                   xx              yy          zz
-        temp = [result[i][0], Fixed_Temperature_fitting[i], ptdep_result[2], ptdep_result[3], ptdep_result[4]]
-        # temp = [result[i][0], Fixed_Temperature_fitting[i], 5.3, 8.5*10**(-35), 0.22]
+        if (multiplicity_fittingmode == "Nothing"):
+            temp = [result[i][0], Fixed_Temperature_fitting[i], ptdep_result[2], ptdep_result[3], ptdep_result[4]]              # Temperature를 pT mean으로 결정하는 경우
+
+        # 각 파라미터들을 고정시켜가며 어떤게 가장 dominant한지 확인하는 작업
+        elif (multiplicity_fittingmode == "Free kick"):
+            temp = [result[i][0], ptdep_result[1], ptdep_result[2], ptdep_result[3], ptdep_result[4]]
+        elif (multiplicity_fittingmode == "Free Tem"):
+            temp = [ptdep_result[0], result[i][0], ptdep_result[2], ptdep_result[3], ptdep_result[4]]
+        elif (multiplicity_fittingmode == "Free fRNk xx"):
+            temp = [ptdep_result[0], ptdep_result[1], result[i][0], ptdep_result[3], ptdep_result[4]]
         print(temp)
         multi_atlas_result.append(temp)
     # print('ATLAS results : ', multi_atlas_result)
@@ -426,7 +443,6 @@ def fit_cmenerg():
 # fit_7tev()
 fit_multipl()
 # fit_cmenerg()
-# fit_multipl()
 
 
 # ptdep_result_cm = [np.array([6.50898500e-02, 1.00053422e+00, 1.99918447e+01, 3.15781968e-12, 1.91795188e-28]),
@@ -447,7 +463,7 @@ dat_13TeV_ptdep = dat_13TeV_ptdep[0:-2]
 
 
 # ptdep_result = [9.62040979e-01, 1.08113653e+00, 2.62053618e+00, 2.86583565e-01, 4.45772582e-04]
-ptdep_result_07 = [1.68531124, 1.43640594, 7.85469003, 0.80428453, 0.88283783]
+# ptdep_result_07 = [1.68531124, 1.43640594, 7.85469003, 0.80428453, 0.88283783]
 
 # fig1, axes1 = plt.subplots(nrows=1, ncols=5,figsize=(125,20))
 #그래프 그리기
