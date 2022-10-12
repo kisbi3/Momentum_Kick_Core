@@ -112,8 +112,9 @@ class Fitting_gpu:
                 # 각 파라미터들을 고정시켜가며 어떤게 가장 dominant한지 확인하는 작업
                 # self.Mode = "Free kick"
                 if (self.Mode == "Free kick"):
-                    dist = Fixed_parameters[1]
-                    self.Fixed_Temperature = [dist, dist, dist, dist, dist, dist, dist, dist, dist]
+                    # dist = Fixed_parameters[1]
+                    # self.Fixed_Temperature = [dist, dist, dist, dist, dist, dist, dist, dist, dist]
+                    self.Fixed_Temperature = Fixed_parameters[1]
                     self.Fixed_xx = Fixed_parameters[2]
                     self.Fixed_yy = Fixed_parameters[3]
                     self.Fixed_zz = Fixed_parameters[4]
@@ -123,9 +124,10 @@ class Fitting_gpu:
                     self.Fixed_yy = Fixed_parameters[3]
                     self.Fixed_zz = Fixed_parameters[4]
                 elif(self.Mode == "Free fRNk xx"):
-                    dist = Fixed_parameters[1]
+                    # dist = Fixed_parameters[1]
+                    # self.Fixed_Temperature = [dist, dist, dist, dist, dist, dist, dist, dist, dist]
+                    self.Fixed_Temperature = Fixed_parameters[1]
                     self.Fixed_kick = Fixed_parameters[0]
-                    self.Fixed_Temperature = [dist, dist, dist, dist, dist, dist, dist, dist, dist]
                     self.Fixed_yy = Fixed_parameters[3]
                     self.Fixed_zz = Fixed_parameters[4]
 
@@ -225,12 +227,14 @@ class Fitting_gpu:
         dyi = (self.__pti[1] - self.__pti[0])/Aridge_bin
         dpti = (self.__yi[1] - self.__yi[0])/Aridge_bin
         number = self.separate_number
-        Aridge = cp.asarray(1/np.sum(cpu.Aridge(pti, yi, Tem[number], self.__m, self.__md, self.__a, self.sqrSnn, self.__mp)*dyi*dpti*2*np.pi))
-        result = self.__multiplicity(phi_array, self.etaf, Aridge, kick, Tem[number], xx, yy, zz)
+        # Aridge = cp.asarray(1/np.sum(cpu.Aridge(pti, yi, Tem[number], self.__m, self.__md, self.__a, self.sqrSnn, self.__mp)*dyi*dpti*2*np.pi))
+        # result = self.__multiplicity(phi_array, self.etaf, Aridge, kick, Tem[number], xx, yy, zz)
+        Aridge = cp.asarray(1/np.sum(cpu.Aridge(pti, yi, Tem, self.__m, self.__md, self.__a, self.sqrSnn, self.__mp)*dyi*dpti*2*np.pi))
+        result = self.__multiplicity(phi_array, self.etaf, Aridge, kick, Tem, xx, yy, zz)
         result = result - np.min(result)
         self.__count = self.__count + 1
         if self.__count == 1:
-            print("Count \t Kick \t\t xx \t\t yy \t zz \t\t Error")
+            print("Count \t Kick \t\t Tem \t\t xx \t\t yy \t zz \t\t Error")
             print(f"{self.__count}회", kick, Tem, xx, yy, zz, np.sum((result-self.data_sep[number])**2))
             self.__error_temp.append(np.sum((result-self.data_sep[number])**2))
         elif self.__count%5==0:

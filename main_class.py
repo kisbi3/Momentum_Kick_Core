@@ -376,6 +376,7 @@ def fit_multipl():
     '''multiplicity에 대한 associated yield만 가지고 fitting하고 phi correlation그리기'''
     multi_atlas = classes.Fitting_gpu(13000, phi_13TeV_multi_atlas_fitting, dat_13TeV_multi_atlas_fitting, None, multiplicity_atlas, (0.5, 5), (2, 5), boundary, initial, "Multiplicity")
 
+    # You can choice fitting mode : "free kick", "free Tem", "free fRNk xx"
     multiplicity_fittingmode = "Free fRNk xx"
     # multi_atlas.multiplicity_fitting_mode(multiplicity_fittingmode)                                                                        # Temperature를 pT mean으로 결정하는 경우
     # result, multi_atlas_error = multi_atlas.fitting(None, (Fixed_Temperature_fitting, ptdep_result[2:]))                  # Temperature를 pT mean으로 결정하는 경우
