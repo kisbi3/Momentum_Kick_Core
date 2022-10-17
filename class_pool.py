@@ -109,6 +109,7 @@ class Fitting_gpu:
             elif self.mode == "Multiplicity":
 
                 print(self.Mode)
+                print(Fixed_parameters[1])
                 # 각 파라미터들을 고정시켜가며 어떤게 가장 dominant한지 확인하는 작업
                 # self.Mode = "Free kick"
                 if (self.Mode == "Free kick"):
@@ -119,6 +120,7 @@ class Fitting_gpu:
                     self.Fixed_yy = Fixed_parameters[3]
                     self.Fixed_zz = Fixed_parameters[4]
                 elif(self.Mode == "Free Tem"):
+                    # Temperature dependence는 물리적으로 말이 안되기 때문에 앞으로 쓸 일 없을 듯.
                     self.Fixed_kick = Fixed_parameters[0]
                     self.Fixed_xx = Fixed_parameters[2]
                     self.Fixed_yy = Fixed_parameters[3]
@@ -157,7 +159,7 @@ class Fitting_gpu:
                 for i in range(len(phi_array_sep)):
                     '''Fitting하는 번호'''
                     self.separate_number = i
-                    print(i)
+                    print(i, f"Temperature : ")
                     self.__count = 0
                     result_temp, pcov = scipy.optimize.curve_fit(self.fitting_func_multi, xdata = phi_array_sep[i], ydata = data_sep[i], bounds=self.boundary, p0 = self.initial, method='trf')
                     print(result_temp)

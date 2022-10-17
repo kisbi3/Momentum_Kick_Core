@@ -297,7 +297,7 @@ def datacut():
             phi_07TeV_ptdep_fitting[i] = phi_07TeV_ptdep_fitting[i][len(phi_07TeV_ptdep_fitting[i])-argmin-1:argmin+1]
 datacut()
 
-ptdep_result = []
+# ptdep_result = []
 # ptdep_result = [1.04435586e+00, 1.39798449e+00, 3.13646871e+00, 4.16055192e-05, 1.39096183e-01]
 ptdep_result = [9.61957351e-01, 1.08075125e+00, 2.61749651e+00, 2.86233547e-01, 2.95346210e-06]
 ptdep_result_07 = []
@@ -363,10 +363,12 @@ def fit_7tev():
 '''multiplicity파일 안에 에서는 multiplicity에 따른 associated yield 그래프를 이용해서 fitting한 후에 delta phi correlation에 적용만 하는 상태.'''
 '''이 파일에서는 multiplicity에 따른 mean pT를 확인하여 이에 따른 T를 계산하고, fitting할 것이다.'''
 def fit_multipl():
+    global ptdep_result
     # boundary = ((0, 0, 0, 0),(20, 10, 1e-10, 1))      # fix parameters : kick, xx, yy, zz
     # initial = (5, 5.3, 0, 0.22)
     boundary = (0,20)
     initial = (1)
+    print(ptdep_result)
     highmulti_Temp = ptdep_result[1]        # 만약, 13TeV fitting을 안돌릴 경우 여기에 상수를 대입해야 함.
     Fixed_Temperature = classes.Fitting_gpu.Fixed_Temp(meanpTvsnch_13TeV[0], meanpTvsnch_13TeV[1], highmulti_Temp)
     Fixed_Temperature_fitting = []
@@ -381,8 +383,15 @@ def fit_multipl():
     # multi_atlas.multiplicity_fitting_mode(multiplicity_fittingmode)                                                                        # Temperature를 pT mean으로 결정하는 경우
     # result, multi_atlas_error = multi_atlas.fitting(None, (Fixed_Temperature_fitting, ptdep_result[2:]))                  # Temperature를 pT mean으로 결정하는 경우
 
+    Fixed_Temperature_fitting = np.array(Fixed_Temperature_fitting)
+    print(Fixed_Temperature_fitting)
+    fitting = []
+    fitting.append(ptdep_result[0])
+    fitting.append(Fixed_Temperature_fitting)
+    fitting.extend([ptdep_result[2], ptdep_result[3], ptdep_result[4]])
+    # fitting = [ptdep_result[0], Fixed_Temperature_fitting, ptdep_result[2], ptdep_result[3], ptdep_result[4]]
     multi_atlas.multiplicity_fitting_mode(multiplicity_fittingmode)                                   # 각 파라미터들을 고정시켜가며 어떤게 가장 dominant한지 확인하는 작업
-    result, multi_atlas_error = multi_atlas.fitting(None, ptdep_result)                  # 각 파라미터들을 고정시켜가며 어떤게 가장 dominant한지 확인하는 작업
+    result, multi_atlas_error = multi_atlas.fitting(None, fitting)                  # 각 파라미터들을 고정시켜가며 어떤게 가장 dominant한지 확인하는 작업
 
 
     # kick = 0.798958702
