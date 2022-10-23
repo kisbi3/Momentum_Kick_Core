@@ -364,10 +364,10 @@ def fit_7tev():
 '''이 파일에서는 multiplicity에 따른 mean pT를 확인하여 이에 따른 T를 계산하고, fitting할 것이다.'''
 def fit_multipl():
     global ptdep_result
-    # boundary = ((0, 0, 0, 0),(20, 10, 1e-10, 1))      # fix parameters : kick, xx, yy, zz
-    # initial = (5, 5.3, 0, 0.22)
-    boundary = (0,20)
-    initial = (1)
+    # boundary = (0,20)       # fitting 개수 1개인 경우
+    # initial = (1)           # fitting 개수 1개인 경우
+    boundary = ((0.1, 0), (5, 10))
+    initial = (0.2, .1)
     print(ptdep_result)
     highmulti_Temp = ptdep_result[1]        # 만약, 13TeV fitting을 안돌릴 경우 여기에 상수를 대입해야 함.
     Fixed_Temperature = classes.Fitting_gpu.Fixed_Temp(meanpTvsnch_13TeV[0], meanpTvsnch_13TeV[1], highmulti_Temp)
@@ -379,19 +379,18 @@ def fit_multipl():
     multi_atlas = classes.Fitting_gpu(13000, phi_13TeV_multi_atlas_fitting, dat_13TeV_multi_atlas_fitting, None, multiplicity_atlas, (0.5, 5), (2, 5), boundary, initial, "Multiplicity")
 
     # You can choice fitting mode : "free kick", "free Tem", "free fRNk xx"
-    multiplicity_fittingmode = "Free fRNk xx"
+    multiplicity_fittingmode = "Free kick, fRNk xx"
     # multi_atlas.multiplicity_fitting_mode(multiplicity_fittingmode)                                                                        # Temperature를 pT mean으로 결정하는 경우
     # result, multi_atlas_error = multi_atlas.fitting(None, (Fixed_Temperature_fitting, ptdep_result[2:]))                  # Temperature를 pT mean으로 결정하는 경우
 
-    Fixed_Temperature_fitting = np.array(Fixed_Temperature_fitting)
     print(Fixed_Temperature_fitting)
     fitting = []
     fitting.append(ptdep_result[0])
-    fitting.append(Fixed_Temperature_fitting)
+    fitting.append(list(Fixed_Temperature_fitting))
     fitting.extend([ptdep_result[2], ptdep_result[3], ptdep_result[4]])
     # fitting = [ptdep_result[0], Fixed_Temperature_fitting, ptdep_result[2], ptdep_result[3], ptdep_result[4]]
     multi_atlas.multiplicity_fitting_mode(multiplicity_fittingmode)                                   # 각 파라미터들을 고정시켜가며 어떤게 가장 dominant한지 확인하는 작업
-    result, multi_atlas_error = multi_atlas.fitting(None, fitting)                  # 각 파라미터들을 고정시켜가며 어떤게 가장 dominant한지 확인하는 작업
+    result, multi_atlas_error = multi_atlas.fitting(None, ptdep_result)                  # 각 파라미터들을 고정시켜가며 어떤게 가장 dominant한지 확인하는 작업
 
 
     # kick = 0.798958702
@@ -415,6 +414,8 @@ def fit_multipl():
             temp = [ptdep_result[0], result[i][0], ptdep_result[2], ptdep_result[3], ptdep_result[4]]
         elif (multiplicity_fittingmode == "Free fRNk xx"):
             temp = [ptdep_result[0], ptdep_result[1], result[i][0], ptdep_result[3], ptdep_result[4]]
+        elif (multiplicity_fittingmode == "Free kick, fRNk xx"):
+            temp = [result[i][0], ptdep_result[1], result[i][1], ptdep_result[3], ptdep_result[4]]
         print(temp)
         multi_atlas_result.append(temp)
     # print('ATLAS results : ', multi_atlas_result)

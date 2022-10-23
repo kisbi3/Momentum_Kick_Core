@@ -133,6 +133,11 @@ class Fitting_gpu:
                     self.Fixed_yy = Fixed_parameters[3]
                     self.Fixed_zz = Fixed_parameters[4]
 
+                elif(self.Mode == "Free kick, fRNk xx"):
+                    print(11)
+                    self.Fixed_Temperature = Fixed_parameters[1]
+                    self.Fixed_yy = Fixed_parameters[3]
+                    self.Fixed_zz = Fixed_parameters[4]
 
                 elif(self.Mode == "Nothing"):
                     # Temperature를 pT mean으로 결정하는 경우
@@ -161,7 +166,10 @@ class Fitting_gpu:
                     self.separate_number = i
                     print(i, f"Temperature : ")
                     self.__count = 0
-                    result_temp, pcov = scipy.optimize.curve_fit(self.fitting_func_multi, xdata = phi_array_sep[i], ydata = data_sep[i], bounds=self.boundary, p0 = self.initial, method='trf')
+                    if(self.Mode == "Free kick, fRNk xx"):
+                        result_temp, pcov = scipy.optimize.curve_fit(self.fitting_func_multi_double, xdata = phi_array_sep[i], ydata = data_sep[i], bounds=self.boundary, p0 = self.initial, method='trf')
+                    else:
+                        result_temp, pcov = scipy.optimize.curve_fit(self.fitting_func_multi, xdata = phi_array_sep[i], ydata = data_sep[i], bounds=self.boundary, p0 = self.initial, method='trf')
                     print(result_temp)
                     totalresult.append(result_temp)
                 
@@ -246,6 +254,32 @@ class Fitting_gpu:
         self.__error_temp[number] = np.sum((result-self.data_sep[number])**2)
         return result
 
+    def fitting_func_multi_double(self, phi_array, Free1, Free2):       
+        xx = Free2
+        yy = self.Fixed_yy; zz = self.Fixed_zz
+        kick = Free1
+        Tem = self.Fixed_Temperature 
+        Aridge_bin = 1000
+        pti, yi = np.meshgrid(np.linspace(self.__pti[0], self.__pti[1], Aridge_bin), np.linspace(self.__yi[0], self.__yi[1], Aridge_bin))
+        dyi = (self.__pti[1] - self.__pti[0])/Aridge_bin
+        dpti = (self.__yi[1] - self.__yi[0])/Aridge_bin
+        number = self.separate_number
+        # Aridge = cp.asarray(1/np.sum(cpu.Aridge(pti, yi, Tem[number], self.__m, self.__md, self.__a, self.sqrSnn, self.__mp)*dyi*dpti*2*np.pi))
+        # result = self.__multiplicity(phi_array, self.etaf, Aridge, kick, Tem[number], xx, yy, zz)
+        Aridge = cp.asarray(1/np.sum(cpu.Aridge(pti, yi, Tem, self.__m, self.__md, self.__a, self.sqrSnn, self.__mp)*dyi*dpti*2*np.pi))
+        result = self.__multiplicity(phi_array, self.etaf, Aridge, kick, Tem, xx, yy, zz)
+        result = result - np.min(result)
+        self.__count = self.__count + 1
+        if self.__count == 1:
+            print("Count \t Kick \t\t Tem \t\t xx \t\t yy \t zz \t\t Error")
+            print(f"{self.__count}회", kick, Tem, xx, yy, zz, np.sum((result-self.data_sep[number])**2))
+            self.__error_temp.append(np.sum((result-self.data_sep[number])**2))
+        elif self.__count%5==0:
+            print(f"{self.__count}회", kick, Tem, xx, yy, zz, np.sum((result-self.data_sep[number])**2))
+            # print(result)
+            # print(self.data_sep[number])
+        self.__error_temp[number] = np.sum((result-self.data_sep[number])**2)
+        return result
 
     def __multiplicity(self, phi_array, etaf_range, Aridge, kick, Tem, xx, yy, zz):
         bin = 300
