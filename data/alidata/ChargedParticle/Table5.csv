@@ -1,0 +1,24 @@
+#: table_doi: 10.17182/hepdata.91996.v2/t5
+#: name: Table 5
+#: description: The spectral shape is characterized by the exponent of the power-law function which fits the high-pTpart (pT>6 GeV/c) of the invariant yields.  The power-law exponent is presented for different V0M multiplicity classes.
+#: data_file: data5.yaml
+#: data_license:   
+#: keyword reactions: P P --> CHARGED X
+#: keyword observables: 
+#: keyword phrases: 
+#: keyword cmenergies: 
+#: SQRT(S) [TEV],13
+#: ETARAP,-0.8 - 0.8
+#: RE,P P --> CHARGED X
+Multiplicity class,Power-law exponent,stat +,stat -,sys +,sys -
+X,6.00e+00,5.67e-02,-5.67e-02,1.23e-01,-1.23e-01
+IX,5.89e+00,3.51e-02,-3.51e-02,6.88e-02,-6.88e-02
+VIII,5.81e+00,3.55e-02,-3.55e-02,7.34e-02,-7.34e-02
+VII,5.86e+00,2.93e-02,-2.93e-02,6.62e-02,-6.62e-02
+VI,5.75e+00,2.36e-02,-2.36e-02,6.73e-02,-6.73e-02
+V,5.73e+00,2.88e-02,-2.88e-02,7.24e-02,-7.24e-02
+IV,5.71e+00,2.57e-02,-2.57e-02,6.29e-02,-6.29e-02
+III,5.70e+00,2.24e-02,-2.24e-02,6.33e-02,-6.33e-02
+II,5.67e+00,2.14e-02,-2.14e-02,6.31e-02,-6.31e-02
+I,5.64e+00,3.36e-02,-3.36e-02,6.78e-02,-6.78e-02
+

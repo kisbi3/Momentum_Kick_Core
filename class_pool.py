@@ -108,7 +108,7 @@ class Fitting_gpu:
                 return popt, self.chisq_error
             elif self.mode == "Multiplicity":
 
-                print(self.Mode)
+                print(f'Mode : {self.Mode}')
                 print(Fixed_parameters[1])
                 # 각 파라미터들을 고정시켜가며 어떤게 가장 dominant한지 확인하는 작업
                 # self.Mode = "Free kick"
@@ -133,8 +133,12 @@ class Fitting_gpu:
                     self.Fixed_yy = Fixed_parameters[3]
                     self.Fixed_zz = Fixed_parameters[4]
 
+                elif(self.Mode == "Free kick, fRNk xx_FixedTem"):
+                    self.Fixed_Temperature = Fixed_parameters[1]
+                    self.Fixed_yy = Fixed_parameters[3]
+                    self.Fixed_zz = Fixed_parameters[4]
+            
                 elif(self.Mode == "Free kick, fRNk xx"):
-                    print(11)
                     self.Fixed_Temperature = Fixed_parameters[1]
                     self.Fixed_yy = Fixed_parameters[3]
                     self.Fixed_zz = Fixed_parameters[4]
@@ -166,8 +170,10 @@ class Fitting_gpu:
                     self.separate_number = i
                     print(i, f"Temperature : ")
                     self.__count = 0
-                    if(self.Mode == "Free kick, fRNk xx"):
+                    if(self.Mode == "Free kick, fRNk xx_FixedTem" or "Free kick, fRNk xx"):
                         result_temp, pcov = scipy.optimize.curve_fit(self.fitting_func_multi_double, xdata = phi_array_sep[i], ydata = data_sep[i], bounds=self.boundary, p0 = self.initial, method='trf')
+                    # elif(self.Mode == "Free kick, fRNk xx"):
+                    #     result_temp, pcov = scipy.optimize.curve_fit(self.fitting_func_multi_double, xdata = phi_array_sep[i], ydata = data_sep[i], bounds=self.boundary, p0 = self.initial, method='trf')
                     else:
                         result_temp, pcov = scipy.optimize.curve_fit(self.fitting_func_multi, xdata = phi_array_sep[i], ydata = data_sep[i], bounds=self.boundary, p0 = self.initial, method='trf')
                     print(result_temp)
@@ -258,7 +264,10 @@ class Fitting_gpu:
         xx = Free2
         yy = self.Fixed_yy; zz = self.Fixed_zz
         kick = Free1
-        Tem = self.Fixed_Temperature 
+        if(self.Mode == "Free kick, fRNk xx_FixedTem"):
+            Tem = self.Fixed_Temperature
+        if(self.Mode == "Free kick, fRNk xx"):
+            Tem = self.Fixed_Temperature[self.separate_number]
         Aridge_bin = 1000
         pti, yi = np.meshgrid(np.linspace(self.__pti[0], self.__pti[1], Aridge_bin), np.linspace(self.__yi[0], self.__yi[1], Aridge_bin))
         dyi = (self.__pti[1] - self.__pti[0])/Aridge_bin

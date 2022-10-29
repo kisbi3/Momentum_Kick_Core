@@ -24,6 +24,35 @@ mpl.rcParams["text.usetex"] = True
 
 path = ['./data/atldata/13TeV/', './data/alidata/', './data/cmsdata/', './data/atldata/2.76TeV/', './data/atldata/5.02TeV/', './data/atldata/13TeV_distribution/', './data/atldata/']
 
+'''Transverse momentum distributions of charged particles(ALICE)'''
+# Total pT distribution
+x_13TeV_pTdistTotal = [] # pT
+y_13TeV_pTdistTotal = [] # d^2N/dpTdeta
+err_13TeV_pTdistTotal = [] # Error
+# High multiplicity pT distribution
+x_13TeV_pTdistHigh = [] # pT
+y_13TeV_pTdistHigh = [] # d^2N/dpTdeta
+err_13TeV_pTdistHigh = [] # Error
+# correlation이 아닌데 사용해도 되나?
+def pTdist():
+    x_13TeV_pTdistTotal.append(np.loadtxt(path[1]+'ChargedParticle/Table3.csv', delimiter=',', usecols=[0], skiprows=13, max_rows=47))
+    y_13TeV_pTdistTotal.append(np.loadtxt(path[1]+'ChargedParticle/Table3.csv', delimiter=',', usecols=[3], skiprows=13, max_rows=47))
+    err_sta1 = np.loadtxt(path[1]+'ChargedParticle/Table3.csv', delimiter=',', usecols=[4], skiprows=13, max_rows=47)
+    err_sta2 = np.loadtxt(path[1]+'ChargedParticle/Table3.csv', delimiter=',', usecols=[5], skiprows=13, max_rows=47)
+    err_sys1 = np.loadtxt(path[1]+'ChargedParticle/Table3.csv', delimiter=',', usecols=[6], skiprows=13, max_rows=47)
+    err_sys2 = np.loadtxt(path[1]+'ChargedParticle/Table3.csv', delimiter=',', usecols=[7], skiprows=13, max_rows=47)
+    err_13TeV_pTdistTotal.append((err_sta1**2+err_sys1**2)**0.5)
+    err_13TeV_pTdistTotal.append((err_sta2**2+err_sys2**2)**0.5)
+
+    x_13TeV_pTdistHigh.append(np.loadtxt(path[1]+'ChargedParticle/Table3.csv', delimiter=',', usecols=[0], skiprows=481, max_rows=47))
+    y_13TeV_pTdistHigh.append(np.loadtxt(path[1]+'ChargedParticle/Table3.csv', delimiter=',', usecols=[3], skiprows=481, max_rows=47))
+    err_sta1 = np.loadtxt(path[1]+'ChargedParticle/Table3.csv', delimiter=',', usecols=[4], skiprows=481, max_rows=47)
+    err_sta2 = np.loadtxt(path[1]+'ChargedParticle/Table3.csv', delimiter=',', usecols=[5], skiprows=481, max_rows=47)
+    err_sys1 = np.loadtxt(path[1]+'ChargedParticle/Table3.csv', delimiter=',', usecols=[6], skiprows=481, max_rows=47)
+    err_sys2 = np.loadtxt(path[1]+'ChargedParticle/Table3.csv', delimiter=',', usecols=[7], skiprows=481, max_rows=47)
+    err_13TeV_pTdistHigh.append((err_sta1**2+err_sys1**2)**0.5)
+    err_13TeV_pTdistHigh.append((err_sta2**2+err_sys2**2)**0.5)
+pTdist()
 
 '''Multiplicity Dependence'''
 phi_13TeV_multi_atlas = []
@@ -366,9 +395,9 @@ def fit_multipl():
     global ptdep_result
     # boundary = (0,20)       # fitting 개수 1개인 경우
     # initial = (1)           # fitting 개수 1개인 경우
-    boundary = ((0.01, 0), (5, 100))
-    initial = (0.2, .1)
-    print(ptdep_result)
+    boundary = ((0.000001, 0), (5, 1000000))
+    initial = (0.0001, 30000)
+    print("High multiplicity results : ", ptdep_result)
     highmulti_Temp = ptdep_result[1]        # 만약, 13TeV fitting을 안돌릴 경우 여기에 상수를 대입해야 함.
     Fixed_Temperature = classes.Fitting_gpu.Fixed_Temp(meanpTvsnch_13TeV[0], meanpTvsnch_13TeV[1], highmulti_Temp)
     Fixed_Temperature_fitting = []
@@ -378,19 +407,20 @@ def fit_multipl():
     '''multiplicity에 대한 associated yield만 가지고 fitting하고 phi correlation그리기'''
     multi_atlas = classes.Fitting_gpu(13000, phi_13TeV_multi_atlas_fitting, dat_13TeV_multi_atlas_fitting, None, multiplicity_atlas, (0.5, 5), (2, 5), boundary, initial, "Multiplicity")
 
-    # You can choice fitting mode : "free kick", "free Tem", "free fRNk xx"
+    # You can choice fitting mode : "free kick", "free Tem", "free fRNk xx", "Free kick, fRNk xx_FixedTem", "Free kick, fRNk xx"
     multiplicity_fittingmode = "Free kick, fRNk xx"
     # multi_atlas.multiplicity_fitting_mode(multiplicity_fittingmode)                                                                        # Temperature를 pT mean으로 결정하는 경우
     # result, multi_atlas_error = multi_atlas.fitting(None, (Fixed_Temperature_fitting, ptdep_result[2:]))                  # Temperature를 pT mean으로 결정하는 경우
 
-    print(Fixed_Temperature_fitting)
-    fitting = []
-    fitting.append(ptdep_result[0])
-    fitting.append(list(Fixed_Temperature_fitting))
-    fitting.extend([ptdep_result[2], ptdep_result[3], ptdep_result[4]])
-    # fitting = [ptdep_result[0], Fixed_Temperature_fitting, ptdep_result[2], ptdep_result[3], ptdep_result[4]]
+    print("Temperature", Fixed_Temperature_fitting)
+    # fitting = []
+    # fitting.append(ptdep_result[0])
+    # fitting.append(list(Fixed_Temperature_fitting))
+    # fitting.extend([ptdep_result[2], ptdep_result[3], ptdep_result[4]])
+    fitting = [ptdep_result[0], Fixed_Temperature_fitting, ptdep_result[2], ptdep_result[3], ptdep_result[4]]
     multi_atlas.multiplicity_fitting_mode(multiplicity_fittingmode)                                   # 각 파라미터들을 고정시켜가며 어떤게 가장 dominant한지 확인하는 작업
-    result, multi_atlas_error = multi_atlas.fitting(None, ptdep_result)                  # 각 파라미터들을 고정시켜가며 어떤게 가장 dominant한지 확인하는 작업
+    # result, multi_atlas_error = multi_atlas.fitting(None, ptdep_result)                  # 각 파라미터들을 고정시켜가며 어떤게 가장 dominant한지 확인하는 작업
+    result, multi_atlas_error = multi_atlas.fitting(None, fitting)                          # fitting Mode가 Free kick, fRNk xx인 경우에 사용
 
 
     # kick = 0.798958702
@@ -414,8 +444,10 @@ def fit_multipl():
             temp = [ptdep_result[0], result[i][0], ptdep_result[2], ptdep_result[3], ptdep_result[4]]
         elif (multiplicity_fittingmode == "Free fRNk xx"):
             temp = [ptdep_result[0], ptdep_result[1], result[i][0], ptdep_result[3], ptdep_result[4]]
-        elif (multiplicity_fittingmode == "Free kick, fRNk xx"):
+        elif (multiplicity_fittingmode == "Free kick, fRNk xx_FixedTem"):
             temp = [result[i][0], ptdep_result[1], result[i][1], ptdep_result[3], ptdep_result[4]]
+        elif (multiplicity_fittingmode == "Free kick, fRNk xx"):
+            temp = [result[i][0], Fixed_Temperature_fitting[i], result[i][1], ptdep_result[3], ptdep_result[4]]
         print(temp)
         multi_atlas_result.append(temp)
     # print('ATLAS results : ', multi_atlas_result)
@@ -452,7 +484,7 @@ def fit_cmenerg():
 
 # fit_13tev()
 # fit_7tev()
-fit_multipl()
+# fit_multipl()
 # fit_cmenerg()
 
 
@@ -801,6 +833,29 @@ def drawgraph_multi_phicorr():
     plt.tight_layout()
     fig1.savefig('./parameters_multiplicity_dep.png')
 
+def draw_13TeV_ptdist():
+    fig2, axis2 = plt.subplots(nrows=1, ncols=1,figsize=(40,20))
+    '''Line'''
+    axis2.errorbar(x_13TeV_pTdistTotal[0], y_13TeV_pTdistTotal[0], yerr=(abs(err_13TeV_pTdistTotal[0]),err_13TeV_pTdistTotal[1]), color="red", linestyle=' ', linewidth=5, capthick=3, capsize=15, zorder=0)
+    axis2.errorbar(x_13TeV_pTdistHigh[0], y_13TeV_pTdistHigh[0], yerr=(abs(err_13TeV_pTdistHigh[0]),err_13TeV_pTdistHigh[1]), color="black", linestyle=' ', linewidth=5, capthick=3, capsize=15, zorder=0)
+    axis2.scatter(x_13TeV_pTdistTotal[0], y_13TeV_pTdistTotal[0], edgecolors="red", s=800, marker='o', facecolors='none', linewidths=5, zorder=0, label="Low Multiplicity")
+    axis2.scatter(x_13TeV_pTdistTotal[0], y_13TeV_pTdistTotal[0], s=800, marker='+', facecolors='red', linewidths=5, zorder=0)
+    axis2.scatter(x_13TeV_pTdistHigh[0], y_13TeV_pTdistHigh[0], edgecolors="black", s=800, marker='o', facecolors='none', linewidths=5, zorder=0, label="High multiplicity")
+    axis2.scatter(x_13TeV_pTdistHigh[0], y_13TeV_pTdistHigh[0], s=800, marker='+', facecolors='black', linewidths=5, zorder=0)
+
+    axis2.set_xlabel(r'$p_T \mathrm{(GeV/c)}$', size=70)
+    axis2.set_ylabel(r'$d^2N_{\mathrm{ch}}/d p_T \, d\eta \,\, \mathrm{(GeV/c)^{-1}}$', size=70)
+    axis2.minorticks_on()
+    axis2.tick_params(axis='both',which='major',direction='in',width=2,length=30,labelsize=45, top = 'true', right='true')
+    axis2.tick_params(axis='both',which='minor',direction='in',width=2,length=15,labelsize=45, top = 'true', right='true')
+    axis2.legend(fontsize=45, loc='upper right')
+    axis2.set_yscale("log")
+    axis2.set_xscale("log")
+    axis2.grid(color='silver',linestyle=':',linewidth=3)
+    fig2.tight_layout()
+    fig2.savefig('./pTdist_multi.png')
+    fig2.savefig('/home/jaesung/Dropbox/ohno/pTdist_multi.png')
+
 # drawgraph_ptdep_phicorr()
 time_phicorr = time.time()
 print(f"Graph, Phi correlation end : {time_phicorr-time_calculate:.3f} sec")
@@ -813,7 +868,10 @@ print(f"FrNk end : {time_frnk-time_yridge:.3f} sec")
 # drawgraph_cmdep_phicorr()
 time_multi = time.time()
 print(f"Graph, Multiplicity end : {time_multi-time_frnk:.3f} sec")
-drawgraph_multi_phicorr()
+# drawgraph_multi_phicorr()
+time_ptdist = time.time()
+print(f"Graph, pT distribution end : {time_ptdist-time_multi:.3f} sec")
+draw_13TeV_ptdist()
 
 time_end = time.time()
 print(f"Total end : {time_end-time_start:.3f} sec")
