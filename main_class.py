@@ -29,10 +29,12 @@ path = ['./data/atldata/13TeV/', './data/alidata/', './data/cmsdata/', './data/a
 x_13TeV_pTdistTotal = [] # pT
 y_13TeV_pTdistTotal = [] # d^2N/dpTdeta
 err_13TeV_pTdistTotal = [] # Error
+pTrange_13TeV_pTdistTotal = []
 # High multiplicity pT distribution
 x_13TeV_pTdistHigh = [] # pT
 y_13TeV_pTdistHigh = [] # d^2N/dpTdeta
 err_13TeV_pTdistHigh = [] # Error
+pTrange_13TeV_pTdistHigh = []
 # correlation이 아닌데 사용해도 되나?
 def pTdist():
     x_13TeV_pTdistTotal.append(np.loadtxt(path[1]+'ChargedParticle/Table3.csv', delimiter=',', usecols=[0], skiprows=13, max_rows=47))
@@ -43,6 +45,8 @@ def pTdist():
     err_sys2 = np.loadtxt(path[1]+'ChargedParticle/Table3.csv', delimiter=',', usecols=[7], skiprows=13, max_rows=47)
     err_13TeV_pTdistTotal.append((err_sta1**2+err_sys1**2)**0.5)
     err_13TeV_pTdistTotal.append((err_sta2**2+err_sys2**2)**0.5)
+    pTlow_13TeV_pTdistTotal = np.loadtxt(path[1]+'ChargedParticle/Table3.csv', delimiter=',', usecols=[1], skiprows=13, max_rows=47)
+    pThig_13TeV_pTdistTotal = np.loadtxt(path[1]+'ChargedParticle/Table3.csv', delimiter=',', usecols=[2], skiprows=13, max_rows=47)
 
     x_13TeV_pTdistHigh.append(np.loadtxt(path[1]+'ChargedParticle/Table3.csv', delimiter=',', usecols=[0], skiprows=481, max_rows=47))
     y_13TeV_pTdistHigh.append(np.loadtxt(path[1]+'ChargedParticle/Table3.csv', delimiter=',', usecols=[3], skiprows=481, max_rows=47))
@@ -52,6 +56,11 @@ def pTdist():
     err_sys2 = np.loadtxt(path[1]+'ChargedParticle/Table3.csv', delimiter=',', usecols=[7], skiprows=481, max_rows=47)
     err_13TeV_pTdistHigh.append((err_sta1**2+err_sys1**2)**0.5)
     err_13TeV_pTdistHigh.append((err_sta2**2+err_sys2**2)**0.5)
+    pTlow_13TeV_pTdistHigh = np.loadtxt(path[1]+'ChargedParticle/Table3.csv', delimiter=',', usecols=[1], skiprows=481, max_rows=47)
+    pThig_13TeV_pTdistHigh = np.loadtxt(path[1]+'ChargedParticle/Table3.csv', delimiter=',', usecols=[2], skiprows=481, max_rows=47)
+    for a, b, c, d in zip(pTlow_13TeV_pTdistTotal, pThig_13TeV_pTdistTotal, pTlow_13TeV_pTdistHigh, pThig_13TeV_pTdistHigh):
+        pTrange_13TeV_pTdistTotal.append((a, b))
+        pTrange_13TeV_pTdistHigh.append((c, d))
 pTdist()
 
 '''Multiplicity Dependence'''
@@ -395,8 +404,8 @@ def fit_multipl():
     global ptdep_result
     # boundary = (0,20)       # fitting 개수 1개인 경우
     # initial = (1)           # fitting 개수 1개인 경우
-    boundary = ((0.000001, 0), (5, 1000000))
-    initial = (0.0001, 30000)
+    boundary = ((0.1, 0), (5, 100))
+    initial = (0.5, 5)
     print("High multiplicity results : ", ptdep_result)
     highmulti_Temp = ptdep_result[1]        # 만약, 13TeV fitting을 안돌릴 경우 여기에 상수를 대입해야 함.
     Fixed_Temperature = classes.Fitting_gpu.Fixed_Temp(meanpTvsnch_13TeV[0], meanpTvsnch_13TeV[1], highmulti_Temp)
@@ -836,12 +845,12 @@ def drawgraph_multi_phicorr():
 def draw_13TeV_ptdist():
     fig2, axis2 = plt.subplots(nrows=1, ncols=1,figsize=(40,20))
     '''Line'''
-    axis2.errorbar(x_13TeV_pTdistTotal[0], y_13TeV_pTdistTotal[0], yerr=(abs(err_13TeV_pTdistTotal[0]),err_13TeV_pTdistTotal[1]), color="red", linestyle=' ', linewidth=5, capthick=3, capsize=15, zorder=0)
-    axis2.errorbar(x_13TeV_pTdistHigh[0], y_13TeV_pTdistHigh[0], yerr=(abs(err_13TeV_pTdistHigh[0]),err_13TeV_pTdistHigh[1]), color="black", linestyle=' ', linewidth=5, capthick=3, capsize=15, zorder=0)
-    axis2.scatter(x_13TeV_pTdistTotal[0], y_13TeV_pTdistTotal[0], edgecolors="red", s=800, marker='o', facecolors='none', linewidths=5, zorder=0, label="Low Multiplicity")
-    axis2.scatter(x_13TeV_pTdistTotal[0], y_13TeV_pTdistTotal[0], s=800, marker='+', facecolors='red', linewidths=5, zorder=0)
-    axis2.scatter(x_13TeV_pTdistHigh[0], y_13TeV_pTdistHigh[0], edgecolors="black", s=800, marker='o', facecolors='none', linewidths=5, zorder=0, label="High multiplicity")
-    axis2.scatter(x_13TeV_pTdistHigh[0], y_13TeV_pTdistHigh[0], s=800, marker='+', facecolors='black', linewidths=5, zorder=0)
+    # axis2.errorbar(x_13TeV_pTdistTotal[0], y_13TeV_pTdistTotal[0], yerr=(abs(err_13TeV_pTdistTotal[0]),err_13TeV_pTdistTotal[1]), color="red", linestyle=' ', linewidth=5, capthick=3, capsize=15, zorder=0)
+    # axis2.errorbar(x_13TeV_pTdistHigh[0], y_13TeV_pTdistHigh[0], yerr=(abs(err_13TeV_pTdistHigh[0]),err_13TeV_pTdistHigh[1]), color="black", linestyle=' ', linewidth=5, capthick=3, capsize=15, zorder=0)
+    axis2.scatter(x_13TeV_pTdistTotal[0], y_13TeV_pTdistTotal[0], edgecolors="red", s=300, marker='o', facecolors='none', linewidths=5, zorder=0, label="Low Multiplicity")
+    axis2.scatter(x_13TeV_pTdistTotal[0], y_13TeV_pTdistTotal[0], s=300, marker='+', facecolors='red', linewidths=5, zorder=0)
+    axis2.scatter(x_13TeV_pTdistHigh[0], y_13TeV_pTdistHigh[0], edgecolors="black", s=300, marker='o', facecolors='none', linewidths=5, zorder=0, label="High multiplicity")
+    axis2.scatter(x_13TeV_pTdistHigh[0], y_13TeV_pTdistHigh[0], s=300, marker='+', facecolors='black', linewidths=5, zorder=0)
 
     axis2.set_xlabel(r'$p_T \mathrm{(GeV/c)}$', size=70)
     axis2.set_ylabel(r'$d^2N_{\mathrm{ch}}/d p_T \, d\eta \,\, \mathrm{(GeV/c)^{-1}}$', size=70)
