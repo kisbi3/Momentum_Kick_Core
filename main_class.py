@@ -24,44 +24,6 @@ mpl.rcParams["text.usetex"] = True
 
 path = ['./data/atldata/13TeV/', './data/alidata/', './data/cmsdata/', './data/atldata/2.76TeV/', './data/atldata/5.02TeV/', './data/atldata/13TeV_distribution/', './data/atldata/']
 
-'''Transverse momentum distributions of charged particles(ALICE)'''
-# Total pT distribution
-x_13TeV_pTdistTotal = [] # pT
-y_13TeV_pTdistTotal = [] # d^2N/dpTdeta
-err_13TeV_pTdistTotal = [] # Error
-pTrange_13TeV_pTdistTotal = []
-# High multiplicity pT distribution
-x_13TeV_pTdistHigh = [] # pT
-y_13TeV_pTdistHigh = [] # d^2N/dpTdeta
-err_13TeV_pTdistHigh = [] # Error
-pTrange_13TeV_pTdistHigh = []
-# correlation이 아닌데 사용해도 되나?
-def pTdist():
-    x_13TeV_pTdistTotal.append(np.loadtxt(path[1]+'ChargedParticle/Table3.csv', delimiter=',', usecols=[0], skiprows=13, max_rows=47))
-    y_13TeV_pTdistTotal.append(np.loadtxt(path[1]+'ChargedParticle/Table3.csv', delimiter=',', usecols=[3], skiprows=13, max_rows=47))
-    err_sta1 = np.loadtxt(path[1]+'ChargedParticle/Table3.csv', delimiter=',', usecols=[4], skiprows=13, max_rows=47)
-    err_sta2 = np.loadtxt(path[1]+'ChargedParticle/Table3.csv', delimiter=',', usecols=[5], skiprows=13, max_rows=47)
-    err_sys1 = np.loadtxt(path[1]+'ChargedParticle/Table3.csv', delimiter=',', usecols=[6], skiprows=13, max_rows=47)
-    err_sys2 = np.loadtxt(path[1]+'ChargedParticle/Table3.csv', delimiter=',', usecols=[7], skiprows=13, max_rows=47)
-    err_13TeV_pTdistTotal.append((err_sta1**2+err_sys1**2)**0.5)
-    err_13TeV_pTdistTotal.append((err_sta2**2+err_sys2**2)**0.5)
-    pTlow_13TeV_pTdistTotal = np.loadtxt(path[1]+'ChargedParticle/Table3.csv', delimiter=',', usecols=[1], skiprows=13, max_rows=47)
-    pThig_13TeV_pTdistTotal = np.loadtxt(path[1]+'ChargedParticle/Table3.csv', delimiter=',', usecols=[2], skiprows=13, max_rows=47)
-
-    x_13TeV_pTdistHigh.append(np.loadtxt(path[1]+'ChargedParticle/Table3.csv', delimiter=',', usecols=[0], skiprows=481, max_rows=47))
-    y_13TeV_pTdistHigh.append(np.loadtxt(path[1]+'ChargedParticle/Table3.csv', delimiter=',', usecols=[3], skiprows=481, max_rows=47))
-    err_sta1 = np.loadtxt(path[1]+'ChargedParticle/Table3.csv', delimiter=',', usecols=[4], skiprows=481, max_rows=47)
-    err_sta2 = np.loadtxt(path[1]+'ChargedParticle/Table3.csv', delimiter=',', usecols=[5], skiprows=481, max_rows=47)
-    err_sys1 = np.loadtxt(path[1]+'ChargedParticle/Table3.csv', delimiter=',', usecols=[6], skiprows=481, max_rows=47)
-    err_sys2 = np.loadtxt(path[1]+'ChargedParticle/Table3.csv', delimiter=',', usecols=[7], skiprows=481, max_rows=47)
-    err_13TeV_pTdistHigh.append((err_sta1**2+err_sys1**2)**0.5)
-    err_13TeV_pTdistHigh.append((err_sta2**2+err_sys2**2)**0.5)
-    pTlow_13TeV_pTdistHigh = np.loadtxt(path[1]+'ChargedParticle/Table3.csv', delimiter=',', usecols=[1], skiprows=481, max_rows=47)
-    pThig_13TeV_pTdistHigh = np.loadtxt(path[1]+'ChargedParticle/Table3.csv', delimiter=',', usecols=[2], skiprows=481, max_rows=47)
-    for a, b, c, d in zip(pTlow_13TeV_pTdistTotal, pThig_13TeV_pTdistTotal, pTlow_13TeV_pTdistHigh, pThig_13TeV_pTdistHigh):
-        pTrange_13TeV_pTdistTotal.append((a, b))
-        pTrange_13TeV_pTdistHigh.append((c, d))
-pTdist()
 
 '''Multiplicity Dependence'''
 phi_13TeV_multi_atlas = []
@@ -133,12 +95,12 @@ def atlas_multiplicity():
     atlaserror.append(np.loadtxt(path[0]+f'130~.csv',delimiter=',',usecols=[3], skiprows=3, max_rows=12))
 atlas_multiplicity()
 '''append cms multiplicity data'''
+'''아래 multiplicity는 사용할지 사용 안할지 모름.'''
+multiplicity_cms = [22.5, 22.5, 22.5, 22.5, 57.5, 57.5, 57.5, 57.5, 92.5, 92.5, 92.5, 92.5, 127.5, 127.5, 127.5, 127.5]
 def cms_multiplicity():
-    '''아래 multiplicity는 사용할지 사용 안할지 모름.'''
-    multiplicity_cms = [57.5, 57.5, 57.5, 57.5, 92.5, 92.5, 92.5, 92.5, 127.5, 127.5, 127.5, 127.5]
-    for i in range(12):
+    for i in range(16):
         '''80<N<105, 3<pT<4 의 데이터가 많이 이상하여 if문으로 빼서 따로 처리해야 할 수도'''
-        table = 2*i+9
+        table = 2*i+1
         phi_13TeV_multi_cms.append(np.loadtxt(path[2]+f'Table{table}.csv',delimiter=',',usecols=[0], skiprows=18, max_rows=13))
         dat_13TeV_multi_cms.append(np.loadtxt(path[2]+f'Table{table}.csv',delimiter=',',usecols=[1], skiprows=18, max_rows=13))
         err_13TeV_multi_cms.append(np.loadtxt(path[2]+f'Table{table}.csv',delimiter=',',usecols=[2], skiprows=18, max_rows=13))
@@ -337,15 +299,20 @@ datacut()
 
 # ptdep_result = []
 # ptdep_result = [1.04435586e+00, 1.39798449e+00, 3.13646871e+00, 4.16055192e-05, 1.39096183e-01]
-ptdep_result = [9.61957351e-01, 1.08075125e+00, 2.61749651e+00, 2.86233547e-01, 2.95346210e-06]
-ptdep_result_07 = []
+
+ptdep_result = [0.9550869558401427, 1.0902337006471705, 2.7422234903350926, 0.35144493617188255, 9.865787114868575e-06]
+ptdep_result_07 = [1.624901759777593, 0.9302427715844408, 5.0117954889744185, 0.8297385370001579, 0.737376419008668]
+# ptdep_result = []
+# ptdep_result_07 = []
 ptdep_result_cm = []
 ptdep_error_cm = []
 multi_atlas_result = []
+multi_cms_result = []
 ptdep_Rsq = []
 
-total_boundary = ((0.5, 1., 0, 0, 0),(5, 4., 10, 10, 10))
-total_initial = (1.5,  2., 5., 0, 0)
+total_boundary = ((0.5, .5, 0, 0, 0),(5, 4., 10, 10, 10))
+total_initial = (1.,  1., 2., 0, 0)
+# total_initial = (0.955, 1.09, 2.74)
 '''Fitting 13TeV data'''
 def fit_13tev():
     ptf = [(1, 2), (2, 3), (3, 4), (1, 2), (2, 3), (3, 4)]
@@ -377,8 +344,8 @@ def fit_13tev():
     for i in range(len(ptf)):
         # print(i, phi_13TeV_ptdep_fitting[i], dat_13TeV_ptdep_fitting[i], ptf[i], etaf[i])
         ptdep_error = classes.Error(13000, phi_13TeV_ptdep_fitting[i], dat_13TeV_ptdep_fitting[i], ptf[i], etaf[i])
-        Error_Rsq = ptdep_error.R_squared("pTdependence", *ptdep_result)
-        ptdep_Rsq.append(Error_Rsq)
+        # Error_Rsq = ptdep_error.R_squared("pTdependence", *ptdep_result)
+        # ptdep_Rsq.append(Error_Rsq)
     print(ptdep_Rsq)
 
 '''Fitting 7TeV data'''
@@ -395,7 +362,8 @@ def fit_7tev():
     result, ptdep_error_07 = ptdep.fitting(None, None)                 # error를 고려하지 않으려는 경우
     print(result)
     print(ptdep_error_07)
-    ptdep_result_07.append(result)
+    # ptdep_result_07.append(result)
+    ptdep_result_07.extend(result)
 
 '''multiplicity fitting'''
 '''multiplicity파일 안에 에서는 multiplicity에 따른 associated yield 그래프를 이용해서 fitting한 후에 delta phi correlation에 적용만 하는 상태.'''
@@ -464,7 +432,35 @@ def fit_multipl():
     '''
             ***Results : [0.798958702    0.840820694    5.38517847    1.49370324    3.51939886e-12    19.4957273e    117.807870]***
     '''
+    
+'''
+    multi_cms = classes.Fitting_gpu(13000, phi_13TeV_multi_cms_fitting, dat_13TeV_multi_cms_fitting, None, multiplicity_cms, (0.5, 5), (2, 4), boundary, initial, "Multiplicity")
+    fitting = [ptdep_result[0], Fixed_Temperature_fitting, ptdep_result[2], ptdep_result[3], ptdep_result[4]]
+    multi_cms.multiplicity_fitting_mode(multiplicity_fittingmode)                                   # 각 파라미터들을 고정시켜가며 어떤게 가장 dominant한지 확인하는 작업
+    # result, multi_cms_error = multi_atlas.fitting(None, ptdep_result)                  # 각 파라미터들을 고정시켜가며 어떤게 가장 dominant한지 확인하는 작업
+    result, multi_cms_error = multi_cms.fitting(None, fitting)                          # fitting Mode가 Free kick, fRNk xx인 경우에 사용
+    print('CMS results :')
+    for i in range(len(result)):
+        #            q                      T                   xx              yy          zz
+        if (multiplicity_fittingmode == "Nothing"):
+            temp = [result[i][0], Fixed_Temperature_fitting[i], ptdep_result[2], ptdep_result[3], ptdep_result[4]]              # Temperature를 pT mean으로 결정하는 경우
 
+        # 각 파라미터들을 고정시켜가며 어떤게 가장 dominant한지 확인하는 작업
+        elif (multiplicity_fittingmode == "Free kick"):
+            temp = [result[i][0], ptdep_result[1], ptdep_result[2], ptdep_result[3], ptdep_result[4]]
+        elif (multiplicity_fittingmode == "Free Tem"):
+            temp = [ptdep_result[0], result[i][0], ptdep_result[2], ptdep_result[3], ptdep_result[4]]
+        elif (multiplicity_fittingmode == "Free fRNk xx"):
+            temp = [ptdep_result[0], ptdep_result[1], result[i][0], ptdep_result[3], ptdep_result[4]]
+        elif (multiplicity_fittingmode == "Free kick, fRNk xx_FixedTem"):
+            temp = [result[i][0], ptdep_result[1], result[i][1], ptdep_result[3], ptdep_result[4]]
+        elif (multiplicity_fittingmode == "Free kick, fRNk xx"):
+            temp = [result[i][0], Fixed_Temperature_fitting[i], result[i][1], ptdep_result[3], ptdep_result[4]]
+        print(temp)
+        multi_cms_result.append(temp)
+    # print('ATLAS results : ', multi_atlas_result)
+    print('CMS error : ', multi_cms_error)
+'''
 
 '''To Check Center of mass Energy dependence'''
 ''' Multiplicity : 90~100'''
@@ -527,10 +523,12 @@ dat_13TeV_ptdep = dat_13TeV_ptdep[0:-2]
 '''pT dependence phi correlation graph'''
 def drawgraph_ptdep_phicorr():
     fig1, axes1 = plt.subplots(nrows=1, ncols=5,figsize=(125,20))
-    alice = classes.Drawing_Graphs(13000, (1.6, 1.8), *ptdep_result, None, None)
-    cms = classes.Drawing_Graphs(13000, (2, 4), *ptdep_result, None, None)
-    cms_07 = classes.Drawing_Graphs(7000, (2, 4), *ptdep_result_07, None, None)
-    atlas = classes.Drawing_Graphs(13000, (2, 5), *ptdep_result, None, None)
+    print("13TeV : ", ptdep_result)
+    print("7TeV : ", ptdep_result_07)
+    alice = classes.Drawing_Graphs(13000, (1.6, 1.8), *ptdep_result, None, None, 'ALICE')
+    cms = classes.Drawing_Graphs(13000, (2, 4), *ptdep_result, None, None, 'CMS')
+    cms_07 = classes.Drawing_Graphs(7000, (2, 4), *ptdep_result_07, None, None, 'CMS')
+    atlas = classes.Drawing_Graphs(13000, (2, 5), *ptdep_result, None, None, 'ATLAS')
     for i in range(5):
         if i==0:
             ptf = (0.1, 1)
@@ -576,12 +574,12 @@ def drawgraph_ptdep_phicorr():
             en = i+1
             # axes1[i].set_title(str(st)+r'$<p_{T, \, \mathrm{trig(assoc)}}<$'+str(en), size = 70, pad=30)
             axes1[i].set_title(str(st)+r'$<p_{T, \, \mathrm{trig(assoc)}}<$'+str(en), size = 70, pad=30)
-        axes1[1].text(-1.18, 0.0165, fr"ALICE R-squared : {round(ptdep_Rsq[0], 3)}", size = 60)
-        axes1[1].text(-1.18, 0.0155, fr" \ CMS \ R-squared : {round(ptdep_Rsq[3], 3)}", size = 60)
-        axes1[2].text(-1.18, 0.0089, fr"ALICE R-squared : {round(ptdep_Rsq[1], 3)}", size = 60)
-        axes1[2].text(-1.18, 0.0083, fr" \ CMS \ R-squared : {round(ptdep_Rsq[4], 3)}", size = 60)
-        axes1[3].text(-1.18, 0.0042, fr"ALICE R-squared : {round(ptdep_Rsq[2], 3)}", size = 60)
-        axes1[3].text(-1.18, 0.0039, fr"\ CMS \ R-squared : {round(ptdep_Rsq[5], 3)}", size = 60)
+        # axes1[1].text(-1.18, 0.0165, fr"ALICE R-squared : {round(ptdep_Rsq[0], 3)}", size = 60)
+        # axes1[1].text(-1.18, 0.0155, fr" \ CMS \ R-squared : {round(ptdep_Rsq[3], 3)}", size = 60)
+        # axes1[2].text(-1.18, 0.0089, fr"ALICE R-squared : {round(ptdep_Rsq[1], 3)}", size = 60)
+        # axes1[2].text(-1.18, 0.0083, fr" \ CMS \ R-squared : {round(ptdep_Rsq[4], 3)}", size = 60)
+        # axes1[3].text(-1.18, 0.0042, fr"ALICE R-squared : {round(ptdep_Rsq[2], 3)}", size = 60)
+        # axes1[3].text(-1.18, 0.0039, fr"\ CMS \ R-squared : {round(ptdep_Rsq[5], 3)}", size = 60)
 
         axes1[i].set_xlabel(r'$\Delta\phi$', size=70)
         axes1[i].minorticks_on()
@@ -592,23 +590,25 @@ def drawgraph_ptdep_phicorr():
     axes1[0].set_ylabel(r'$\frac{1}{N_{\mathrm{trig}}}\frac{dN^{\mathrm{pair}}}{d\Delta\phi}-C_{\mathrm{ZYAM}}$', size=70)
     fig1.tight_layout(h_pad=-1)
 
-    fig1.savefig('./phiCorr_Test.png')
+    fig1.savefig('./Results/phiCorr_Test.png')
     fig1.savefig('/home/jaesung/Dropbox/ohno/phiCorr_Test.png')
 
 '''pT dependence Y^ridge graph'''
 def drawgraph_ptdep_Yridge():
     fig2, axis2 = plt.subplots(nrows=1, ncols=1,figsize=(40,20))
-    alice = classes.Drawing_Graphs(13000, (1.6, 1.8), *ptdep_result, None, None)
-    cms = classes.Drawing_Graphs(13000, (2, 4), *ptdep_result, None, None)
-    cms_07 = classes.Drawing_Graphs(7000, (2, 4), *ptdep_result_07, None, None)
-    atlas = classes.Drawing_Graphs(13000, (2, 5), *ptdep_result, None, None)
+    alice = classes.Drawing_Graphs(13000, (1.6, 1.8), *ptdep_result, None, None, 'ALICE')
+    cms = classes.Drawing_Graphs(13000, (2, 4), *ptdep_result, None, None, 'CMS')
+    cms_07 = classes.Drawing_Graphs(7000, (2, 4), *ptdep_result_07, None, None, 'CMS')
+    atlas = classes.Drawing_Graphs(13000, (2, 5), *ptdep_result, None, None, 'ATLAS')
 
     '''Line'''
     alice_Yridge = alice.Yridge_line("Subtract")
     cms_Yridge = cms.Yridge_line("Subtract")
     cms_07Yridge = cms_07.Yridge_line("Subtract")
+    atlas_Yridge = atlas.Yridge_line("Subtract")    # 그냥 atlas도 한번 그려보자.
     axis2.plot(alice_Yridge[0], alice_Yridge[1], color = "red", linewidth=7, linestyle='-')
     axis2.plot(cms_Yridge[0], cms_Yridge[1], color = "black", linewidth=7, linestyle='-')
+    axis2.plot(atlas_Yridge[0], atlas_Yridge[1], color = "blue", linewidth=7, linestyle='-')
     axis2.plot(cms_07Yridge[0], cms_07Yridge[1], color = "grey", linewidth=7, linestyle='-')
     axis2.errorbar(Yridge_phi[0], Yridge_dat[0], yerr=(abs(err_13TeV_ptdep[15]),err_13TeV_ptdep[14]), color="red", linestyle=' ', linewidth=5, capthick=3, capsize=15, zorder=0)
     axis2.errorbar(Yridge_phi[1], Yridge_dat[1], yerr=(abs(err_13TeV_ptdep[17]),err_13TeV_ptdep[16]), color="black", linestyle=' ', linewidth=5, capthick=3, capsize=15, zorder=0)
@@ -627,7 +627,7 @@ def drawgraph_ptdep_Yridge():
     axis2.tick_params(axis='both',which='minor',direction='in',width=2,length=15,labelsize=45, top = 'true', right='true')
     axis2.grid(color='silver',linestyle=':',linewidth=3)
     fig2.tight_layout()
-    fig2.savefig('./Yridge_Test.png')
+    fig2.savefig('./Results/Yridge_Test.png')
     fig2.savefig('/home/jaesung/Dropbox/ohno/Yridge_Test.png')
 
 '''pT dependence FrNk graph'''
@@ -669,7 +669,7 @@ def drawgraph_ptdep_frnk():
 
     plt.tight_layout()
 
-    fig3.savefig('./FrNk_Test.png')
+    fig3.savefig('./Results/FrNk_Test.png')
     fig3.savefig('/home/jaesung/Dropbox/ohno/FrNk_Test.png')
 
 '''CM energy dependence phi correlation graph + CM energy frNk'''
@@ -703,7 +703,7 @@ def drawgraph_cmdep_phicorr():
 
     plt.tight_layout()
 
-    fig3.savefig('./cmdep_phicorr.png')
+    fig3.savefig('./Results/cmdep_phicorr.png')
     fig3.savefig('/home/jaesung/Dropbox/ohno/cmdep_phicorr.png')
 
     fig3 = plt.figure()
@@ -749,7 +749,7 @@ def drawgraph_cmdep_phicorr():
 
     plt.tight_layout()
 
-    fig3.savefig('./CMenerg_FrNk.png')
+    fig3.savefig('./Results/CMenerg_FrNk.png')
     fig3.savefig('/home/jaesung/Dropbox/ohno/CMenerg_FrNk.png')
 
 def drawgraph_multi_phicorr():
@@ -761,7 +761,7 @@ def drawgraph_multi_phicorr():
     for j in range(3):
         axes1[j][0].set_ylabel(r'$\frac{1}{N_{\mathrm{trig}}}\frac{dN^{\mathrm{pair}}}{d\Delta\phi}-C_{\mathrm{ZYAM}}$', size = 150)
         for i in range(3):
-            atlas = classes.Drawing_Graphs(13000, (2, 5), *multi_atlas_result[i+3*j], None, None)
+            atlas = classes.Drawing_Graphs(13000, (2, 5), *multi_atlas_result[i+3*j], None, None, 'ATLAS')
             multiplicity = (3*j+i)*10 + 55
             atlas_result = atlas.result_plot("Multiplicity", multiplicity, (0.5, 5), (min(phi_13TeV_multi_atlas_fitting[3*j+i]), max(phi_13TeV_multi_atlas_fitting[3*j+i])))
             axes1[j][i].scatter(phi_13TeV_multi_atlas[3*j+i], dat_13TeV_multi_atlas[3*j+i]-min(dat_13TeV_multi_atlas[3*j+i]), color = 'blue', s=2000, marker='o')
@@ -798,7 +798,7 @@ def drawgraph_multi_phicorr():
     axes1[2][0].set_ylim(-0.001,0.0699)
 
     fig1.tight_layout(h_pad = -1)
-    fig1.savefig('./rezero_atlas_Nk.png')
+    fig1.savefig('./Results/rezero_atlas_Nk.png')
 
     ''' 파라미터들 정리해서 그림 형태로 저장'''
     fig1 = plt.figure()
@@ -840,35 +840,104 @@ def drawgraph_multi_phicorr():
     ax1.legend(lns, labs, fontsize=50, loc='upper left')
 
     plt.tight_layout()
-    fig1.savefig('./parameters_multiplicity_dep.png')
+    fig1.savefig('./Results/parameters_multiplicity_dep_ATLAS.png')
 
-def draw_13TeV_ptdist():
-    fig2, axis2 = plt.subplots(nrows=1, ncols=1,figsize=(40,20))
-    '''Line'''
-    # axis2.errorbar(x_13TeV_pTdistTotal[0], y_13TeV_pTdistTotal[0], yerr=(abs(err_13TeV_pTdistTotal[0]),err_13TeV_pTdistTotal[1]), color="red", linestyle=' ', linewidth=5, capthick=3, capsize=15, zorder=0)
-    # axis2.errorbar(x_13TeV_pTdistHigh[0], y_13TeV_pTdistHigh[0], yerr=(abs(err_13TeV_pTdistHigh[0]),err_13TeV_pTdistHigh[1]), color="black", linestyle=' ', linewidth=5, capthick=3, capsize=15, zorder=0)
-    axis2.scatter(x_13TeV_pTdistTotal[0], y_13TeV_pTdistTotal[0], edgecolors="red", s=300, marker='o', facecolors='none', linewidths=5, zorder=0, label="Low Multiplicity")
-    axis2.scatter(x_13TeV_pTdistTotal[0], y_13TeV_pTdistTotal[0], s=300, marker='+', facecolors='red', linewidths=5, zorder=0)
-    axis2.scatter(x_13TeV_pTdistHigh[0], y_13TeV_pTdistHigh[0], edgecolors="black", s=300, marker='o', facecolors='none', linewidths=5, zorder=0, label="High multiplicity")
-    axis2.scatter(x_13TeV_pTdistHigh[0], y_13TeV_pTdistHigh[0], s=300, marker='+', facecolors='black', linewidths=5, zorder=0)
 
-    axis2.set_xlabel(r'$p_T \mathrm{(GeV/c)}$', size=70)
-    axis2.set_ylabel(r'$d^2N_{\mathrm{ch}}/d p_T \, d\eta \,\, \mathrm{(GeV/c)^{-1}}$', size=70)
-    axis2.minorticks_on()
-    axis2.tick_params(axis='both',which='major',direction='in',width=2,length=30,labelsize=45, top = 'true', right='true')
-    axis2.tick_params(axis='both',which='minor',direction='in',width=2,length=15,labelsize=45, top = 'true', right='true')
-    axis2.legend(fontsize=45, loc='upper right')
-    axis2.set_yscale("log")
-    axis2.set_xscale("log")
-    axis2.grid(color='silver',linestyle=':',linewidth=3)
-    fig2.tight_layout()
-    fig2.savefig('./pTdist_multi.png')
-    fig2.savefig('/home/jaesung/Dropbox/ohno/pTdist_multi.png')
+'''
+    fig1, axes1 = plt.subplots(nrows=4, ncols=4,figsize=(120,120),sharey='row', sharex='col')
+    #그래프 그리기
+    # alice = classes.Drawing_Graphs((1.6, 1.8), *ptdep_alice_result, None, None)
+    # cms = classes.Drawing_Graphs((2, 4), *multi_cms_result)
+    # atlas = classes.Drawing_Graphs((2, 5), *multi_atlas_result, None, None)
+    for j in range(3):
+        axes1[j][0].set_ylabel(r'$\frac{1}{N_{\mathrm{trig}}}\frac{dN^{\mathrm{pair}}}{d\Delta\phi}-C_{\mathrm{ZYAM}}$', size = 150)
+        multiplicity = j*35 + 22.5
+        for i in range(3):
+            cms = classes.Drawing_Graphs(13000, (2, 5), *multi_atlas_result[i+3*j], None, None)
+            atlas_result = atlas.result_plot("Multiplicity", multiplicity, (0.5, 5), (min(phi_13TeV_multi_atlas_fitting[3*j+i]), max(phi_13TeV_multi_atlas_fitting[3*j+i])))
+            axes1[j][i].scatter(phi_13TeV_multi_atlas[3*j+i], dat_13TeV_multi_atlas[3*j+i]-min(dat_13TeV_multi_atlas[3*j+i]), color = 'blue', s=2000, marker='o')
+            axes1[j][i].plot(atlas_result[0], atlas_result[1]-min(atlas_result[1]), color = 'blue', linewidth=14, linestyle = '-')
+            if j==2:
+                axes1[j][i].set_xlabel(r'$\Delta\phi$', size=150)
 
-# drawgraph_ptdep_phicorr()
+            axes1[j][i].minorticks_on()
+
+            # axes1[j][i].set_ylim(-0.001,0.07)
+            axes1[j][i].set_xlim(-1.1,1.1)
+
+            axes1[j][i].tick_params(axis='both',which='major',direction='in',width=4,length=35,labelsize=100, top = 'true', right='true')
+            axes1[j][i].tick_params(axis='both',which='minor',direction='in',width=4,length=20,labelsize=100, top = 'true', right='true')
+            axes1[j][i].grid(color='silver',linestyle=':',linewidth=3)
+
+            # axes1[i][j].legend(framealpha=False, fontsize = 70)
+
+    axes1[2][1].errorbar(phi_13TeV_multi_atlas[7], dat_13TeV_multi_atlas[7]-min(dat_13TeV_multi_atlas[7]), yerr=(abs(atlaserror[0]), atlaserror[1]), color="blue", linestyle=' ', linewidth=14, capthick=6, capsize=30, zorder=1)
+    axes1[2][2].errorbar(phi_13TeV_multi_atlas[8], dat_13TeV_multi_atlas[8]-min(dat_13TeV_multi_atlas[8]), yerr=(abs(atlaserror[2]), atlaserror[3]), color="blue", linestyle=' ', linewidth=14, capthick=6, capsize=30, zorder=1)
+
+    axes1[0][0].text(-0.9, 0.0145, r'$50 \leq N^{\mathrm{rec}}_{\mathrm{ch}} < 60$', size = 150)
+    axes1[0][1].text(-0.9, 0.0145, r'$60 \leq N^{\mathrm{rec}}_{\mathrm{ch}} < 70$', size = 150)
+    axes1[0][2].text(-0.9, 0.0145, r'$70 \leq N^{\mathrm{rec}}_{\mathrm{ch}} < 80$', size = 150)
+    axes1[1][0].text(-0.9, 0.032, r'$80 \leq N^{\mathrm{rec}}_{\mathrm{ch}} < 90$', size = 150)
+    axes1[1][1].text(-0.9, 0.032, r'$90 \leq N^{\mathrm{rec}}_{\mathrm{ch}} < 100$', size = 150)
+    axes1[1][2].text(-0.9, 0.032, r'$100 \leq N^{\mathrm{rec}}_{\mathrm{ch}} < 110$', size = 150)
+    axes1[2][0].text(-0.9, 0.0625, r'$110 \leq N^{\mathrm{rec}}_{\mathrm{ch}} < 120$', size = 150)
+    axes1[2][1].text(-0.9, 0.0625, r'$120 \leq N^{\mathrm{rec}}_{\mathrm{ch}} < 130$', size = 150)
+    axes1[2][2].text(-0.9, 0.0625, r'$130 \leq N^{\mathrm{rec}}_{\mathrm{ch}}$', size = 150)
+
+    axes1[0][0].set_ylim(-0.001,0.0159)
+    axes1[1][0].set_ylim(-0.001,0.0349)
+    axes1[2][0].set_ylim(-0.001,0.0699)
+
+    fig1.tight_layout(h_pad = -1)
+    fig1.savefig('./Results/rezero_atlas_Nk.png')
+
+    # 파라미터들 정리해서 그림 형태로 저장
+    fig1 = plt.figure()
+    ax1 = plt.axes()
+    ax2 = ax1.twinx()
+    fig1.set_size_inches(35, 16.534, forward=True)
+    multiplicity_atlas = [55, 65, 75, 85, 95, 105, 115, 125, 135]
+    multiplicity_range = [[5,5,5,5,5,5,5,5,5],[5,5,5,5,5,5,5,5,5]]
+    q = []; T = []
+    for list in multi_atlas_result:
+        q.append(list[0]);  T.append(list[1])
+
+    lns1 = ax1.scatter(multiplicity_atlas, q, edgecolor = 'blue', facecolors='none', s=900, marker='o', linewidths=5, zorder=2, label=r'$q\quad (\mathrm{left \, axis})$')
+    ax1.errorbar(multiplicity_atlas, q, xerr=multiplicity_range, color="blue", linestyle=' ', linewidth=7, capthick=3, capsize=15)
+    ax1.scatter(multiplicity_atlas, q, facecolors='blue', s=900, marker='+', linewidths=5, zorder=2)
+    lns2 = ax2.scatter(multiplicity_atlas, T, edgecolor = 'red', facecolors='none', s=900, marker='o', linewidths=5, zorder=2, label=r'$T\quad (\mathrm{right \, axis})$')
+    ax2.scatter(multiplicity_atlas, T, facecolors='red', s=900, marker='+', linewidths=5, zorder=2)
+    ax2.errorbar(multiplicity_atlas, T, xerr=multiplicity_range, color="red", linestyle=' ', linewidth=7, capthick=3, capsize=15)
+
+    ax1.set_xlabel(r'$N^{\mathrm{rec}}_{\mathrm{ch}}$',size=70)
+    ax1.set_xlim(50, 140)
+    ax1.set_ylabel(r'$ q(\mathrm{GeV}) $',size=70)
+    ax1.set_ylim(0.3, 1.8)
+    ax2.set_ylabel(r'$ T(\mathrm{GeV}) $',size=70)
+    # ax2.set_ylim(1.325, 1.7)      # T 기준을 AuAu 200GeV로 할 경우
+    ax2.set_ylim(1.01, 1.16)        # T 기준을 pp 13TeV로 할 경우
+
+    ax1.yaxis.set_major_formatter(ticker.FuncFormatter(lambda y, _: '${:g}$'.format(y)))
+    ax1.tick_params(axis='both',which='major',direction='in',width=2,length=30,labelsize=45, top='true')
+    ax1.tick_params(axis='both',which='minor',direction='in',width=2,length=15,labelsize=45, top='true')
+    ax2.yaxis.set_major_formatter(ticker.FuncFormatter(lambda y, _: '${:g}$'.format(y)))
+    ax2.tick_params(axis='both',which='major',direction='in',width=2,length=30,labelsize=45, top='true')
+    ax2.tick_params(axis='both',which='minor',direction='in',width=2,length=15,labelsize=45, top='true')
+
+    ax1.grid(color='silver',linestyle=':',linewidth=5, zorder=0)
+
+    lns = [lns1, lns2]
+    labs = [l.get_label() for l in lns]
+    ax1.legend(lns, labs, fontsize=50, loc='upper left')
+
+    plt.tight_layout()
+    fig1.savefig('./Results/parameters_multiplicity_dep_CMS.png')
+'''
+
+drawgraph_ptdep_phicorr()
 time_phicorr = time.time()
 print(f"Graph, Phi correlation end : {time_phicorr-time_calculate:.3f} sec")
-# drawgraph_ptdep_Yridge()
+drawgraph_ptdep_Yridge()
 time_yridge = time.time()
 print(f"Graph, Yridge end : {time_yridge-time_phicorr:.3f} sec")
 # drawgraph_ptdep_frnk()
@@ -880,7 +949,7 @@ print(f"Graph, Multiplicity end : {time_multi-time_frnk:.3f} sec")
 # drawgraph_multi_phicorr()
 time_ptdist = time.time()
 print(f"Graph, pT distribution end : {time_ptdist-time_multi:.3f} sec")
-draw_13TeV_ptdist()
+
 
 time_end = time.time()
 print(f"Total end : {time_end-time_start:.3f} sec")

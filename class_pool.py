@@ -21,7 +21,7 @@ class Fitting_gpu:
     __a = .5    #fall off parameter
     __m = 0.13957018  #m == mpi
     __mb = __m #mb==mpi, GeV
-    __md = 1.   #GeV
+    # __md = 1.   #GeV
     __mp = 0.938272046 #Proton mass, GeV
     __Yridge_phif_start = -1.18
     __Yridge_phif_end = 1.18
@@ -308,6 +308,8 @@ class Fitting_gpu:
         zz는 frnk에 추가적으로 들어갈 수 있는 parameter '''
 
     def fitting_func(self, given_array, kick, Tem, xx, yy, zz):
+        '''md를 q로 한번 두고 fitting 해보자.'''
+        self.__md = kick
         if self.ptdis_number is None:
             phi_array = given_array
         else:
@@ -406,14 +408,15 @@ class Drawing_Graphs:
     __a = .5    #fall off parameter
     __m = 0.13957018  #m == mpi
     __mb = __m #mb==mpi, GeV
-    __md = 1.   #GeV
+    # __md = 1.   #GeV
+    # __md = 9.61957351e-01
     # __sqrSnn = 13000.
     # __sqrSnn = 7000.
     __mp = 0.938272046 #Proton mass, GeV
     __Yridge_phif_start = -1.18
     __Yridge_phif_end = 1.18
     
-    def __init__(self, sqrSnn, etaf, kick, Tem, xx, yy, zz, AA, BB):
+    def __init__(self, sqrSnn, etaf, kick, Tem, xx, yy, zz, AA, BB, type):
         # self.multi = multi
         # self.ptf = ptf
         self.etaf = etaf
@@ -429,6 +432,7 @@ class Drawing_Graphs:
         self.BB = BB
         self.zz = zz
         self.sqrSnn = sqrSnn
+        self.type = type
         #mode : Multiplciity, pTdependence, Both
         # self.mode = mode
     
@@ -473,12 +477,18 @@ class Drawing_Graphs:
         detaf = (etaf_range[1]-etaf_range[0])/bin
         ridge_integrate = ptf*gpu.Ridge_dist(Aridge, ptf, etaf, phif, kick, Tem, self.sqrSnn, self.__mp, self.__m, self.__mb, self.__md, self.__a)
         ridge_integrate = ridge_integrate*self.__FrNk(xx, yy, zz, ptf)
-        dist_integrate = cp.sum(ridge_integrate, axis = 1)*(4/3)*dptf*detaf/delta_Deltaeta
+        # dist_integrate = cp.sum(ridge_integrate, axis = 1)*(4/3)*dptf*detaf/delta_Deltaeta
+        if self.type == 'ATLAS':
+            dist_integrate = cp.sum(ridge_integrate, axis = 1)*(4/3)*dptf*detaf/delta_Deltaeta
+        else:
+            dist_integrate = cp.sum(ridge_integrate, axis = 1)*(4/3)*dptf*detaf/(delta_Deltaeta*(ptf_range[1]-ptf_range[0]))
         Ridge_phi = cp.asnumpy(cp.sum(dist_integrate, axis = 0))
         return cp.asnumpy(phif[0][0]), Ridge_phi-min(Ridge_phi)
 
 
     def __Ridge_ptdep(self, ptf_range, phif_range):
+        self.__md = self.kick
+
         kick = self.kick; Tem = self.Tem; xx = self.xx; yy = self.yy; zz = self.zz
         Aridge = self.__Aridge()
         bin = 300
@@ -488,12 +498,17 @@ class Drawing_Graphs:
         ptf, etaf, phif = cp.meshgrid(cp.linspace(ptf_range[0], ptf_range[1], bin), cp.linspace(self.etaf[0], self.etaf[1], bin), cp.linspace(phif_range[0], phif_range[1], bin))
         detaf = (self.etaf[1]-self.etaf[0])/bin
         dist = deltapt*(4/3)*cp.sum(self.__FrNk(xx, yy, zz, ptf)*ptf*gpu.Ridge_dist(Aridge, ptf, etaf, phif, kick, Tem, self.sqrSnn, self.__mp, self.__m, self.__mb, self.__md, self.__a), axis = 1)*dptf*detaf/delta_Deltaeta
-        Ridge_phi = cp.asnumpy(cp.sum(dist, axis=0))
+        # Ridge_phi = cp.asnumpy(cp.sum(dist, axis=0))
+        if self.type == 'ATLAS':
+            Ridge_phi = cp.asnumpy(cp.sum(dist, axis=0))
+        else:
+            Ridge_phi = cp.asnumpy(cp.sum(dist, axis=0))/(ptf_range[1]-ptf_range[0])
         return cp.asnumpy(phif[0][0]), Ridge_phi-min(Ridge_phi)
     
 
     # Yridge를 데이터와 동일하게 '점'으로 표현할 경우
     def Yridge(self, pt_range, czyam):
+        self.__md = self.kick
         if czyam == "Subtract":      # ALICE
             kick = self.kick; Tem = self.Tem; xx = self.xx; yy = self.yy; zz = self.zz
             Aridge = self.__Aridge()
@@ -545,6 +560,7 @@ class Drawing_Graphs:
 
     # 앞선 함수와 다르게 Yridge를 실선으로 그리고자 할 경우
     def Yridge_line(self, czyam):
+        self.__md = self.kick
         if czyam == "Subtract":      # ALICE
 
             ptbin = 150
