@@ -95,7 +95,9 @@ class Fitting_gpu:
     def __FrNk(self, xx, yy, zz, pt):
         # return xx+yy*pt*pt
         # return xx*cp.exp(yy*pt)
-        return xx*cp.exp(-yy/pt-zz*pt)
+        # return xx*cp.exp(-yy/pt-zz*pt)
+        # return xx*cp.exp(-yy/pt)
+        return 1.415411195083602
     def __Fr(self, xx, yy, pt):
         return xx+yy*pt*pt
     def __Nk(self, A, B, multi):
@@ -309,7 +311,8 @@ class Fitting_gpu:
 
     def fitting_func(self, given_array, kick, Tem, xx, yy, zz):
         '''md를 q로 한번 두고 fitting 해보자.'''
-        self.__md = kick
+        # self.__md = kick
+        self.__md = 1.
         if self.ptdis_number is None:
             phi_array = given_array
         else:
@@ -446,7 +449,9 @@ class Drawing_Graphs:
     def __FrNk(self, xx, yy, zz, pt):
         # return xx+yy*pt*pt
         # return xx*cp.exp(yy*pt)
-        return xx*cp.exp(-yy/pt-zz*pt)
+        # return xx*cp.exp(-yy/pt-zz*pt)
+        # return xx*cp.exp(-yy/pt)
+        return 1.415411195083602
     def __Fr(self, xx, yy, pt):
         return xx+yy*pt*pt
     def __Nk(self, A, B, multi):
@@ -487,7 +492,8 @@ class Drawing_Graphs:
 
 
     def __Ridge_ptdep(self, ptf_range, phif_range):
-        self.__md = self.kick
+        # self.__md = self.kick
+        self.__md = 1.
 
         kick = self.kick; Tem = self.Tem; xx = self.xx; yy = self.yy; zz = self.zz
         Aridge = self.__Aridge()
@@ -500,15 +506,16 @@ class Drawing_Graphs:
         dist = deltapt*(4/3)*cp.sum(self.__FrNk(xx, yy, zz, ptf)*ptf*gpu.Ridge_dist(Aridge, ptf, etaf, phif, kick, Tem, self.sqrSnn, self.__mp, self.__m, self.__mb, self.__md, self.__a), axis = 1)*dptf*detaf/delta_Deltaeta
         # Ridge_phi = cp.asnumpy(cp.sum(dist, axis=0))
         if self.type == 'ATLAS':
-            Ridge_phi = cp.asnumpy(cp.sum(dist, axis=0))
+            Ridge_phi = cp.asnumpy(cp.sum(dist, axis=0))*(ptf_range[1]-ptf_range[0])
         else:
-            Ridge_phi = cp.asnumpy(cp.sum(dist, axis=0))/(ptf_range[1]-ptf_range[0])
+            Ridge_phi = cp.asnumpy(cp.sum(dist, axis=0))
         return cp.asnumpy(phif[0][0]), Ridge_phi-min(Ridge_phi)
     
 
     # Yridge를 데이터와 동일하게 '점'으로 표현할 경우
     def Yridge(self, pt_range, czyam):
-        self.__md = self.kick
+        # self.__md = self.kick
+        self.__md = 1.
         if czyam == "Subtract":      # ALICE
             kick = self.kick; Tem = self.Tem; xx = self.xx; yy = self.yy; zz = self.zz
             Aridge = self.__Aridge()
@@ -560,7 +567,8 @@ class Drawing_Graphs:
 
     # 앞선 함수와 다르게 Yridge를 실선으로 그리고자 할 경우
     def Yridge_line(self, czyam):
-        self.__md = self.kick
+        # self.__md = self.kick
+        self.__md = 1.
         if czyam == "Subtract":      # ALICE
 
             ptbin = 150

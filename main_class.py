@@ -487,8 +487,8 @@ def fit_cmenerg():
     print(ptdep_error_cm)
 
 
-fit_13tev()
-fit_7tev()
+# fit_13tev()
+# fit_7tev()
 # fit_multipl()
 # fit_cmenerg()
 
@@ -509,9 +509,17 @@ Yridge_dat = dat_13TeV_ptdep[-2::]
 phi_13TeV_ptdep = phi_13TeV_ptdep[0:-2]
 dat_13TeV_ptdep = dat_13TeV_ptdep[0:-2]
 
+# md=q 로 두고 fitting
+# ptdep_result = [0.9550869558401427, 1.0902337006471705, 2.7422234903350926, 0.35144493617188255, 9.865787114868575e-06]
+# ptdep_result_07 = [1.624901759777593, 0.9302427715844408, 5.0117954889744185, 0.8297385370001579, 0.737376419008668]
 
-# ptdep_result = [9.62040979e-01, 1.08113653e+00, 2.62053618e+00, 2.86583565e-01, 4.45772582e-04]
-# ptdep_result_07 = [1.68531124, 1.43640594, 7.85469003, 0.80428453, 0.88283783]
+# md=1 로 두고 fitting
+# ptdep_result = [0.9619064848652367, 1.0806152707987788, 2.6181236203620877, 0.2866504816022142, 4.83643115879628e-06]
+# ptdep_result_07 = [1.6594350487174188, 1.254920842633187, 6.8002216962428035, 0.8677859196950383, 0.8214136167443336]
+
+# Nk 제거, md=1 fitting
+ptdep_result = [9.61853703e-01, 1.08047173e+00, 2.61871339e+00, 2.87068889e-01, 1.00000000e-10]
+ptdep_result_07 = [1.04583978e+00, 5.02452357e-01, 9.88785638e+00, 4.05148986e+00, 1.00000000e-10]
 
 # fig1, axes1 = plt.subplots(nrows=1, ncols=5,figsize=(125,20))
 #그래프 그리기
@@ -538,13 +546,13 @@ def drawgraph_ptdep_phicorr():
             axes1[i].errorbar(phi_13TeV_ptdep[i+3], dat_13TeV_ptdep[i+3], yerr=(abs(err_13TeV_ptdep[2*(i+3)+1]),err_13TeV_ptdep[2*(i+3)]), color="black", linestyle=' ', linewidth=7, capthick=3, capsize=15)
             axes1[i].scatter(phi_13TeV_ptdep[i+3], dat_13TeV_ptdep[i+3], edgecolors="black", s=800, marker='o', facecolors='none', linewidths=7)
             axes1[i].scatter(phi_13TeV_ptdep[i+3], dat_13TeV_ptdep[i+3], s=800, marker='+', facecolors='black', linewidths=7)
-            '''cms plot 7TeV'''
-            cms_07result = cms_07.result_plot("pTdependence", None, ptf, (min(phi_07TeV_ptdep[i]), max(phi_07TeV_ptdep[i])))
-            axes1[i].plot(cms_07result[0], cms_07result[1], color = "grey", linewidth=7, linestyle='-')
-            axes1[i].errorbar(phi_07TeV_ptdep[i], dat_07TeV_ptdep[i], yerr=(abs(err_07TeV_ptdep[2*i+1]),err_07TeV_ptdep[2*i]), color="grey", linestyle=' ', linewidth=7, capthick=3, capsize=15)
-            axes1[i].scatter(phi_07TeV_ptdep[i], dat_07TeV_ptdep[i], edgecolors="grey", s=800, marker='o', facecolors='none', linewidths=7)
-            axes1[i].scatter(phi_07TeV_ptdep[i], dat_07TeV_ptdep[i], s=800, marker='+', facecolors='grey', linewidths=7)
-            axes1[i].set_title(r'$0.1<p_{T, \, \mathrm{trig(assoc)}}<1$', size = 70, pad=30)
+            # '''cms plot 7TeV'''
+            # cms_07result = cms_07.result_plot("pTdependence", None, ptf, (min(phi_07TeV_ptdep[i]), max(phi_07TeV_ptdep[i])))
+            # axes1[i].plot(cms_07result[0], cms_07result[1], color = "grey", linewidth=7, linestyle='-')
+            # axes1[i].errorbar(phi_07TeV_ptdep[i], dat_07TeV_ptdep[i], yerr=(abs(err_07TeV_ptdep[2*i+1]),err_07TeV_ptdep[2*i]), color="grey", linestyle=' ', linewidth=7, capthick=3, capsize=15)
+            # axes1[i].scatter(phi_07TeV_ptdep[i], dat_07TeV_ptdep[i], edgecolors="grey", s=800, marker='o', facecolors='none', linewidths=7)
+            # axes1[i].scatter(phi_07TeV_ptdep[i], dat_07TeV_ptdep[i], s=800, marker='+', facecolors='grey', linewidths=7)
+            # axes1[i].set_title(r'$0.1<p_{T, \, \mathrm{trig(assoc)}}<1$', size = 70, pad=30)
         elif i==4:
             atlas_result = atlas.result_plot("pTdependence", None, (0.5, 5), (min(phi_13TeV_ptdep[-1]), max(phi_13TeV_ptdep[-1])))
             axes1[i].plot(atlas_result[0], atlas_result[1], color = "blue", linewidth=7, linestyle='-')
@@ -564,12 +572,12 @@ def drawgraph_ptdep_phicorr():
             axes1[i].errorbar(phi_13TeV_ptdep[i+3], dat_13TeV_ptdep[i+3], yerr=(abs(err_13TeV_ptdep[2*(i+3)+1]),err_13TeV_ptdep[2*(i+3)]), color="black", linestyle=' ', linewidth=7, capthick=3, capsize=15)
             axes1[i].scatter(phi_13TeV_ptdep[i+3], dat_13TeV_ptdep[i+3], edgecolors="black", s=800, marker='o', facecolors='none', linewidths=7)
             axes1[i].scatter(phi_13TeV_ptdep[i+3], dat_13TeV_ptdep[i+3], s=800, marker='+', facecolors='black', linewidths=7)
-            '''cms plot 7TeV'''
-            cms_07result = cms_07.result_plot("pTdependence", None, ptf, (min(phi_07TeV_ptdep_fitting[i-1]), max(phi_07TeV_ptdep_fitting[i-1])))
-            axes1[i].plot(cms_07result[0], cms_07result[1], color = "grey", linewidth=7, linestyle='-')
-            axes1[i].errorbar(phi_07TeV_ptdep[i], dat_07TeV_ptdep[i], yerr=(abs(err_07TeV_ptdep[2*i+1]),err_07TeV_ptdep[2*i]), color="grey", linestyle=' ', linewidth=7, capthick=3, capsize=15)
-            axes1[i].scatter(phi_07TeV_ptdep[i], dat_07TeV_ptdep[i], edgecolors="grey", s=800, marker='o', facecolors='none', linewidths=7)
-            axes1[i].scatter(phi_07TeV_ptdep[i], dat_07TeV_ptdep[i], s=800, marker='+', facecolors='grey', linewidths=7)
+            # '''cms plot 7TeV'''
+            # cms_07result = cms_07.result_plot("pTdependence", None, ptf, (min(phi_07TeV_ptdep_fitting[i-1]), max(phi_07TeV_ptdep_fitting[i-1])))
+            # axes1[i].plot(cms_07result[0], cms_07result[1], color = "grey", linewidth=7, linestyle='-')
+            # axes1[i].errorbar(phi_07TeV_ptdep[i], dat_07TeV_ptdep[i], yerr=(abs(err_07TeV_ptdep[2*i+1]),err_07TeV_ptdep[2*i]), color="grey", linestyle=' ', linewidth=7, capthick=3, capsize=15)
+            # axes1[i].scatter(phi_07TeV_ptdep[i], dat_07TeV_ptdep[i], edgecolors="grey", s=800, marker='o', facecolors='none', linewidths=7)
+            # axes1[i].scatter(phi_07TeV_ptdep[i], dat_07TeV_ptdep[i], s=800, marker='+', facecolors='grey', linewidths=7)
             st = i
             en = i+1
             # axes1[i].set_title(str(st)+r'$<p_{T, \, \mathrm{trig(assoc)}}<$'+str(en), size = 70, pad=30)
@@ -643,6 +651,7 @@ def drawgraph_ptdep_frnk():
     PbPb_276TeV = [20.2, 1.395, 0.207]
     pp_13TeV = [ptdep_result[2], ptdep_result[3], ptdep_result[4]]
     pp_07TeV = [ptdep_result_07[2], ptdep_result_07[3], ptdep_result_07[4]]
+    pp_07TeV_Wong = [1.415411195083602, 0, 0]
     '''Hanul's pp 13TeV FrNk result plot [[pt(Average)], [FrNk]]'''
     Hanul_FrNk = [[1.5, 2.5], [0.93, 1.37]]
     Hanul_FrNk_error = [[0.5, 0.5], [0.5, 0.5]]
@@ -650,13 +659,14 @@ def drawgraph_ptdep_frnk():
 
     plt.plot(ptf, FrNk_func(ptf, *AuAu_200GeV), color = 'red', linewidth=7, label=r'$AuAu, \, 200\mathrm{GeV}$')
     plt.plot(ptf, FrNk_func(ptf, *PbPb_276TeV), color = 'black', linewidth=7, label=r'$PbPb, \, 2.76\mathrm{TeV}$')
-    plt.plot(ptf, FrNk_func(ptf, *pp_13TeV), color = 'blue', linewidth=7, label=r'$pp, \, 13\mathrm{TeV}$')
-    plt.plot(ptf, FrNk_func(ptf, *pp_07TeV), color = 'grey', linewidth=7, label=r'$pp, \, 07\mathrm{TeV}$')
+    plt.plot(ptf, FrNk_func(ptf, *pp_07TeV_Wong), color = 'blue', linewidth=7, label=r'$pp, \, 7\mathrm{TeV}$')
+    plt.plot(ptf, FrNk_func(ptf, *pp_13TeV), color = 'purple', linewidth=7, label=r'$pp, \, 13\mathrm{TeV}$')
+    # plt.plot(ptf, FrNk_func(ptf, *pp_07TeV), color = 'grey', linewidth=7, label=r'$pp, \, 07\mathrm{TeV}$')
     plt.scatter(Hanul_FrNk[0], Hanul_FrNk[1], edgecolor = 'green', facecolors='none', s=900, marker='o', linewidths=5, zorder=2, label=r'$pp, \, 13\mathrm{TeV}$')
     plt.scatter(Hanul_FrNk[0], Hanul_FrNk[1], facecolors='green', s=900, marker='+', linewidths=5, zorder=2)
     plt.errorbar(Hanul_FrNk[0], Hanul_FrNk[1], xerr=Hanul_FrNk_error, color="green", linestyle=' ', linewidth=7, capthick=3, capsize=15)
 
-    plt.xlabel(r'$p_T^{\mathrm{trig}}$',size=70)
+    plt.xlabel(r'$p_T^{\mathrm{trig}},\, p_T^{\mathrm{trig}(\mathrm{assoc})}$',size=70)
     plt.ylabel(r'$f_{R} \langle N_k \rangle $',size=70)
     plt.xlim(0,4)
 
@@ -937,10 +947,10 @@ def drawgraph_multi_phicorr():
 drawgraph_ptdep_phicorr()
 time_phicorr = time.time()
 print(f"Graph, Phi correlation end : {time_phicorr-time_calculate:.3f} sec")
-drawgraph_ptdep_Yridge()
+# drawgraph_ptdep_Yridge()
 time_yridge = time.time()
 print(f"Graph, Yridge end : {time_yridge-time_phicorr:.3f} sec")
-# drawgraph_ptdep_frnk()
+drawgraph_ptdep_frnk()
 time_frnk = time.time()
 print(f"FrNk end : {time_frnk-time_yridge:.3f} sec")
 # drawgraph_cmdep_phicorr()
