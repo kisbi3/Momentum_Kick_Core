@@ -599,7 +599,6 @@ def drawgraph_ptdep_phicorr():
     fig1.tight_layout(h_pad=-1)
 
     fig1.savefig('./Results/phiCorr_Test.png')
-    fig1.savefig('/home/jaesung/Dropbox/ohno/phiCorr_Test.png')
 
 '''pT dependence Y^ridge graph'''
 def drawgraph_ptdep_Yridge():
@@ -636,7 +635,6 @@ def drawgraph_ptdep_Yridge():
     axis2.grid(color='silver',linestyle=':',linewidth=3)
     fig2.tight_layout()
     fig2.savefig('./Results/Yridge_Test.png')
-    fig2.savefig('/home/jaesung/Dropbox/ohno/Yridge_Test.png')
 
 '''pT dependence FrNk graph'''
 def drawgraph_ptdep_frnk():
@@ -680,7 +678,6 @@ def drawgraph_ptdep_frnk():
     plt.tight_layout()
 
     fig3.savefig('./Results/FrNk_Test.png')
-    fig3.savefig('/home/jaesung/Dropbox/ohno/FrNk_Test.png')
 
 '''CM energy dependence phi correlation graph + CM energy frNk'''
 def drawgraph_cmdep_phicorr():
@@ -714,7 +711,6 @@ def drawgraph_cmdep_phicorr():
     plt.tight_layout()
 
     fig3.savefig('./Results/cmdep_phicorr.png')
-    fig3.savefig('/home/jaesung/Dropbox/ohno/cmdep_phicorr.png')
 
     fig3 = plt.figure()
     ax = plt.axes()
@@ -760,7 +756,6 @@ def drawgraph_cmdep_phicorr():
     plt.tight_layout()
 
     fig3.savefig('./Results/CMenerg_FrNk.png')
-    fig3.savefig('/home/jaesung/Dropbox/ohno/CMenerg_FrNk.png')
 
 def drawgraph_multi_phicorr():
     fig1, axes1 = plt.subplots(nrows=3, ncols=3,figsize=(90,90),sharey='row', sharex='col')
@@ -852,97 +847,6 @@ def drawgraph_multi_phicorr():
     plt.tight_layout()
     fig1.savefig('./Results/parameters_multiplicity_dep_ATLAS.png')
 
-
-'''
-    fig1, axes1 = plt.subplots(nrows=4, ncols=4,figsize=(120,120),sharey='row', sharex='col')
-    #그래프 그리기
-    # alice = classes.Drawing_Graphs((1.6, 1.8), *ptdep_alice_result, None, None)
-    # cms = classes.Drawing_Graphs((2, 4), *multi_cms_result)
-    # atlas = classes.Drawing_Graphs((2, 5), *multi_atlas_result, None, None)
-    for j in range(3):
-        axes1[j][0].set_ylabel(r'$\frac{1}{N_{\mathrm{trig}}}\frac{dN^{\mathrm{pair}}}{d\Delta\phi}-C_{\mathrm{ZYAM}}$', size = 150)
-        multiplicity = j*35 + 22.5
-        for i in range(3):
-            cms = classes.Drawing_Graphs(13000, (2, 5), *multi_atlas_result[i+3*j], None, None)
-            atlas_result = atlas.result_plot("Multiplicity", multiplicity, (0.5, 5), (min(phi_13TeV_multi_atlas_fitting[3*j+i]), max(phi_13TeV_multi_atlas_fitting[3*j+i])))
-            axes1[j][i].scatter(phi_13TeV_multi_atlas[3*j+i], dat_13TeV_multi_atlas[3*j+i]-min(dat_13TeV_multi_atlas[3*j+i]), color = 'blue', s=2000, marker='o')
-            axes1[j][i].plot(atlas_result[0], atlas_result[1]-min(atlas_result[1]), color = 'blue', linewidth=14, linestyle = '-')
-            if j==2:
-                axes1[j][i].set_xlabel(r'$\Delta\phi$', size=150)
-
-            axes1[j][i].minorticks_on()
-
-            # axes1[j][i].set_ylim(-0.001,0.07)
-            axes1[j][i].set_xlim(-1.1,1.1)
-
-            axes1[j][i].tick_params(axis='both',which='major',direction='in',width=4,length=35,labelsize=100, top = 'true', right='true')
-            axes1[j][i].tick_params(axis='both',which='minor',direction='in',width=4,length=20,labelsize=100, top = 'true', right='true')
-            axes1[j][i].grid(color='silver',linestyle=':',linewidth=3)
-
-            # axes1[i][j].legend(framealpha=False, fontsize = 70)
-
-    axes1[2][1].errorbar(phi_13TeV_multi_atlas[7], dat_13TeV_multi_atlas[7]-min(dat_13TeV_multi_atlas[7]), yerr=(abs(atlaserror[0]), atlaserror[1]), color="blue", linestyle=' ', linewidth=14, capthick=6, capsize=30, zorder=1)
-    axes1[2][2].errorbar(phi_13TeV_multi_atlas[8], dat_13TeV_multi_atlas[8]-min(dat_13TeV_multi_atlas[8]), yerr=(abs(atlaserror[2]), atlaserror[3]), color="blue", linestyle=' ', linewidth=14, capthick=6, capsize=30, zorder=1)
-
-    axes1[0][0].text(-0.9, 0.0145, r'$50 \leq N^{\mathrm{rec}}_{\mathrm{ch}} < 60$', size = 150)
-    axes1[0][1].text(-0.9, 0.0145, r'$60 \leq N^{\mathrm{rec}}_{\mathrm{ch}} < 70$', size = 150)
-    axes1[0][2].text(-0.9, 0.0145, r'$70 \leq N^{\mathrm{rec}}_{\mathrm{ch}} < 80$', size = 150)
-    axes1[1][0].text(-0.9, 0.032, r'$80 \leq N^{\mathrm{rec}}_{\mathrm{ch}} < 90$', size = 150)
-    axes1[1][1].text(-0.9, 0.032, r'$90 \leq N^{\mathrm{rec}}_{\mathrm{ch}} < 100$', size = 150)
-    axes1[1][2].text(-0.9, 0.032, r'$100 \leq N^{\mathrm{rec}}_{\mathrm{ch}} < 110$', size = 150)
-    axes1[2][0].text(-0.9, 0.0625, r'$110 \leq N^{\mathrm{rec}}_{\mathrm{ch}} < 120$', size = 150)
-    axes1[2][1].text(-0.9, 0.0625, r'$120 \leq N^{\mathrm{rec}}_{\mathrm{ch}} < 130$', size = 150)
-    axes1[2][2].text(-0.9, 0.0625, r'$130 \leq N^{\mathrm{rec}}_{\mathrm{ch}}$', size = 150)
-
-    axes1[0][0].set_ylim(-0.001,0.0159)
-    axes1[1][0].set_ylim(-0.001,0.0349)
-    axes1[2][0].set_ylim(-0.001,0.0699)
-
-    fig1.tight_layout(h_pad = -1)
-    fig1.savefig('./Results/rezero_atlas_Nk.png')
-
-    # 파라미터들 정리해서 그림 형태로 저장
-    fig1 = plt.figure()
-    ax1 = plt.axes()
-    ax2 = ax1.twinx()
-    fig1.set_size_inches(35, 16.534, forward=True)
-    multiplicity_atlas = [55, 65, 75, 85, 95, 105, 115, 125, 135]
-    multiplicity_range = [[5,5,5,5,5,5,5,5,5],[5,5,5,5,5,5,5,5,5]]
-    q = []; T = []
-    for list in multi_atlas_result:
-        q.append(list[0]);  T.append(list[1])
-
-    lns1 = ax1.scatter(multiplicity_atlas, q, edgecolor = 'blue', facecolors='none', s=900, marker='o', linewidths=5, zorder=2, label=r'$q\quad (\mathrm{left \, axis})$')
-    ax1.errorbar(multiplicity_atlas, q, xerr=multiplicity_range, color="blue", linestyle=' ', linewidth=7, capthick=3, capsize=15)
-    ax1.scatter(multiplicity_atlas, q, facecolors='blue', s=900, marker='+', linewidths=5, zorder=2)
-    lns2 = ax2.scatter(multiplicity_atlas, T, edgecolor = 'red', facecolors='none', s=900, marker='o', linewidths=5, zorder=2, label=r'$T\quad (\mathrm{right \, axis})$')
-    ax2.scatter(multiplicity_atlas, T, facecolors='red', s=900, marker='+', linewidths=5, zorder=2)
-    ax2.errorbar(multiplicity_atlas, T, xerr=multiplicity_range, color="red", linestyle=' ', linewidth=7, capthick=3, capsize=15)
-
-    ax1.set_xlabel(r'$N^{\mathrm{rec}}_{\mathrm{ch}}$',size=70)
-    ax1.set_xlim(50, 140)
-    ax1.set_ylabel(r'$ q(\mathrm{GeV}) $',size=70)
-    ax1.set_ylim(0.3, 1.8)
-    ax2.set_ylabel(r'$ T(\mathrm{GeV}) $',size=70)
-    # ax2.set_ylim(1.325, 1.7)      # T 기준을 AuAu 200GeV로 할 경우
-    ax2.set_ylim(1.01, 1.16)        # T 기준을 pp 13TeV로 할 경우
-
-    ax1.yaxis.set_major_formatter(ticker.FuncFormatter(lambda y, _: '${:g}$'.format(y)))
-    ax1.tick_params(axis='both',which='major',direction='in',width=2,length=30,labelsize=45, top='true')
-    ax1.tick_params(axis='both',which='minor',direction='in',width=2,length=15,labelsize=45, top='true')
-    ax2.yaxis.set_major_formatter(ticker.FuncFormatter(lambda y, _: '${:g}$'.format(y)))
-    ax2.tick_params(axis='both',which='major',direction='in',width=2,length=30,labelsize=45, top='true')
-    ax2.tick_params(axis='both',which='minor',direction='in',width=2,length=15,labelsize=45, top='true')
-
-    ax1.grid(color='silver',linestyle=':',linewidth=5, zorder=0)
-
-    lns = [lns1, lns2]
-    labs = [l.get_label() for l in lns]
-    ax1.legend(lns, labs, fontsize=50, loc='upper left')
-
-    plt.tight_layout()
-    fig1.savefig('./Results/parameters_multiplicity_dep_CMS.png')
-'''
 
 drawgraph_ptdep_phicorr()
 time_phicorr = time.time()
