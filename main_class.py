@@ -297,12 +297,14 @@ def datacut():
             phi_07TeV_ptdep_fitting[i] = phi_07TeV_ptdep_fitting[i][len(phi_07TeV_ptdep_fitting[i])-argmin-1:argmin+1]
 datacut()
 
-# ptdep_result = []
+ptdep_result = []
 # ptdep_result = [1.04435586e+00, 1.39798449e+00, 3.13646871e+00, 4.16055192e-05, 1.39096183e-01]
 
 # ptdep_result = [0.9550869558401427, 1.0902337006471705, 2.7422234903350926, 0.35144493617188255, 9.865787114868575e-06]
 # ptdep_result_07 = [1.624901759777593, 0.9302427715844408, 5.0117954889744185, 0.8297385370001579, 0.737376419008668]
-ptdep_result = []
+
+# ptdep_result = [9.61853703e-01, 1.08047173e+00, 2.61871339e+00, 2.87068889e-01, 1.00000000e-10] 
+# ptdep_result = []
 ptdep_result_07 = []
 ptdep_result_cm = []
 ptdep_error_cm = []
@@ -370,12 +372,13 @@ def fit_7tev():
 '''이 파일에서는 multiplicity에 따른 mean pT를 확인하여 이에 따른 T를 계산하고, fitting할 것이다.'''
 def fit_multipl():
     global ptdep_result
-    # boundary = (0,20)       # fitting 개수 1개인 경우
-    # initial = (1)           # fitting 개수 1개인 경우
-    boundary = ((0.1, 0), (5, 100))
-    initial = (0.5, 5)
+    boundary = (0,20)       # fitting 개수 1개인 경우
+    initial = (0.5)           # fitting 개수 1개인 경우
+    # boundary = ((0.1, 0), (5, 100))
+    # initial = (0.5, 5)
     print("High multiplicity results : ", ptdep_result)
-    highmulti_Temp = ptdep_result[1]        # 만약, 13TeV fitting을 안돌릴 경우 여기에 상수를 대입해야 함.
+    # highmulti_Temp = ptdep_result[1]        # 만약, 13TeV fitting을 안돌릴 경우 여기에 상수를 대입해야 함.
+    highmulti_Temp = 1.08047173e+00        # 만약, 13TeV fitting을 안돌릴 경우 여기에 상수를 대입해야 함.
     Fixed_Temperature = classes.Fitting_gpu.Fixed_Temp(meanpTvsnch_13TeV[0], meanpTvsnch_13TeV[1], highmulti_Temp)
     Fixed_Temperature_fitting = []
     Fixed_Temperature_fitting.extend([Fixed_Temperature[54], Fixed_Temperature[62], Fixed_Temperature[67], Fixed_Temperature[72]])
@@ -384,9 +387,9 @@ def fit_multipl():
     '''multiplicity에 대한 associated yield만 가지고 fitting하고 phi correlation그리기'''
     multi_atlas = classes.Fitting_gpu(13000, phi_13TeV_multi_atlas_fitting, dat_13TeV_multi_atlas_fitting, None, multiplicity_atlas, (0.5, 5), (2, 5), boundary, initial, "Multiplicity")
 
-    # You can choice fitting mode : "free kick", "free Tem", "free fRNk xx", "Free kick, fRNk xx_FixedTem", "Free kick, fRNk xx"
-    multiplicity_fittingmode = "Free kick, fRNk xx"
-    # multi_atlas.multiplicity_fitting_mode(multiplicity_fittingmode)                                                                        # Temperature를 pT mean으로 결정하는 경우
+    # You can choice fitting mode : "free kick", "free Tem", "free fRNk xx", "Free kick and fRNk xx_FixedTem", "Free kick and fRNk xx, Final"
+    multiplicity_fittingmode = "Final"
+    multi_atlas.multiplicity_fitting_mode(multiplicity_fittingmode)                                                                        # Temperature를 pT mean으로 결정하는 경우
     # result, multi_atlas_error = multi_atlas.fitting(None, (Fixed_Temperature_fitting, ptdep_result[2:]))                  # Temperature를 pT mean으로 결정하는 경우
 
     print("Temperature", Fixed_Temperature_fitting)
@@ -395,9 +398,11 @@ def fit_multipl():
     # fitting.append(list(Fixed_Temperature_fitting))
     # fitting.extend([ptdep_result[2], ptdep_result[3], ptdep_result[4]])
     fitting = [ptdep_result[0], Fixed_Temperature_fitting, ptdep_result[2], ptdep_result[3], ptdep_result[4]]
-    multi_atlas.multiplicity_fitting_mode(multiplicity_fittingmode)                                   # 각 파라미터들을 고정시켜가며 어떤게 가장 dominant한지 확인하는 작업
+    # multi_atlas.multiplicity_fitting_mode(multiplicity_fittingmode)                                   # 각 파라미터들을 고정시켜가며 어떤게 가장 dominant한지 확인하는 작업
     # result, multi_atlas_error = multi_atlas.fitting(None, ptdep_result)                  # 각 파라미터들을 고정시켜가며 어떤게 가장 dominant한지 확인하는 작업
-    result, multi_atlas_error = multi_atlas.fitting(None, fitting)                          # fitting Mode가 Free kick, fRNk xx인 경우에 사용
+    # result, multi_atlas_error = multi_atlas.fitting(None, fitting)                          # fitting Mode가 Free kick and fRNk xx인 경우에 사용
+    ''' 아래가 최종! '''
+    result, multi_atlas_error = multi_atlas.fitting(None, fitting)
 
 
     # kick = 0.798958702
@@ -421,46 +426,43 @@ def fit_multipl():
             temp = [ptdep_result[0], result[i][0], ptdep_result[2], ptdep_result[3], ptdep_result[4]]
         elif (multiplicity_fittingmode == "Free fRNk xx"):
             temp = [ptdep_result[0], ptdep_result[1], result[i][0], ptdep_result[3], ptdep_result[4]]
-        elif (multiplicity_fittingmode == "Free kick, fRNk xx_FixedTem"):
+        elif (multiplicity_fittingmode == "Free kick and fRNk xx_FixedTem"):
             temp = [result[i][0], ptdep_result[1], result[i][1], ptdep_result[3], ptdep_result[4]]
-        elif (multiplicity_fittingmode == "Free kick, fRNk xx"):
+        elif (multiplicity_fittingmode == "Free kick and fRNk xx"):
             temp = [result[i][0], Fixed_Temperature_fitting[i], result[i][1], ptdep_result[3], ptdep_result[4]]
+        # Final!!!!
+        elif (multiplicity_fittingmode == "Final"):
+            temp = [ptdep_result[0], Fixed_Temperature_fitting[i], result[i][0], ptdep_result[3], ptdep_result[4]]
         print(temp)
         multi_atlas_result.append(temp)
     # print('ATLAS results : ', multi_atlas_result)
     print('ATLAS error : ', multi_atlas_error)
-    '''
-            ***Results : [0.798958702    0.840820694    5.38517847    1.49370324    3.51939886e-12    19.4957273e    117.807870]***
-    '''
-    
-'''
-    multi_cms = classes.Fitting_gpu(13000, phi_13TeV_multi_cms_fitting, dat_13TeV_multi_cms_fitting, None, multiplicity_cms, (0.5, 5), (2, 4), boundary, initial, "Multiplicity")
-    fitting = [ptdep_result[0], Fixed_Temperature_fitting, ptdep_result[2], ptdep_result[3], ptdep_result[4]]
-    multi_cms.multiplicity_fitting_mode(multiplicity_fittingmode)                                   # 각 파라미터들을 고정시켜가며 어떤게 가장 dominant한지 확인하는 작업
-    # result, multi_cms_error = multi_atlas.fitting(None, ptdep_result)                  # 각 파라미터들을 고정시켜가며 어떤게 가장 dominant한지 확인하는 작업
-    result, multi_cms_error = multi_cms.fitting(None, fitting)                          # fitting Mode가 Free kick, fRNk xx인 경우에 사용
-    print('CMS results :')
-    for i in range(len(result)):
-        #            q                      T                   xx              yy          zz
-        if (multiplicity_fittingmode == "Nothing"):
-            temp = [result[i][0], Fixed_Temperature_fitting[i], ptdep_result[2], ptdep_result[3], ptdep_result[4]]              # Temperature를 pT mean으로 결정하는 경우
 
-        # 각 파라미터들을 고정시켜가며 어떤게 가장 dominant한지 확인하는 작업
-        elif (multiplicity_fittingmode == "Free kick"):
-            temp = [result[i][0], ptdep_result[1], ptdep_result[2], ptdep_result[3], ptdep_result[4]]
-        elif (multiplicity_fittingmode == "Free Tem"):
-            temp = [ptdep_result[0], result[i][0], ptdep_result[2], ptdep_result[3], ptdep_result[4]]
-        elif (multiplicity_fittingmode == "Free fRNk xx"):
-            temp = [ptdep_result[0], ptdep_result[1], result[i][0], ptdep_result[3], ptdep_result[4]]
-        elif (multiplicity_fittingmode == "Free kick, fRNk xx_FixedTem"):
-            temp = [result[i][0], ptdep_result[1], result[i][1], ptdep_result[3], ptdep_result[4]]
-        elif (multiplicity_fittingmode == "Free kick, fRNk xx"):
-            temp = [result[i][0], Fixed_Temperature_fitting[i], result[i][1], ptdep_result[3], ptdep_result[4]]
-        print(temp)
-        multi_cms_result.append(temp)
-    # print('ATLAS results : ', multi_atlas_result)
-    print('CMS error : ', multi_cms_error)
-'''
+    # 여기까지 ATLAS, 아래부터 CMS
+    # Fixed_Temperature_fitting = []
+    # print(meanpTvsnch_13TeV[0][0:35])
+    # print(meanpTvsnch_13TeV[0][35:70])
+    # print(meanpTvsnch_13TeV[0][70:78])
+    # print(meanpTvsnch_13TeV[0][78::])
+
+    # Fixed_Temperature_fitting.append(np.sum(Fixed_Temperature[0:35])/np.size(Fixed_Temperature[0:35]))
+    # Fixed_Temperature_fitting.append(np.sum(Fixed_Temperature[35:70])/np.size(Fixed_Temperature[35:70]))
+    # Fixed_Temperature_fitting.append(np.sum(Fixed_Temperature[70:78])/np.size(Fixed_Temperature[70:78]))
+    # Fixed_Temperature_fitting.append(np.sum(Fixed_Temperature[78::])/np.size(Fixed_Temperature[78::]))
+
+    # multi_cms = classes.Fitting_gpu(13000, phi_13TeV_multi_cms_fitting, dat_13TeV_multi_cms_fitting, None, multiplicity_cms, (0.5, 5), (2, 4), boundary, initial, "Multiplicity")
+    # fitting = [ptdep_result[0], Fixed_Temperature_fitting, ptdep_result[2], ptdep_result[3], ptdep_result[4]]
+    # multi_cms.multiplicity_fitting_mode(multiplicity_fittingmode)                                   # 각 파라미터들을 고정시켜가며 어떤게 가장 dominant한지 확인하는 작업
+    # # result, multi_cms_error = multi_atlas.fitting(None, ptdep_result)                  # 각 파라미터들을 고정시켜가며 어떤게 가장 dominant한지 확인하는 작업
+    # result, multi_cms_error = multi_cms.fitting(None, fitting)                          # fitting Mode가 Free kick and fRNk xx인 경우에 사용
+    # print('CMS results :')
+    # for i in range(len(result)):
+    #     #            q                      T                   xx              yy          zz
+    #     temp = [ptdep_result[0], Fixed_Temperature_fitting[i], result[i][0], ptdep_result[3], ptdep_result[4]]
+    #     print(temp)
+    #     multi_cms_result.append(temp)
+    # print('CMS error : ', multi_cms_error)
+
 
 '''To Check Center of mass Energy dependence'''
 ''' Multiplicity : 90~100'''
@@ -517,7 +519,7 @@ dat_13TeV_ptdep = dat_13TeV_ptdep[0:-2]
 # ptdep_result = [0.9619064848652367, 1.0806152707987788, 2.6181236203620877, 0.2866504816022142, 4.83643115879628e-06]
 # ptdep_result_07 = [1.6594350487174188, 1.254920842633187, 6.8002216962428035, 0.8677859196950383, 0.8214136167443336]
 
-# Nk 제거, md=1 fitting
+# Nk 제거, md=1 fitting (exponentially decay 제거 : Final version)
 ptdep_result = [9.61853703e-01, 1.08047173e+00, 2.61871339e+00, 2.87068889e-01, 1.00000000e-10]
 ptdep_result_07 = [1.04583978e+00, 5.02452357e-01, 9.88785638e+00, 4.05148986e+00, 1.00000000e-10]
 
@@ -546,13 +548,13 @@ def drawgraph_ptdep_phicorr():
             axes1[i].errorbar(phi_13TeV_ptdep[i+3], dat_13TeV_ptdep[i+3], yerr=(abs(err_13TeV_ptdep[2*(i+3)+1]),err_13TeV_ptdep[2*(i+3)]), color="black", linestyle=' ', linewidth=7, capthick=3, capsize=15)
             axes1[i].scatter(phi_13TeV_ptdep[i+3], dat_13TeV_ptdep[i+3], edgecolors="black", s=800, marker='o', facecolors='none', linewidths=7)
             axes1[i].scatter(phi_13TeV_ptdep[i+3], dat_13TeV_ptdep[i+3], s=800, marker='+', facecolors='black', linewidths=7)
-            # '''cms plot 7TeV'''
-            # cms_07result = cms_07.result_plot("pTdependence", None, ptf, (min(phi_07TeV_ptdep[i]), max(phi_07TeV_ptdep[i])))
-            # axes1[i].plot(cms_07result[0], cms_07result[1], color = "grey", linewidth=7, linestyle='-')
-            # axes1[i].errorbar(phi_07TeV_ptdep[i], dat_07TeV_ptdep[i], yerr=(abs(err_07TeV_ptdep[2*i+1]),err_07TeV_ptdep[2*i]), color="grey", linestyle=' ', linewidth=7, capthick=3, capsize=15)
-            # axes1[i].scatter(phi_07TeV_ptdep[i], dat_07TeV_ptdep[i], edgecolors="grey", s=800, marker='o', facecolors='none', linewidths=7)
-            # axes1[i].scatter(phi_07TeV_ptdep[i], dat_07TeV_ptdep[i], s=800, marker='+', facecolors='grey', linewidths=7)
-            # axes1[i].set_title(r'$0.1<p_{T, \, \mathrm{trig(assoc)}}<1$', size = 70, pad=30)
+            '''cms plot 7TeV'''
+            cms_07result = cms_07.result_plot("pTdependence", None, ptf, (min(phi_07TeV_ptdep[i]), max(phi_07TeV_ptdep[i])))
+            axes1[i].plot(cms_07result[0], cms_07result[1], color = "grey", linewidth=7, linestyle='-')
+            axes1[i].errorbar(phi_07TeV_ptdep[i], dat_07TeV_ptdep[i], yerr=(abs(err_07TeV_ptdep[2*i+1]),err_07TeV_ptdep[2*i]), color="grey", linestyle=' ', linewidth=7, capthick=3, capsize=15)
+            axes1[i].scatter(phi_07TeV_ptdep[i], dat_07TeV_ptdep[i], edgecolors="grey", s=800, marker='o', facecolors='none', linewidths=7)
+            axes1[i].scatter(phi_07TeV_ptdep[i], dat_07TeV_ptdep[i], s=800, marker='+', facecolors='grey', linewidths=7)
+            axes1[i].set_title(r'$0.1<p_{T, \, \mathrm{trig(assoc)}}<1$', size = 70, pad=30)
         elif i==4:
             atlas_result = atlas.result_plot("pTdependence", None, (0.5, 5), (min(phi_13TeV_ptdep[-1]), max(phi_13TeV_ptdep[-1])))
             axes1[i].plot(atlas_result[0], atlas_result[1], color = "blue", linewidth=7, linestyle='-')
@@ -572,12 +574,12 @@ def drawgraph_ptdep_phicorr():
             axes1[i].errorbar(phi_13TeV_ptdep[i+3], dat_13TeV_ptdep[i+3], yerr=(abs(err_13TeV_ptdep[2*(i+3)+1]),err_13TeV_ptdep[2*(i+3)]), color="black", linestyle=' ', linewidth=7, capthick=3, capsize=15)
             axes1[i].scatter(phi_13TeV_ptdep[i+3], dat_13TeV_ptdep[i+3], edgecolors="black", s=800, marker='o', facecolors='none', linewidths=7)
             axes1[i].scatter(phi_13TeV_ptdep[i+3], dat_13TeV_ptdep[i+3], s=800, marker='+', facecolors='black', linewidths=7)
-            # '''cms plot 7TeV'''
-            # cms_07result = cms_07.result_plot("pTdependence", None, ptf, (min(phi_07TeV_ptdep_fitting[i-1]), max(phi_07TeV_ptdep_fitting[i-1])))
-            # axes1[i].plot(cms_07result[0], cms_07result[1], color = "grey", linewidth=7, linestyle='-')
-            # axes1[i].errorbar(phi_07TeV_ptdep[i], dat_07TeV_ptdep[i], yerr=(abs(err_07TeV_ptdep[2*i+1]),err_07TeV_ptdep[2*i]), color="grey", linestyle=' ', linewidth=7, capthick=3, capsize=15)
-            # axes1[i].scatter(phi_07TeV_ptdep[i], dat_07TeV_ptdep[i], edgecolors="grey", s=800, marker='o', facecolors='none', linewidths=7)
-            # axes1[i].scatter(phi_07TeV_ptdep[i], dat_07TeV_ptdep[i], s=800, marker='+', facecolors='grey', linewidths=7)
+            '''cms plot 7TeV'''
+            cms_07result = cms_07.result_plot("pTdependence", None, ptf, (min(phi_07TeV_ptdep_fitting[i-1]), max(phi_07TeV_ptdep_fitting[i-1])))
+            axes1[i].plot(cms_07result[0], cms_07result[1], color = "grey", linewidth=7, linestyle='-')
+            axes1[i].errorbar(phi_07TeV_ptdep[i], dat_07TeV_ptdep[i], yerr=(abs(err_07TeV_ptdep[2*i+1]),err_07TeV_ptdep[2*i]), color="grey", linestyle=' ', linewidth=7, capthick=3, capsize=15)
+            axes1[i].scatter(phi_07TeV_ptdep[i], dat_07TeV_ptdep[i], edgecolors="grey", s=800, marker='o', facecolors='none', linewidths=7)
+            axes1[i].scatter(phi_07TeV_ptdep[i], dat_07TeV_ptdep[i], s=800, marker='+', facecolors='grey', linewidths=7)
             st = i
             en = i+1
             # axes1[i].set_title(str(st)+r'$<p_{T, \, \mathrm{trig(assoc)}}<$'+str(en), size = 70, pad=30)
@@ -653,20 +655,20 @@ def drawgraph_ptdep_frnk():
     '''Hanul's pp 13TeV FrNk result plot [[pt(Average)], [FrNk]]'''
     Hanul_FrNk = [[1.5, 2.5], [0.93, 1.37]]
     Hanul_FrNk_error = [[0.5, 0.5], [0.5, 0.5]]
-    ptf = np.arange(0.01,4,0.01)
+    ptf = np.arange(0.01,10,0.01)
 
     plt.plot(ptf, FrNk_func(ptf, *AuAu_200GeV), color = 'red', linewidth=7, label=r'$AuAu, \, 200\mathrm{GeV}$')
     plt.plot(ptf, FrNk_func(ptf, *PbPb_276TeV), color = 'black', linewidth=7, label=r'$PbPb, \, 2.76\mathrm{TeV}$')
-    plt.plot(ptf, FrNk_func(ptf, *pp_07TeV_Wong), color = 'blue', linewidth=7, label=r'$pp, \, 7\mathrm{TeV}$')
+    plt.plot(ptf, FrNk_func(ptf, *pp_07TeV_Wong), color = 'blue', linewidth=7, label=r'$pp, \, 7\mathrm{TeV}, Wong$')
     plt.plot(ptf, FrNk_func(ptf, *pp_13TeV), color = 'purple', linewidth=7, label=r'$pp, \, 13\mathrm{TeV}$')
-    # plt.plot(ptf, FrNk_func(ptf, *pp_07TeV), color = 'grey', linewidth=7, label=r'$pp, \, 07\mathrm{TeV}$')
+    plt.plot(ptf, FrNk_func(ptf, *pp_07TeV), color = 'grey', linewidth=7, label=r'$pp, \, 07\mathrm{TeV}$')
     plt.scatter(Hanul_FrNk[0], Hanul_FrNk[1], edgecolor = 'green', facecolors='none', s=900, marker='o', linewidths=5, zorder=2, label=r'$pp, \, 13\mathrm{TeV}$')
     plt.scatter(Hanul_FrNk[0], Hanul_FrNk[1], facecolors='green', s=900, marker='+', linewidths=5, zorder=2)
     plt.errorbar(Hanul_FrNk[0], Hanul_FrNk[1], xerr=Hanul_FrNk_error, color="green", linestyle=' ', linewidth=7, capthick=3, capsize=15)
 
     plt.xlabel(r'$p_T^{\mathrm{trig}},\, p_T^{\mathrm{trig}(\mathrm{assoc})}$',size=70)
     plt.ylabel(r'$f_{R} \langle N_k \rangle $',size=70)
-    plt.xlim(0,4)
+    plt.xlim(0,10)
 
     ax.yaxis.set_major_formatter(ticker.FuncFormatter(lambda y, _: '${:g}$'.format(y)))
     plt.tick_params(axis='both',which='major',direction='in',width=2,length=30,labelsize=45, top='true')
@@ -851,7 +853,7 @@ def drawgraph_multi_phicorr():
 drawgraph_ptdep_phicorr()
 time_phicorr = time.time()
 print(f"Graph, Phi correlation end : {time_phicorr-time_calculate:.3f} sec")
-# drawgraph_ptdep_Yridge()
+drawgraph_ptdep_Yridge()
 time_yridge = time.time()
 print(f"Graph, Yridge end : {time_yridge-time_phicorr:.3f} sec")
 drawgraph_ptdep_frnk()

@@ -131,17 +131,25 @@ class Fitting_gpu:
                 elif(self.Mode == "Free fRNk xx"):
                     # dist = Fixed_parameters[1]
                     # self.Fixed_Temperature = [dist, dist, dist, dist, dist, dist, dist, dist, dist]
+                    print(Fixed_parameters)
                     self.Fixed_Temperature = Fixed_parameters[1]
                     self.Fixed_kick = Fixed_parameters[0]
                     self.Fixed_yy = Fixed_parameters[3]
                     self.Fixed_zz = Fixed_parameters[4]
 
-                elif(self.Mode == "Free kick, fRNk xx_FixedTem"):
+                elif(self.Mode == "Final"):
+                    print(Fixed_parameters)
+                    self.Fixed_Temperature = Fixed_parameters[1]
+                    self.Fixed_kick = Fixed_parameters[0]
+                    self.Fixed_yy = Fixed_parameters[3]
+                    self.Fixed_zz = Fixed_parameters[4]
+
+                elif(self.Mode == "Free kick and fRNk xx_FixedTem"):
                     self.Fixed_Temperature = Fixed_parameters[1]
                     self.Fixed_yy = Fixed_parameters[3]
                     self.Fixed_zz = Fixed_parameters[4]
             
-                elif(self.Mode == "Free kick, fRNk xx"):
+                elif(self.Mode == "Free kick and fRNk xx"):
                     self.Fixed_Temperature = Fixed_parameters[1]
                     self.Fixed_yy = Fixed_parameters[3]
                     self.Fixed_zz = Fixed_parameters[4]
@@ -171,13 +179,15 @@ class Fitting_gpu:
                 for i in range(len(phi_array_sep)):
                     '''Fitting하는 번호'''
                     self.separate_number = i
-                    print(i, f"Temperature : ")
                     self.__count = 0
-                    if(self.Mode == "Free kick, fRNk xx_FixedTem" or "Free kick, fRNk xx"):
+                    if(self.Mode == "Free kick and fRNk xx_FixedTem" or self.Mode == "Free kick and fRNk xx"):
+                        print(i, "\t Temperature : ", self.Fixed_Temperature)
                         result_temp, pcov = scipy.optimize.curve_fit(self.fitting_func_multi_double, xdata = phi_array_sep[i], ydata = data_sep[i], bounds=self.boundary, p0 = self.initial, method='trf')
-                    # elif(self.Mode == "Free kick, fRNk xx"):
-                    #     result_temp, pcov = scipy.optimize.curve_fit(self.fitting_func_multi_double, xdata = phi_array_sep[i], ydata = data_sep[i], bounds=self.boundary, p0 = self.initial, method='trf')
+                    elif(self.Mode == "Final"):
+                        print(i, "\t Temperature : ", self.Fixed_Temperature[i])
+                        result_temp, pcov = scipy.optimize.curve_fit(self.fitting_func_multi, xdata = phi_array_sep[i], ydata = data_sep[i], bounds=self.boundary, p0 = self.initial, method='trf')
                     else:
+                        print(i, "\t Temperature : ", self.Fixed_Temperature)
                         result_temp, pcov = scipy.optimize.curve_fit(self.fitting_func_multi, xdata = phi_array_sep[i], ydata = data_sep[i], bounds=self.boundary, p0 = self.initial, method='trf')
                     print(result_temp)
                     totalresult.append(result_temp)
@@ -224,6 +234,7 @@ class Fitting_gpu:
 
 
     def fitting_func_multi(self, phi_array, Free):
+        self.__md = 1.
         # xx = 5.3; yy = 8.5*10**(-35); zz = 0.22
         if (self.Mode == "Nothing"):
             xx = self.Fixed_xx; yy = self.Fixed_yy; zz = self.Fixed_zz
@@ -240,7 +251,13 @@ class Fitting_gpu:
             xx = Free
             yy = self.Fixed_yy; zz = self.Fixed_zz
             kick = self.Fixed_kick
-            Tem = self.Fixed_Temperature           
+            Tem = self.Fixed_Temperature          
+
+        elif(self.Mode == "Final"):
+            xx = Free
+            yy = self.Fixed_yy; zz = self.Fixed_zz
+            kick = self.Fixed_kick
+            Tem = self.Fixed_Temperature[self.separate_number]
         Aridge_bin = 1000
         pti, yi = np.meshgrid(np.linspace(self.__pti[0], self.__pti[1], Aridge_bin), np.linspace(self.__yi[0], self.__yi[1], Aridge_bin))
         dyi = (self.__pti[1] - self.__pti[0])/Aridge_bin
@@ -264,12 +281,13 @@ class Fitting_gpu:
         return result
 
     def fitting_func_multi_double(self, phi_array, Free1, Free2):       
+        self.__md = 1.
         xx = Free2
         yy = self.Fixed_yy; zz = self.Fixed_zz
         kick = Free1
-        if(self.Mode == "Free kick, fRNk xx_FixedTem"):
+        if(self.Mode == "Free kick and fRNk xx_FixedTem"):
             Tem = self.Fixed_Temperature
-        if(self.Mode == "Free kick, fRNk xx"):
+        if(self.Mode == "Free kick and fRNk xx"):
             Tem = self.Fixed_Temperature[self.separate_number]
         Aridge_bin = 1000
         pti, yi = np.meshgrid(np.linspace(self.__pti[0], self.__pti[1], Aridge_bin), np.linspace(self.__yi[0], self.__yi[1], Aridge_bin))
@@ -399,7 +417,6 @@ class Fitting_gpu:
         # pp13_highmulti_meanpT = 1.186
         ''' 단순히 multiplicity로 도출'''
         pp13_highmulti_meanpT = 1.209
-        # pp13_highmulti_Temp = 1.08075125
         # return (meanpT/AuAu_meanpT)*AuAu_Temp
         return (meanpT/pp13_highmulti_meanpT)*pp13_highmulti_Temp
 
@@ -451,8 +468,8 @@ class Drawing_Graphs:
         # return xx+yy*pt*pt
         # return xx*cp.exp(yy*pt)
         # return xx*cp.exp(-yy/pt-zz*pt)
-        # return xx*cp.exp(-yy/pt)
-        return 1.415411195083602
+        return xx*cp.exp(-yy/pt)
+        # return 1.415411195083602
     def __Fr(self, xx, yy, pt):
         return xx+yy*pt*pt
     def __Nk(self, A, B, multi):
@@ -473,6 +490,8 @@ class Drawing_Graphs:
             quit()
 
     def __Ridge_Multi(self, multi, ptf, phif_range):
+        # self.__md = self.kick
+        self.__md = 1.
         kick = self.kick; Tem = self.Tem; xx = self.xx; yy = self.yy; zz = self.zz; AA = self.AA; BB = self.BB; etaf_range = self.etaf
         Aridge = self.__Aridge()
         bin = 300
