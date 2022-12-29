@@ -103,6 +103,8 @@ class Fitting_gpu:
         return xx+yy*pt*pt
     def __Nk(self, A, B, multi):
         return A*cp.exp(-B/multi)
+    def __MultiNk(self, Free1, Free2, Free3, multi):
+        return Free1*(Free2+Free3*multi)
 
     def fitting(self, error, Fixed_parameters):
         if error is None:
@@ -169,34 +171,36 @@ class Fitting_gpu:
                 totalresult = []
                 phi_array_sep = []; data_sep = []
                 start = 0
-                print(self.phi_array)
+                # print(self.phi_array)
                 for i in range(self.Number_of_Array):
                     number = self.array_length[i]
                     phi_array_sep.append(self.phi_array[start : start + number])
                     data_sep.append(self.data[start : start + number])
                     start += number
                 self.data_sep = data_sep
-                print(self.data_sep)
+                # print(self.data_sep)
 
                 # 데이터를 한번에 넣고 fitting하는 것을 구현하는중
                 if (self.Mode == "Final"):
-                    result_temp, pcov = scipy.optimize.curve_fit(self.fitting_func_multi, xdata = self.phi_array, ydata = self.data, bounds=self.boundary, p0 = self.initial, method='trf')
-                for i in range(len(phi_array_sep)):
-                    '''Fitting하는 번호'''
-                    self.separate_number = i
-                    self.__count = 0
-                    if(self.Mode == "Free kick and fRNk xx_FixedTem" or self.Mode == "Free kick and fRNk xx"):
-                        print(i, "\t Temperature : ", self.Fixed_Temperature)
-                        result_temp, pcov = scipy.optimize.curve_fit(self.fitting_func_multi_double, xdata = phi_array_sep[i], ydata = data_sep[i], bounds=self.boundary, p0 = self.initial, method='trf')
-                    elif(self.Mode == "Final"):
-                        print(i, "\t Temperature : ", self.Fixed_Temperature[i])
-                        # result_temp, pcov = scipy.optimize.curve_fit(self.fitting_func_multi, xdata = phi_array_sep[i], ydata = data_sep[i], bounds=self.boundary, p0 = self.initial, method='trf')
-                        result_temp, pcov = scipy.optimize.curve_fit(self.fitting_func_multi, xdata = self.phi_array, ydata = self.data, bounds=self.boundary, p0 = self.initial, method='trf')
-                    else:
-                        print(i, "\t Temperature : ", self.Fixed_Temperature)
-                        result_temp, pcov = scipy.optimize.curve_fit(self.fitting_func_multi, xdata = phi_array_sep[i], ydata = data_sep[i], bounds=self.boundary, p0 = self.initial, method='trf')
-                    print(result_temp)
-                    totalresult.append(result_temp)
+                    result_temp, pcov = scipy.optimize.curve_fit(self.fitting_func_multi_final, xdata = self.phi_array, ydata = self.data, bounds=self.boundary, p0 = self.initial)
+
+                else:
+                    for i in range(len(phi_array_sep)):
+                        '''Fitting하는 번호'''
+                        self.separate_number = i
+                        self.__count = 0
+                        if(self.Mode == "Free kick and fRNk xx_FixedTem" or self.Mode == "Free kick and fRNk xx"):
+                            print(i, "\t Temperature : ", self.Fixed_Temperature)
+                            result_temp, pcov = scipy.optimize.curve_fit(self.fitting_func_multi_double, xdata = phi_array_sep[i], ydata = data_sep[i], bounds=self.boundary, p0 = self.initial, method='trf')
+                        # elif(self.Mode == "Final"):
+                        #     print(i, "\t Temperature : ", self.Fixed_Temperature[i])
+                        #     # result_temp, pcov = scipy.optimize.curve_fit(self.fitting_func_multi, xdata = phi_array_sep[i], ydata = data_sep[i], bounds=self.boundary, p0 = self.initial, method='trf')
+                        #     result_temp, pcov = scipy.optimize.curve_fit(self.fitting_func_multi, xdata = self.phi_array, ydata = self.data, bounds=self.boundary, p0 = self.initial, method='trf')
+                        else:
+                            print(i, "\t Temperature : ", self.Fixed_Temperature)
+                            result_temp, pcov = scipy.optimize.curve_fit(self.fitting_func_multi, xdata = phi_array_sep[i], ydata = data_sep[i], bounds=self.boundary, p0 = self.initial, method='trf')
+                        print(result_temp)
+                        totalresult.append(result_temp)
                 
                 print("Error : ", self.__error_temp)
                 popt = totalresult
@@ -238,6 +242,48 @@ class Fitting_gpu:
                 quit()
         return popt, np.sqrt(np.diag(pcov))
 
+    # Free1(Free2+Free3*multiplicity)
+    def fitting_func_multi_final(self, phi_array, Free1, Free2, Free3):
+        self.__md = 1.
+        print("수정")
+        # 함수 외부에서 쪼개서 각각을 fitting 했었지만, 이번에는 내부에서 데이터를 쪼개야 함.
+        multi_data = [55, 65, 75, 85, 95, 105, 115, 125, 135]
+        start = 0
+        phi_array_sep = []; data_sep = []
+        for i in range(self.Number_of_Array):
+            number = self.array_length[i]
+            phi_array_sep.append(self.phi_array[start : start + number])
+            data_sep.append(self.data[start : start + number])
+            start += number
+        # xx에 1을 넣어서 xx가 없는 것으로 하자.
+        Tem = self.Fixed_Temperature
+        kick = self.Fixed_kick
+        yy = self.Fixed_yy
+        zz = self.Fixed_zz
+
+        Aridge_bin = 1000
+        pti, yi = np.meshgrid(np.linspace(self.__pti[0], self.__pti[1], Aridge_bin), np.linspace(self.__yi[0], self.__yi[1], Aridge_bin))
+        dyi = (self.__pti[1] - self.__pti[0])/Aridge_bin
+        dpti = (self.__yi[1] - self.__yi[0])/Aridge_bin
+
+        totalresult = np.array([])
+        for i in range(len(phi_array_sep)):
+            Aridge = cp.asarray(1/np.sum(cpu.Aridge(pti, yi, Tem[i], self.__m, self.__md, self.__a, self.sqrSnn, self.__mp)*dyi*dpti*2*np.pi))
+            # print(len(Free1, Free2, Free3, multi_data[i]))
+            result = self.__MultiNk(Free1, Free2, Free3, multi_data[i])*self.__multiplicity(phi_array, self.etaf, Aridge, kick, Tem[i], 1, yy, zz)
+            totalresult = np.concatenate(totalresult, (result - np.min(result)))
+        self.__count = self.__count + 1
+        if self.__count == 1:
+            print("Count \t Kick \t\t Tem \t\t xx \t\t yy \t zz \t\t Error")
+            print(f"{self.__count}회", kick, Tem, 1., yy, zz, np.sum((result-self.data_sep[number])**2))
+            self.__error_temp.append(np.sum((result-self.data_sep[number])**2))
+        elif self.__count%5==0:
+            print(f"{self.__count}회", kick, Tem, 1., yy, zz, np.sum((result-self.data_sep[number])**2))
+            # print(result)
+            # print(self.data_sep[number])
+        print(totalresult)
+        self.__error_temp[number] = np.sum((result-totalresult)**2)
+        return result
 
     def fitting_func_multi(self, phi_array, Free):
         self.__md = 1.

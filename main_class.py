@@ -372,10 +372,13 @@ def fit_7tev():
 '''이 파일에서는 multiplicity에 따른 mean pT를 확인하여 이에 따른 T를 계산하고, fitting할 것이다.'''
 def fit_multipl():
     global ptdep_result
-    boundary = (0,20)       # fitting 개수 1개인 경우
-    initial = (0.5)           # fitting 개수 1개인 경우
-    # boundary = ((0.1, 0), (5, 100))
-    # initial = (0.5, 5)
+    # boundary = (0,20)                               # fitting 개수 1개인 경우
+    # initial = (0.5)                                 # fitting 개수 1개인 경우
+    # boundary = ((0.1, 0), (5, 100))               # fitting 개수 2개인 경우
+    # initial = (0.5, 5)                            # fitting 개수 2개인 경우
+    boundary = ((0, 0, 0), (10, 10, 10))          # fitting 개수 3개인 경우 (final)
+    initial = (5, 5, 5)                             # fitting 개수 3개인 경우 (final)
+
     print("High multiplicity results : ", ptdep_result)
     # highmulti_Temp = ptdep_result[1]        # 만약, 13TeV fitting을 안돌릴 경우 여기에 상수를 대입해야 함.
     highmulti_Temp = 1.08047173e+00        # 만약, 13TeV fitting을 안돌릴 경우 여기에 상수를 대입해야 함.
