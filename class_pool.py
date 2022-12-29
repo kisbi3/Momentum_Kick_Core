@@ -169,13 +169,18 @@ class Fitting_gpu:
                 totalresult = []
                 phi_array_sep = []; data_sep = []
                 start = 0
+                print(self.phi_array)
                 for i in range(self.Number_of_Array):
                     number = self.array_length[i]
                     phi_array_sep.append(self.phi_array[start : start + number])
                     data_sep.append(self.data[start : start + number])
                     start += number
                 self.data_sep = data_sep
+                print(self.data_sep)
 
+                # 데이터를 한번에 넣고 fitting하는 것을 구현하는중
+                if (self.Mode == "Final"):
+                    result_temp, pcov = scipy.optimize.curve_fit(self.fitting_func_multi, xdata = self.phi_array, ydata = self.data, bounds=self.boundary, p0 = self.initial, method='trf')
                 for i in range(len(phi_array_sep)):
                     '''Fitting하는 번호'''
                     self.separate_number = i
@@ -185,7 +190,8 @@ class Fitting_gpu:
                         result_temp, pcov = scipy.optimize.curve_fit(self.fitting_func_multi_double, xdata = phi_array_sep[i], ydata = data_sep[i], bounds=self.boundary, p0 = self.initial, method='trf')
                     elif(self.Mode == "Final"):
                         print(i, "\t Temperature : ", self.Fixed_Temperature[i])
-                        result_temp, pcov = scipy.optimize.curve_fit(self.fitting_func_multi, xdata = phi_array_sep[i], ydata = data_sep[i], bounds=self.boundary, p0 = self.initial, method='trf')
+                        # result_temp, pcov = scipy.optimize.curve_fit(self.fitting_func_multi, xdata = phi_array_sep[i], ydata = data_sep[i], bounds=self.boundary, p0 = self.initial, method='trf')
+                        result_temp, pcov = scipy.optimize.curve_fit(self.fitting_func_multi, xdata = self.phi_array, ydata = self.data, bounds=self.boundary, p0 = self.initial, method='trf')
                     else:
                         print(i, "\t Temperature : ", self.Fixed_Temperature)
                         result_temp, pcov = scipy.optimize.curve_fit(self.fitting_func_multi, xdata = phi_array_sep[i], ydata = data_sep[i], bounds=self.boundary, p0 = self.initial, method='trf')

@@ -303,7 +303,7 @@ ptdep_result = []
 # ptdep_result = [0.9550869558401427, 1.0902337006471705, 2.7422234903350926, 0.35144493617188255, 9.865787114868575e-06]
 # ptdep_result_07 = [1.624901759777593, 0.9302427715844408, 5.0117954889744185, 0.8297385370001579, 0.737376419008668]
 
-# ptdep_result = [9.61853703e-01, 1.08047173e+00, 2.61871339e+00, 2.87068889e-01, 1.00000000e-10] 
+ptdep_result = [9.61853703e-01, 1.08047173e+00, 2.61871339e+00, 2.87068889e-01, 1.00000000e-10] 
 # ptdep_result = []
 ptdep_result_07 = []
 ptdep_result_cm = []
@@ -312,7 +312,7 @@ multi_atlas_result = []
 multi_cms_result = []
 ptdep_Rsq = []
 
-total_boundary = ((0.5, .5, 0, 0, 0),(5, 4., 10, 10, 10))
+total_boundary = ((0.5, 0.8, 0, 0, 0),(5, 4., 10, 10, 10))
 total_initial = (1.,  1., 2., 0, 0)
 # total_initial = (0.955, 1.09, 2.74)
 '''Fitting 13TeV data'''
@@ -450,7 +450,8 @@ def fit_multipl():
     # Fixed_Temperature_fitting.append(np.sum(Fixed_Temperature[70:78])/np.size(Fixed_Temperature[70:78]))
     # Fixed_Temperature_fitting.append(np.sum(Fixed_Temperature[78::])/np.size(Fixed_Temperature[78::]))
 
-    # multi_cms = classes.Fitting_gpu(13000, phi_13TeV_multi_cms_fitting, dat_13TeV_multi_cms_fitting, None, multiplicity_cms, (0.5, 5), (2, 4), boundary, initial, "Multiplicity")
+    # ptrange_temp = [(1,2), (2,3), (3,4)]
+    # multi_cms = classes.Fitting_gpu(13000, phi_13TeV_multi_cms_fitting, dat_13TeV_multi_cms_fitting, None, multiplicity_cms, ptrange_temp, (2, 4), boundary, initial, "Multiplicity")
     # fitting = [ptdep_result[0], Fixed_Temperature_fitting, ptdep_result[2], ptdep_result[3], ptdep_result[4]]
     # multi_cms.multiplicity_fitting_mode(multiplicity_fittingmode)                                   # 각 파라미터들을 고정시켜가며 어떤게 가장 dominant한지 확인하는 작업
     # # result, multi_cms_error = multi_atlas.fitting(None, ptdep_result)                  # 각 파라미터들을 고정시켜가며 어떤게 가장 dominant한지 확인하는 작업
@@ -491,7 +492,7 @@ def fit_cmenerg():
 
 # fit_13tev()
 # fit_7tev()
-# fit_multipl()
+fit_multipl()
 # fit_cmenerg()
 
 
@@ -521,7 +522,7 @@ dat_13TeV_ptdep = dat_13TeV_ptdep[0:-2]
 
 # Nk 제거, md=1 fitting (exponentially decay 제거 : Final version)
 ptdep_result = [9.61853703e-01, 1.08047173e+00, 2.61871339e+00, 2.87068889e-01, 1.00000000e-10]
-ptdep_result_07 = [1.04583978e+00, 5.02452357e-01, 9.88785638e+00, 4.05148986e+00, 1.00000000e-10]
+# ptdep_result_07 = [1.04583978e+00, 5.02452357e-01, 9.88785638e+00, 4.05148986e+00, 1.00000000e-10]
 
 # fig1, axes1 = plt.subplots(nrows=1, ncols=5,figsize=(125,20))
 #그래프 그리기
@@ -600,6 +601,7 @@ def drawgraph_ptdep_phicorr():
     axes1[0].set_ylabel(r'$\frac{1}{N_{\mathrm{trig}}}\frac{dN^{\mathrm{pair}}}{d\Delta\phi}-C_{\mathrm{ZYAM}}$', size=70)
     fig1.tight_layout(h_pad=-1)
 
+    plt.show()
     fig1.savefig('./Results/phiCorr_Test.png')
 
 '''pT dependence Y^ridge graph'''
@@ -636,6 +638,7 @@ def drawgraph_ptdep_Yridge():
     axis2.tick_params(axis='both',which='minor',direction='in',width=2,length=15,labelsize=45, top = 'true', right='true')
     axis2.grid(color='silver',linestyle=':',linewidth=3)
     fig2.tight_layout()
+    plt.show()
     fig2.savefig('./Results/Yridge_Test.png')
 
 '''pT dependence FrNk graph'''
@@ -679,6 +682,7 @@ def drawgraph_ptdep_frnk():
 
     plt.tight_layout()
 
+    plt.show()
     fig3.savefig('./Results/FrNk_Test.png')
 
 '''CM energy dependence phi correlation graph + CM energy frNk'''
@@ -712,6 +716,7 @@ def drawgraph_cmdep_phicorr():
 
     plt.tight_layout()
 
+    plt.show()
     fig3.savefig('./Results/cmdep_phicorr.png')
 
     fig3 = plt.figure()
@@ -757,6 +762,7 @@ def drawgraph_cmdep_phicorr():
 
     plt.tight_layout()
 
+    plt.show()
     fig3.savefig('./Results/CMenerg_FrNk.png')
 
 def drawgraph_multi_phicorr():
@@ -805,6 +811,7 @@ def drawgraph_multi_phicorr():
     axes1[2][0].set_ylim(-0.001,0.0699)
 
     fig1.tight_layout(h_pad = -1)
+    plt.show()
     fig1.savefig('./Results/rezero_atlas_Nk.png')
 
     ''' 파라미터들 정리해서 그림 형태로 저장'''
@@ -847,6 +854,7 @@ def drawgraph_multi_phicorr():
     ax1.legend(lns, labs, fontsize=50, loc='upper left')
 
     plt.tight_layout()
+    plt.show()
     fig1.savefig('./Results/parameters_multiplicity_dep_ATLAS.png')
 
 
