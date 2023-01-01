@@ -376,8 +376,8 @@ def fit_multipl():
     # initial = (0.5)                                 # fitting 개수 1개인 경우
     # boundary = ((0.1, 0), (5, 100))               # fitting 개수 2개인 경우
     # initial = (0.5, 5)                            # fitting 개수 2개인 경우
-    boundary = ((0, 0, 0), (10, 10, 10))          # fitting 개수 3개인 경우 (final)
-    initial = (5, 5, 5)                             # fitting 개수 3개인 경우 (final)
+    boundary = ((0, 0, 0), (1, 1, 1))          # fitting 개수 3개인 경우 (final)
+    initial = (0.1, 0.1, 0.1)                             # fitting 개수 3개인 경우 (final)
 
     print("High multiplicity results : ", ptdep_result)
     # highmulti_Temp = ptdep_result[1]        # 만약, 13TeV fitting을 안돌릴 경우 여기에 상수를 대입해야 함.
@@ -390,8 +390,8 @@ def fit_multipl():
     '''multiplicity에 대한 associated yield만 가지고 fitting하고 phi correlation그리기'''
     multi_atlas = classes.Fitting_gpu(13000, phi_13TeV_multi_atlas_fitting, dat_13TeV_multi_atlas_fitting, None, multiplicity_atlas, (0.5, 5), (2, 5), boundary, initial, "Multiplicity")
 
-    # You can choice fitting mode : "free kick", "free Tem", "free fRNk xx", "Free kick and fRNk xx_FixedTem", "Free kick and fRNk xx, Final"
-    multiplicity_fittingmode = "Final"
+    # You can choice fitting mode : "free kick", "free Tem", "free fRNk xx", "Free kick and fRNk xx_FixedTem", "Free kick and fRNk xx", "Final", "Final_ATLAS"
+    multiplicity_fittingmode = "Final_ATLAS"
     multi_atlas.multiplicity_fitting_mode(multiplicity_fittingmode)                                                                        # Temperature를 pT mean으로 결정하는 경우
     # result, multi_atlas_error = multi_atlas.fitting(None, (Fixed_Temperature_fitting, ptdep_result[2:]))                  # Temperature를 pT mean으로 결정하는 경우
 
@@ -417,25 +417,30 @@ def fit_multipl():
     # print('ATLAS results : ', result)
 
     print('ATLAS results :')
-    for i in range(len(result)):
-        #            q                      T                   xx              yy          zz
-        if (multiplicity_fittingmode == "Nothing"):
-            temp = [result[i][0], Fixed_Temperature_fitting[i], ptdep_result[2], ptdep_result[3], ptdep_result[4]]              # Temperature를 pT mean으로 결정하는 경우
+    if (multiplicity_fittingmode == "Final_ATLAS"):
+        multi_atlas_result.extend([ptdep_result[0], Fixed_Temperature_fitting, 1, ptdep_result[3], ptdep_result[4], result[0], result[1], result[2]])
+        print(multi_atlas_result)
+    else:
+        for i in range(len(result)):
+            #            q                      T                   xx              yy          zz
+            if (multiplicity_fittingmode == "Nothing"):
+                temp = [result[i][0], Fixed_Temperature_fitting[i], ptdep_result[2], ptdep_result[3], ptdep_result[4]]              # Temperature를 pT mean으로 결정하는 경우
 
-        # 각 파라미터들을 고정시켜가며 어떤게 가장 dominant한지 확인하는 작업
-        elif (multiplicity_fittingmode == "Free kick"):
-            temp = [result[i][0], ptdep_result[1], ptdep_result[2], ptdep_result[3], ptdep_result[4]]
-        elif (multiplicity_fittingmode == "Free Tem"):
-            temp = [ptdep_result[0], result[i][0], ptdep_result[2], ptdep_result[3], ptdep_result[4]]
-        elif (multiplicity_fittingmode == "Free fRNk xx"):
-            temp = [ptdep_result[0], ptdep_result[1], result[i][0], ptdep_result[3], ptdep_result[4]]
-        elif (multiplicity_fittingmode == "Free kick and fRNk xx_FixedTem"):
-            temp = [result[i][0], ptdep_result[1], result[i][1], ptdep_result[3], ptdep_result[4]]
-        elif (multiplicity_fittingmode == "Free kick and fRNk xx"):
-            temp = [result[i][0], Fixed_Temperature_fitting[i], result[i][1], ptdep_result[3], ptdep_result[4]]
-        # Final!!!!
-        elif (multiplicity_fittingmode == "Final"):
-            temp = [ptdep_result[0], Fixed_Temperature_fitting[i], result[i][0], ptdep_result[3], ptdep_result[4]]
+            # 각 파라미터들을 고정시켜가며 어떤게 가장 dominant한지 확인하는 작업
+            elif (multiplicity_fittingmode == "Free kick"):
+                temp = [result[i][0], ptdep_result[1], ptdep_result[2], ptdep_result[3], ptdep_result[4]]
+            elif (multiplicity_fittingmode == "Free Tem"):
+                temp = [ptdep_result[0], result[i][0], ptdep_result[2], ptdep_result[3], ptdep_result[4]]
+            elif (multiplicity_fittingmode == "Free fRNk xx"):
+                temp = [ptdep_result[0], ptdep_result[1], result[i][0], ptdep_result[3], ptdep_result[4]]
+            elif (multiplicity_fittingmode == "Free kick and fRNk xx_FixedTem"):
+                temp = [result[i][0], ptdep_result[1], result[i][1], ptdep_result[3], ptdep_result[4]]
+            elif (multiplicity_fittingmode == "Free kick and fRNk xx"):
+                temp = [result[i][0], Fixed_Temperature_fitting[i], result[i][1], ptdep_result[3], ptdep_result[4]]
+            # Final!!!!
+            elif (multiplicity_fittingmode == "Final"):
+                temp = [ptdep_result[0], Fixed_Temperature_fitting[i], result[i][0], ptdep_result[3], ptdep_result[4]]
+
         print(temp)
         multi_atlas_result.append(temp)
     # print('ATLAS results : ', multi_atlas_result)
@@ -769,6 +774,8 @@ def drawgraph_cmdep_phicorr():
     fig3.savefig('./Results/CMenerg_FrNk.png')
 
 def drawgraph_multi_phicorr():
+    # "Multiplicity" or "Multiplicity_FinalATLAS"
+    mode = "Multiplicity_FinalATLAS"
     fig1, axes1 = plt.subplots(nrows=3, ncols=3,figsize=(90,90),sharey='row', sharex='col')
     #그래프 그리기
     # alice = classes.Drawing_Graphs((1.6, 1.8), *ptdep_alice_result, None, None)
@@ -777,9 +784,17 @@ def drawgraph_multi_phicorr():
     for j in range(3):
         axes1[j][0].set_ylabel(r'$\frac{1}{N_{\mathrm{trig}}}\frac{dN^{\mathrm{pair}}}{d\Delta\phi}-C_{\mathrm{ZYAM}}$', size = 150)
         for i in range(3):
-            atlas = classes.Drawing_Graphs(13000, (2, 5), *multi_atlas_result[i+3*j], None, None, 'ATLAS')
+            if mode == "Multiplicity":
+                atlas = classes.Drawing_Graphs(13000, (2, 5), *multi_atlas_result[i+3*j], None, None, 'ATLAS')
+            if mode == "Multiplicity_FinalATLAS":
+                Temperature = multi_atlas_result[1][i+3*j]
+                parameters = [multi_atlas_result[0], Temperature, multi_atlas_result[2], multi_atlas_result[3], multi_atlas_result[4]]
+                print(parameters)
+                atlas = classes.Drawing_Graphs(13000, (2, 5), *parameters, None, None, 'ATLAS')
+                atlas.MultiNk_param(multi_atlas_result[5], multi_atlas_result[6], multi_atlas_result[7])
+
             multiplicity = (3*j+i)*10 + 55
-            atlas_result = atlas.result_plot("Multiplicity", multiplicity, (0.5, 5), (min(phi_13TeV_multi_atlas_fitting[3*j+i]), max(phi_13TeV_multi_atlas_fitting[3*j+i])))
+            atlas_result = atlas.result_plot(mode, multiplicity, (0.5, 5), (min(phi_13TeV_multi_atlas_fitting[3*j+i]), max(phi_13TeV_multi_atlas_fitting[3*j+i])))
             axes1[j][i].scatter(phi_13TeV_multi_atlas[3*j+i], dat_13TeV_multi_atlas[3*j+i]-min(dat_13TeV_multi_atlas[3*j+i]), color = 'blue', s=2000, marker='o')
             axes1[j][i].plot(atlas_result[0], atlas_result[1]-min(atlas_result[1]), color = 'blue', linewidth=14, linestyle = '-')
             if j==2:
@@ -817,63 +832,64 @@ def drawgraph_multi_phicorr():
     plt.show()
     fig1.savefig('./Results/rezero_atlas_Nk.png')
 
-    ''' 파라미터들 정리해서 그림 형태로 저장'''
-    fig1 = plt.figure()
-    ax1 = plt.axes()
-    ax2 = ax1.twinx()
-    fig1.set_size_inches(35, 16.534, forward=True)
-    multiplicity_atlas = [55, 65, 75, 85, 95, 105, 115, 125, 135]
-    multiplicity_range = [[5,5,5,5,5,5,5,5,5],[5,5,5,5,5,5,5,5,5]]
-    q = []; T = []
-    for list in multi_atlas_result:
-        q.append(list[0]);  T.append(list[1])
+    if (mode != "Multiplicity_FinalATLAS"):
+        ''' 파라미터들 정리해서 그림 형태로 저장'''
+        fig1 = plt.figure()
+        ax1 = plt.axes()
+        ax2 = ax1.twinx()
+        fig1.set_size_inches(35, 16.534, forward=True)
+        multiplicity_atlas = [55, 65, 75, 85, 95, 105, 115, 125, 135]
+        multiplicity_range = [[5,5,5,5,5,5,5,5,5],[5,5,5,5,5,5,5,5,5]]
+        q = []; T = []
+        for list in multi_atlas_result:
+            q.append(list[0]);  T.append(list[1])
 
-    lns1 = ax1.scatter(multiplicity_atlas, q, edgecolor = 'blue', facecolors='none', s=900, marker='o', linewidths=5, zorder=2, label=r'$q\quad (\mathrm{left \, axis})$')
-    ax1.errorbar(multiplicity_atlas, q, xerr=multiplicity_range, color="blue", linestyle=' ', linewidth=7, capthick=3, capsize=15)
-    ax1.scatter(multiplicity_atlas, q, facecolors='blue', s=900, marker='+', linewidths=5, zorder=2)
-    lns2 = ax2.scatter(multiplicity_atlas, T, edgecolor = 'red', facecolors='none', s=900, marker='o', linewidths=5, zorder=2, label=r'$T\quad (\mathrm{right \, axis})$')
-    ax2.scatter(multiplicity_atlas, T, facecolors='red', s=900, marker='+', linewidths=5, zorder=2)
-    ax2.errorbar(multiplicity_atlas, T, xerr=multiplicity_range, color="red", linestyle=' ', linewidth=7, capthick=3, capsize=15)
+        lns1 = ax1.scatter(multiplicity_atlas, q, edgecolor = 'blue', facecolors='none', s=900, marker='o', linewidths=5, zorder=2, label=r'$q\quad (\mathrm{left \, axis})$')
+        ax1.errorbar(multiplicity_atlas, q, xerr=multiplicity_range, color="blue", linestyle=' ', linewidth=7, capthick=3, capsize=15)
+        ax1.scatter(multiplicity_atlas, q, facecolors='blue', s=900, marker='+', linewidths=5, zorder=2)
+        lns2 = ax2.scatter(multiplicity_atlas, T, edgecolor = 'red', facecolors='none', s=900, marker='o', linewidths=5, zorder=2, label=r'$T\quad (\mathrm{right \, axis})$')
+        ax2.scatter(multiplicity_atlas, T, facecolors='red', s=900, marker='+', linewidths=5, zorder=2)
+        ax2.errorbar(multiplicity_atlas, T, xerr=multiplicity_range, color="red", linestyle=' ', linewidth=7, capthick=3, capsize=15)
 
-    ax1.set_xlabel(r'$N^{\mathrm{rec}}_{\mathrm{ch}}$',size=70)
-    ax1.set_xlim(50, 140)
-    ax1.set_ylabel(r'$ q(\mathrm{GeV}) $',size=70)
-    ax1.set_ylim(0.3, 1.8)
-    ax2.set_ylabel(r'$ T(\mathrm{GeV}) $',size=70)
-    # ax2.set_ylim(1.325, 1.7)      # T 기준을 AuAu 200GeV로 할 경우
-    ax2.set_ylim(1.01, 1.16)        # T 기준을 pp 13TeV로 할 경우
+        ax1.set_xlabel(r'$N^{\mathrm{rec}}_{\mathrm{ch}}$',size=70)
+        ax1.set_xlim(50, 140)
+        ax1.set_ylabel(r'$ q(\mathrm{GeV}) $',size=70)
+        ax1.set_ylim(0.3, 1.8)
+        ax2.set_ylabel(r'$ T(\mathrm{GeV}) $',size=70)
+        # ax2.set_ylim(1.325, 1.7)      # T 기준을 AuAu 200GeV로 할 경우
+        ax2.set_ylim(1.01, 1.16)        # T 기준을 pp 13TeV로 할 경우
 
-    ax1.yaxis.set_major_formatter(ticker.FuncFormatter(lambda y, _: '${:g}$'.format(y)))
-    ax1.tick_params(axis='both',which='major',direction='in',width=2,length=30,labelsize=45, top='true')
-    ax1.tick_params(axis='both',which='minor',direction='in',width=2,length=15,labelsize=45, top='true')
-    ax2.yaxis.set_major_formatter(ticker.FuncFormatter(lambda y, _: '${:g}$'.format(y)))
-    ax2.tick_params(axis='both',which='major',direction='in',width=2,length=30,labelsize=45, top='true')
-    ax2.tick_params(axis='both',which='minor',direction='in',width=2,length=15,labelsize=45, top='true')
+        ax1.yaxis.set_major_formatter(ticker.FuncFormatter(lambda y, _: '${:g}$'.format(y)))
+        ax1.tick_params(axis='both',which='major',direction='in',width=2,length=30,labelsize=45, top='true')
+        ax1.tick_params(axis='both',which='minor',direction='in',width=2,length=15,labelsize=45, top='true')
+        ax2.yaxis.set_major_formatter(ticker.FuncFormatter(lambda y, _: '${:g}$'.format(y)))
+        ax2.tick_params(axis='both',which='major',direction='in',width=2,length=30,labelsize=45, top='true')
+        ax2.tick_params(axis='both',which='minor',direction='in',width=2,length=15,labelsize=45, top='true')
 
-    ax1.grid(color='silver',linestyle=':',linewidth=5, zorder=0)
+        ax1.grid(color='silver',linestyle=':',linewidth=5, zorder=0)
 
-    lns = [lns1, lns2]
-    labs = [l.get_label() for l in lns]
-    ax1.legend(lns, labs, fontsize=50, loc='upper left')
+        lns = [lns1, lns2]
+        labs = [l.get_label() for l in lns]
+        ax1.legend(lns, labs, fontsize=50, loc='upper left')
 
-    plt.tight_layout()
-    plt.show()
-    fig1.savefig('./Results/parameters_multiplicity_dep_ATLAS.png')
+        plt.tight_layout()
+        plt.show()
+        fig1.savefig('./Results/parameters_multiplicity_dep_ATLAS.png')
 
 
-drawgraph_ptdep_phicorr()
+# drawgraph_ptdep_phicorr()
 time_phicorr = time.time()
 print(f"Graph, Phi correlation end : {time_phicorr-time_calculate:.3f} sec")
-drawgraph_ptdep_Yridge()
+# drawgraph_ptdep_Yridge()
 time_yridge = time.time()
 print(f"Graph, Yridge end : {time_yridge-time_phicorr:.3f} sec")
-drawgraph_ptdep_frnk()
+# drawgraph_ptdep_frnk()
 time_frnk = time.time()
 print(f"FrNk end : {time_frnk-time_yridge:.3f} sec")
 # drawgraph_cmdep_phicorr()
 time_multi = time.time()
 print(f"Graph, Multiplicity end : {time_multi-time_frnk:.3f} sec")
-# drawgraph_multi_phicorr()
+drawgraph_multi_phicorr()
 time_ptdist = time.time()
 print(f"Graph, pT distribution end : {time_ptdist-time_multi:.3f} sec")
 

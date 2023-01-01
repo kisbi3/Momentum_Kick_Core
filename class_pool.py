@@ -163,6 +163,13 @@ class Fitting_gpu:
                     self.Fixed_yy = Fixed_parameters[1][1]
                     self.Fixed_zz = Fixed_parameters[1][2]
 
+                elif(self.Mode == "Final_ATLAS"):
+                    print(Fixed_parameters)
+                    self.Fixed_Temperature = Fixed_parameters[1]
+                    self.Fixed_kick = Fixed_parameters[0]
+                    self.Fixed_yy = Fixed_parameters[3]
+                    self.Fixed_zz = Fixed_parameters[4]
+
                 else:
                     print("Error!! Mode 스펠링 체크 필요")
                     print("Mode : ", self.Mode)
@@ -181,8 +188,9 @@ class Fitting_gpu:
                 # print(self.data_sep)
 
                 # 데이터를 한번에 넣고 fitting하는 것을 구현하는중
-                if (self.Mode == "Final"):
-                    result_temp, pcov = scipy.optimize.curve_fit(self.fitting_func_multi_final, xdata = self.phi_array, ydata = self.data, bounds=self.boundary, p0 = self.initial)
+                if (self.Mode == "Final_ATLAS"):
+                    result_temp, pcov = scipy.optimize.curve_fit(self.fitting_func_multi_final_ATLAS, xdata = self.phi_array, ydata = self.data, bounds=self.boundary, p0 = self.initial)
+                    popt = result_temp
 
                 else:
                     for i in range(len(phi_array_sep)):
@@ -201,9 +209,9 @@ class Fitting_gpu:
                             result_temp, pcov = scipy.optimize.curve_fit(self.fitting_func_multi, xdata = phi_array_sep[i], ydata = data_sep[i], bounds=self.boundary, p0 = self.initial, method='trf')
                         print(result_temp)
                         totalresult.append(result_temp)
+                        popt = totalresult
                 
                 print("Error : ", self.__error_temp)
-                popt = totalresult
                 
 
             elif self.mode == "CMenergy":
@@ -243,9 +251,8 @@ class Fitting_gpu:
         return popt, np.sqrt(np.diag(pcov))
 
     # Free1(Free2+Free3*multiplicity)
-    def fitting_func_multi_final(self, phi_array, Free1, Free2, Free3):
+    def fitting_func_multi_final_ATLAS(self, phi_array, Free1, Free2, Free3):
         self.__md = 1.
-        print("수정")
         # 함수 외부에서 쪼개서 각각을 fitting 했었지만, 이번에는 내부에서 데이터를 쪼개야 함.
         multi_data = [55, 65, 75, 85, 95, 105, 115, 125, 135]
         start = 0
@@ -266,23 +273,29 @@ class Fitting_gpu:
         dyi = (self.__pti[1] - self.__pti[0])/Aridge_bin
         dpti = (self.__yi[1] - self.__yi[0])/Aridge_bin
 
-        totalresult = np.array([])
+        totalresult = []
         for i in range(len(phi_array_sep)):
             Aridge = cp.asarray(1/np.sum(cpu.Aridge(pti, yi, Tem[i], self.__m, self.__md, self.__a, self.sqrSnn, self.__mp)*dyi*dpti*2*np.pi))
             # print(len(Free1, Free2, Free3, multi_data[i]))
-            result = self.__MultiNk(Free1, Free2, Free3, multi_data[i])*self.__multiplicity(phi_array, self.etaf, Aridge, kick, Tem[i], 1, yy, zz)
-            totalresult = np.concatenate(totalresult, (result - np.min(result)))
+            result = self.__MultiNk(Free1, Free2, Free3, multi_data[i]) * self.__multiplicity(phi_array, self.etaf, Aridge, kick, Tem[i], 1, yy, zz)
+            # totalresult = np.append(totalresult, (result - np.min(result)))
+            totalresult.append((result - np.min(result)))
+        
+        totalresult = np.array(totalresult)
+        temp = totalresult
+        totalresult = totalresult.reshape(-1)
         self.__count = self.__count + 1
+
         if self.__count == 1:
-            print("Count \t Kick \t\t Tem \t\t xx \t\t yy \t zz \t\t Error")
-            print(f"{self.__count}회", kick, Tem, 1., yy, zz, np.sum((result-self.data_sep[number])**2))
-            self.__error_temp.append(np.sum((result-self.data_sep[number])**2))
+            print("Count \t Free1 \t\t Free2 \t\t Free3 \t\t Error")
+            print(f"{self.__count}회", Free1, Free2, Free3, np.sum((totalresult-self.data[number])**2))
+            # self.__error_temp.append(np.sum((result-self.data[number])**2))
         elif self.__count%5==0:
-            print(f"{self.__count}회", kick, Tem, 1., yy, zz, np.sum((result-self.data_sep[number])**2))
+            print(f"{self.__count}회", Free1, Free2, Free3, np.sum((totalresult-self.data[number])**2))
+            print(temp)
             # print(result)
             # print(self.data_sep[number])
-        print(totalresult)
-        self.__error_temp[number] = np.sum((result-totalresult)**2)
+        self.__error_temp = np.sum((totalresult-self.data[number])**2)
         return result
 
     def fitting_func_multi(self, phi_array, Free):
@@ -532,6 +545,8 @@ class Drawing_Graphs:
             return self.__Ridge_Multi(multi, ptf, phif)
         elif mode == "pTdependence":
             return self.__Ridge_ptdep(ptf, phif)
+        elif mode == "Multiplicity_FinalATLAS":
+            return self.__Ridge_Multi_FinalATLAS(multi, ptf, phif)
         # elif mode == "CMenergy":
         #     pass
             # return self.__Ridge_ptdep(sqrsnn, ptf, phif)
@@ -540,6 +555,35 @@ class Drawing_Graphs:
         else:
             print("Maybe Typo")
             quit()
+    
+    def MultiNk_param(self, Free1, Free2, Free3):
+        self.Free1 = Free1
+        self.Free2 = Free2
+        self.Free3 = Free3
+
+    def __MultiNk_func(self, Free1, Free2, Free3, multi):
+        return Free1*(Free2+Free3*multi)
+
+    def __Ridge_Multi_FinalATLAS(self, multi, ptf, phif_range):
+        # self.__md = self.kick
+        self.__md = 1.
+        kick = self.kick; Tem = self.Tem; xx = self.xx; yy = self.yy; zz = self.zz; AA = self.AA; BB = self.BB; etaf_range = self.etaf
+        Aridge = self.__Aridge()
+        bin = 300
+        delta_Deltaeta = 2*(etaf_range[1]-etaf_range[0])
+        ptf_range = (0.5, 5)
+        dptf = (ptf_range[1]-ptf_range[0])/bin
+        ptf, etaf, phif = cp.meshgrid(cp.linspace(ptf_range[0], ptf_range[1], bin), cp.linspace(etaf_range[0], etaf_range[1], bin), cp.linspace(phif_range[0], phif_range[1], bin))
+        detaf = (etaf_range[1]-etaf_range[0])/bin
+        ridge_integrate = ptf*gpu.Ridge_dist(Aridge, ptf, etaf, phif, kick, Tem, self.sqrSnn, self.__mp, self.__m, self.__mb, self.__md, self.__a)
+        ridge_integrate = ridge_integrate*self.__FrNk(xx, yy, zz, ptf)*self.__MultiNk_func(self.Free1, self.Free2, self.Free3, multi)
+        # dist_integrate = cp.sum(ridge_integrate, axis = 1)*(4/3)*dptf*detaf/delta_Deltaeta
+        if self.type == 'ATLAS':
+            dist_integrate = cp.sum(ridge_integrate, axis = 1)*(4/3)*dptf*detaf/delta_Deltaeta
+        else:
+            dist_integrate = cp.sum(ridge_integrate, axis = 1)*(4/3)*dptf*detaf/(delta_Deltaeta*(ptf_range[1]-ptf_range[0]))
+        Ridge_phi = cp.asnumpy(cp.sum(dist_integrate, axis = 0))
+        return cp.asnumpy(phif[0][0]), Ridge_phi-min(Ridge_phi)
 
     def __Ridge_Multi(self, multi, ptf, phif_range):
         # self.__md = self.kick
