@@ -104,7 +104,9 @@ class Fitting_gpu:
     def __Nk(self, A, B, multi):
         return A*cp.exp(-B/multi)
     def __MultiNk(self, Free1, Free2, Free3, multi):
-        return Free1*(Free2+Free3*multi)
+        # return Free1*(Free2+Free3*multi)
+        # return Free1*(Free2+Free3*multi*multi)
+        return Free1 + Free2*np.exp(-Free3/multi)
 
     def fitting(self, error, Fixed_parameters):
         if error is None:
@@ -267,7 +269,6 @@ class Fitting_gpu:
         kick = self.Fixed_kick
         yy = self.Fixed_yy
         zz = self.Fixed_zz
-
         Aridge_bin = 1000
         pti, yi = np.meshgrid(np.linspace(self.__pti[0], self.__pti[1], Aridge_bin), np.linspace(self.__yi[0], self.__yi[1], Aridge_bin))
         dyi = (self.__pti[1] - self.__pti[0])/Aridge_bin
@@ -276,27 +277,23 @@ class Fitting_gpu:
         totalresult = []
         for i in range(len(phi_array_sep)):
             Aridge = cp.asarray(1/np.sum(cpu.Aridge(pti, yi, Tem[i], self.__m, self.__md, self.__a, self.sqrSnn, self.__mp)*dyi*dpti*2*np.pi))
-            # print(len(Free1, Free2, Free3, multi_data[i]))
-            result = self.__MultiNk(Free1, Free2, Free3, multi_data[i]) * self.__multiplicity(phi_array, self.etaf, Aridge, kick, Tem[i], 1, yy, zz)
-            # totalresult = np.append(totalresult, (result - np.min(result)))
-            totalresult.append((result - np.min(result)))
-        
+            result = self.__MultiNk(Free1, Free2, Free3, multi_data[i]) * self.__multiplicity(phi_array_sep[i], self.etaf, Aridge, kick, Tem[i], 1, yy, zz)
+            temp = result - np.min(result)
+            totalresult.extend(temp.tolist())
+
         totalresult = np.array(totalresult)
-        temp = totalresult
-        totalresult = totalresult.reshape(-1)
         self.__count = self.__count + 1
 
         if self.__count == 1:
             print("Count \t Free1 \t\t Free2 \t\t Free3 \t\t Error")
-            print(f"{self.__count}회", Free1, Free2, Free3, np.sum((totalresult-self.data[number])**2))
-            # self.__error_temp.append(np.sum((result-self.data[number])**2))
+            print(f"{self.__count}회", Free1, Free2, Free3, np.sum((totalresult-self.data)**2))
         elif self.__count%5==0:
-            print(f"{self.__count}회", Free1, Free2, Free3, np.sum((totalresult-self.data[number])**2))
-            print(temp)
-            # print(result)
-            # print(self.data_sep[number])
-        self.__error_temp = np.sum((totalresult-self.data[number])**2)
-        return result
+            print(f"{self.__count}회", Free1, Free2, Free3, np.sum((totalresult-self.data)**2))
+            # print("deviation")
+            # print(totalresult-self.data)
+
+        self.__error_temp = np.sum((totalresult-self.data)**2)
+        return totalresult
 
     def fitting_func_multi(self, phi_array, Free):
         self.__md = 1.
@@ -562,7 +559,9 @@ class Drawing_Graphs:
         self.Free3 = Free3
 
     def __MultiNk_func(self, Free1, Free2, Free3, multi):
-        return Free1*(Free2+Free3*multi)
+        # return Free1*(Free2+Free3*multi)
+        # return Free1*(Free2+Free3*multi*multi)
+        return Free1 + Free2*np.exp(-Free3/multi)
 
     def __Ridge_Multi_FinalATLAS(self, multi, ptf, phif_range):
         # self.__md = self.kick
