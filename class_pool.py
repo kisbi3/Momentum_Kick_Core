@@ -96,17 +96,19 @@ class Fitting_gpu:
         # return xx+yy*pt*pt
         # return xx*cp.exp(yy*pt)
         # return xx*cp.exp(-yy/pt-zz*pt)
-        ''' 13 TeV에서 zz항이 의미 없어진 것을 확인 -> 7 TeV에서도 zz항을 없애버림 '''
-        return xx*cp.exp(-yy/pt)
+        # ''' 13 TeV에서 zz항이 의미 없어진 것을 확인 -> 7 TeV에서도 zz항을 없애버림 '''
+        # return xx*cp.exp(-yy/pt)
+        ''' frnk 상수로 두면 어떻게 되려나?'''
+        return xx
         # return 1.415411195083602
     def __Fr(self, xx, yy, pt):
         return xx+yy*pt*pt
     def __Nk(self, A, B, multi):
         return A*cp.exp(-B/multi)
     def __MultiNk(self, Free1, Free2, Free3, multi):
-        # return Free1*(Free2+Free3*multi)
+        return Free1*(Free2+Free3*multi)
         # return Free1*(Free2+Free3*multi*multi)
-        return Free1 + Free2*np.exp(-Free3/multi)
+        # return Free1 + Free2*np.exp(-Free3/multi)
 
     def fitting(self, error, Fixed_parameters):
         if error is None:
@@ -254,19 +256,23 @@ class Fitting_gpu:
 
     # Free1(Free2+Free3*multiplicity)
     def fitting_func_multi_final_ATLAS(self, phi_array, Free1, Free2, Free3):
+    # def fitting_func_multi_final_ATLAS(self, phi_array, Free1, Free2):
         self.__md = 1.
         # 함수 외부에서 쪼개서 각각을 fitting 했었지만, 이번에는 내부에서 데이터를 쪼개야 함.
         multi_data = [55, 65, 75, 85, 95, 105, 115, 125, 135]
+        multi_slope = [0.00023138684077866737, 0.00032327077444578383, 0.0004426004230247412, 0.0004974045871900281, 0.0005646750762371896, 0.0005071353528608789, 0.0005299309414008545, 0.0006254010939585516, 0.0006254010939585516]
         start = 0
         phi_array_sep = []; data_sep = []
         for i in range(self.Number_of_Array):
             number = self.array_length[i]
-            phi_array_sep.append(self.phi_array[start : start + number])
+            phi_array_sep.append(phi_array[start : start + number])
             data_sep.append(self.data[start : start + number])
             start += number
-        # xx에 1을 넣어서 xx가 없는 것으로 하자.
+        '''xx에 1을 넣어서 xx가 없는 것으로 하자.'''
         Tem = self.Fixed_Temperature
         kick = self.Fixed_kick
+        # kick = Free3
+        xx = 2.243448959076882
         yy = self.Fixed_yy
         zz = self.Fixed_zz
         Aridge_bin = 1000
@@ -277,7 +283,8 @@ class Fitting_gpu:
         totalresult = []
         for i in range(len(phi_array_sep)):
             Aridge = cp.asarray(1/np.sum(cpu.Aridge(pti, yi, Tem[i], self.__m, self.__md, self.__a, self.sqrSnn, self.__mp)*dyi*dpti*2*np.pi))
-            result = self.__MultiNk(Free1, Free2, Free3, multi_data[i]) * self.__multiplicity(phi_array_sep[i], self.etaf, Aridge, kick, Tem[i], 1, yy, zz)
+            # result = self.__MultiNk(Free1, Free2, Free3, multi_data[i]) * self.__multiplicity(phi_array_sep[i], self.etaf, Aridge, kick, Tem[i], xx, yy, zz)
+            result = self.__MultiNk(Free1, Free2, multi_slope[i], multi_data[i]) * self.__multiplicity(phi_array_sep[i], self.etaf, Aridge, kick, Tem[i], xx, yy, zz)
             temp = result - np.min(result)
             totalresult.extend(temp.tolist())
 
@@ -285,10 +292,12 @@ class Fitting_gpu:
         self.__count = self.__count + 1
 
         if self.__count == 1:
-            print("Count \t Free1 \t\t Free2 \t\t Free3 \t\t Error")
-            print(f"{self.__count}회", Free1, Free2, Free3, np.sum((totalresult-self.data)**2))
+            print("Count \t kick \t xx\t yy\t zz\t Free1 \t\t Free2 \t\t Free3 \t\t Error")
+            print(f"{self.__count}회", kick, xx, yy, zz, Free1, Free2, Free3, np.sum((totalresult-self.data)**2))
         elif self.__count%5==0:
-            print(f"{self.__count}회", Free1, Free2, Free3, np.sum((totalresult-self.data)**2))
+            print(f"{self.__count}회", kick, xx, yy, zz, Free1, Free2, Free3, np.sum((totalresult-self.data)**2))
+        # if self.__count%10==0:
+        #     print(totalresult)
             # print("deviation")
             # print(totalresult-self.data)
 
@@ -530,8 +539,10 @@ class Drawing_Graphs:
         # return xx+yy*pt*pt
         # return xx*cp.exp(yy*pt)
         # return xx*cp.exp(-yy/pt-zz*pt)
-        return xx*cp.exp(-yy/pt)
+        # return xx*cp.exp(-yy/pt)
         # return 1.415411195083602
+        ''' frnk 상수로 두면 어떻게 되려나?'''
+        return xx
     def __Fr(self, xx, yy, pt):
         return xx+yy*pt*pt
     def __Nk(self, A, B, multi):
@@ -559,9 +570,9 @@ class Drawing_Graphs:
         self.Free3 = Free3
 
     def __MultiNk_func(self, Free1, Free2, Free3, multi):
-        # return Free1*(Free2+Free3*multi)
+        return Free1*(Free2+Free3*multi)
         # return Free1*(Free2+Free3*multi*multi)
-        return Free1 + Free2*np.exp(-Free3/multi)
+        # return Free1 + Free2*np.exp(-Free3/multi)
 
     def __Ridge_Multi_FinalATLAS(self, multi, ptf, phif_range):
         # self.__md = self.kick
@@ -812,7 +823,9 @@ class Error:
 
 
     def __FrNk(self, xx, yy, zz, pt):
-        return xx*cp.exp(-yy/pt-zz*pt)
+        # return xx*cp.exp(-yy/pt-zz*pt)
+        ''' frnk 상수로 두면 어떻게 되려나?'''
+        return xx
 
     def R_squared(self, datatype, kick, Tem, xx, yy, zz):
         if datatype == "pTdependence":

@@ -297,15 +297,12 @@ def datacut():
             phi_07TeV_ptdep_fitting[i] = phi_07TeV_ptdep_fitting[i][len(phi_07TeV_ptdep_fitting[i])-argmin-1:argmin+1]
 datacut()
 
-ptdep_result = []
-# ptdep_result = [1.04435586e+00, 1.39798449e+00, 3.13646871e+00, 4.16055192e-05, 1.39096183e-01]
-
-# ptdep_result = [0.9550869558401427, 1.0902337006471705, 2.7422234903350926, 0.35144493617188255, 9.865787114868575e-06]
-# ptdep_result_07 = [1.624901759777593, 0.9302427715844408, 5.0117954889744185, 0.8297385370001579, 0.737376419008668]
-
-ptdep_result = [9.61853703e-01, 1.08047173e+00, 2.61871339e+00, 2.87068889e-01, 1.00000000e-10] 
+ptdep_result = [0.9959725081178606, 1.1806651359004734, 2.243448959076882, 1e-10, 1e-10]
+ptdep_result_07 = [1.3275252294326796, 1.1626369531267884, 0.9941263378234529, 1e-10, 1e-10]
 # ptdep_result = []
-ptdep_result_07 = []
+# ptdep_result_07 = []
+
+
 ptdep_result_cm = []
 ptdep_error_cm = []
 multi_atlas_result = []
@@ -352,8 +349,11 @@ def fit_13tev():
 
 '''Fitting 7TeV data'''
 def fit_7tev():
-    boundary_7TeV = ((0.5, 1.063, 0, 0, 0),(5, 1.0631, 10, 10, 10))
-    initial_7TeV = (1.,  1.06301, 2., 0, 0)
+    Temp_7TeV = ptdep_result[1]*(1.226/1.245)
+    # boundary_7TeV = ((0.5, 1.063, 0, 0, 0),(5, 1.0631, 10, 10, 10))
+    # initial_7TeV = (1.,  1.06301, 2., 0, 0)
+    boundary_7TeV = ((0.5, Temp_7TeV-0.00001, 0, 0, 0),(5, Temp_7TeV+0.00001, 10, 10, 10))
+    initial_7TeV = (1., Temp_7TeV, 2., 0, 0)
     ptf = [(1, 2), (2, 3), (3, 4)]
     etaf = [(2, 4), (2, 4), (2, 4)]
     '''boundary conditions'''
@@ -379,12 +379,12 @@ def fit_multipl():
     # initial = (0.5)                                 # fitting 개수 1개인 경우
     # boundary = ((0.1, 0), (5, 100))               # fitting 개수 2개인 경우
     # initial = (0.5, 5)                            # fitting 개수 2개인 경우
-    boundary = ((0, 0, 0), (50, 100, 1000))          # fitting 개수 3개인 경우 (final)
-    initial = (10, 10, 10)                             # fitting 개수 3개인 경우 (final)
+    boundary = ((0, -10, 0), (100, 100, 1000))          # fitting 개수 3개인 경우 (final)
+    initial = (10, 10, 500)                             # fitting 개수 3개인 경우 (final)
 
     print("High multiplicity results : ", ptdep_result)
-    # highmulti_Temp = ptdep_result[1]        # 만약, 13TeV fitting을 안돌릴 경우 여기에 상수를 대입해야 함.
-    highmulti_Temp = 1.08047173e+00        # 만약, 13TeV fitting을 안돌릴 경우 여기에 상수를 대입해야 함.
+    highmulti_Temp = ptdep_result[1]        # 만약, 13TeV fitting을 안돌릴 경우 여기에 상수를 대입해야 함.
+    # highmulti_Temp = 1.08047173e+00        # 만약, 13TeV fitting을 안돌릴 경우 여기에 상수를 대입해야 함.
     Fixed_Temperature = classes.Fitting_gpu.Fixed_Temp(meanpTvsnch_13TeV[0], meanpTvsnch_13TeV[1], highmulti_Temp)
     Fixed_Temperature_fitting = []
     Fixed_Temperature_fitting.extend([Fixed_Temperature[54], Fixed_Temperature[62], Fixed_Temperature[67], Fixed_Temperature[72]])
@@ -421,7 +421,8 @@ def fit_multipl():
 
     print('ATLAS results :')
     if (multiplicity_fittingmode == "Final_ATLAS"):
-        multi_atlas_result.extend([ptdep_result[0], Fixed_Temperature_fitting, 1, ptdep_result[3], ptdep_result[4], result[0], result[1], result[2]])
+        multi_atlas_result.extend([ptdep_result[0], Fixed_Temperature_fitting, ptdep_result[2], ptdep_result[3], ptdep_result[4], result[0], result[1], result[2]])
+        print("버리는 수, T, xx, yy, zz, AA, BB, Kick")
         print(multi_atlas_result)
     else:
         for i in range(len(result)):
@@ -502,8 +503,8 @@ def fit_cmenerg():
 
 
 # fit_13tev()
-fit_7tev()
-# fit_multipl()
+# fit_7tev()
+fit_multipl()
 # fit_cmenerg()
 
 
@@ -532,7 +533,7 @@ dat_13TeV_ptdep = dat_13TeV_ptdep[0:-2]
 # ptdep_result_07 = [1.6594350487174188, 1.254920842633187, 6.8002216962428035, 0.8677859196950383, 0.8214136167443336]
 
 # Nk 제거, md=1 fitting (exponentially decay 제거 : Final version)
-ptdep_result = [9.61853703e-01, 1.08047173e+00, 2.61871339e+00, 2.87068889e-01, 1.00000000e-10]
+# ptdep_result = [9.61853703e-01, 1.08047173e+00, 2.61871339e+00, 2.87068889e-01, 1.00000000e-10]
 # ptdep_result_07 = [1.04583978e+00, 5.02452357e-01, 9.88785638e+00, 4.05148986e+00, 1.00000000e-10]
 
 # fig1, axes1 = plt.subplots(nrows=1, ncols=5,figsize=(125,20))
@@ -787,6 +788,7 @@ def drawgraph_multi_phicorr():
     for j in range(3):
         axes1[j][0].set_ylabel(r'$\frac{1}{N_{\mathrm{trig}}}\frac{dN^{\mathrm{pair}}}{d\Delta\phi}-C_{\mathrm{ZYAM}}$', size = 150)
         for i in range(3):
+            multi_slope = [0.00023138684077866737, 0.00032327077444578383, 0.0004426004230247412, 0.0004974045871900281, 0.0005646750762371896, 0.0005071353528608789, 0.0005299309414008545, 0.0006254010939585516, 0.0006254010939585516]
             if mode == "Multiplicity":
                 atlas = classes.Drawing_Graphs(13000, (2, 5), *multi_atlas_result[i+3*j], None, None, 'ATLAS')
             if mode == "Multiplicity_FinalATLAS":
@@ -794,10 +796,12 @@ def drawgraph_multi_phicorr():
                 parameters = [multi_atlas_result[0], Temperature, multi_atlas_result[2], multi_atlas_result[3], multi_atlas_result[4]]
                 print(parameters, multi_atlas_result[5], multi_atlas_result[6], multi_atlas_result[7])
                 atlas = classes.Drawing_Graphs(13000, (2, 5), *parameters, None, None, 'ATLAS')
-                atlas.MultiNk_param(multi_atlas_result[5], multi_atlas_result[6], multi_atlas_result[7])
+                ''' Free1, Free2, Free3'''
+                # atlas.MultiNk_param(multi_atlas_result[5], multi_atlas_result[6], multi_atlas_result[7])
+                atlas.MultiNk_param(multi_atlas_result[5], multi_atlas_result[6], multi_slope[3*j+i])
 
             multiplicity = (3*j+i)*10 + 55
-            print(multiplicity)
+            print(multiplicity, multi_slope[3*j+i])
             atlas_result = atlas.result_plot(mode, multiplicity, (0.5, 5), (min(phi_13TeV_multi_atlas_fitting[3*j+i]), max(phi_13TeV_multi_atlas_fitting[3*j+i])))
             axes1[j][i].scatter(phi_13TeV_multi_atlas[3*j+i], dat_13TeV_multi_atlas[3*j+i]-min(dat_13TeV_multi_atlas[3*j+i]), color = 'blue', s=2000, marker='o')
             axes1[j][i].plot(atlas_result[0], atlas_result[1]-min(atlas_result[1]), color = 'blue', linewidth=14, linestyle = '-')
@@ -881,19 +885,19 @@ def drawgraph_multi_phicorr():
         fig1.savefig('./Results/parameters_multiplicity_dep_ATLAS.png')
 
 
-drawgraph_ptdep_phicorr()
+# drawgraph_ptdep_phicorr()
 time_phicorr = time.time()
 print(f"Graph, Phi correlation end : {time_phicorr-time_calculate:.3f} sec")
-drawgraph_ptdep_Yridge()
+# drawgraph_ptdep_Yridge()
 time_yridge = time.time()
 print(f"Graph, Yridge end : {time_yridge-time_phicorr:.3f} sec")
-drawgraph_ptdep_frnk()
+# drawgraph_ptdep_frnk()
 time_frnk = time.time()
 print(f"FrNk end : {time_frnk-time_yridge:.3f} sec")
 # drawgraph_cmdep_phicorr()
 time_multi = time.time()
 print(f"Graph, Multiplicity end : {time_multi-time_frnk:.3f} sec")
-# drawgraph_multi_phicorr()
+drawgraph_multi_phicorr()
 time_ptdist = time.time()
 print(f"Graph, pT distribution end : {time_ptdist-time_multi:.3f} sec")
 
