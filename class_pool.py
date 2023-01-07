@@ -106,8 +106,8 @@ class Fitting_gpu:
     def __Nk(self, A, B, multi):
         return A*cp.exp(-B/multi)
     def __MultiNk(self, Free1, Free2, Free3, multi):
-        return Free1*(Free2+Free3*multi)
-        # return Free1*(Free2+Free3*multi*multi)
+        # return Free1*(Free2+Free3*multi)
+        return Free1*(Free2+Free3*multi*multi)
         # return Free1 + Free2*np.exp(-Free3/multi)
 
     def fitting(self, error, Fixed_parameters):
@@ -191,7 +191,6 @@ class Fitting_gpu:
                 self.data_sep = data_sep
                 # print(self.data_sep)
 
-                # 데이터를 한번에 넣고 fitting하는 것을 구현하는중
                 if (self.Mode == "Final_ATLAS"):
                     result_temp, pcov = scipy.optimize.curve_fit(self.fitting_func_multi_final_ATLAS, xdata = self.phi_array, ydata = self.data, bounds=self.boundary, p0 = self.initial)
                     popt = result_temp
@@ -210,11 +209,12 @@ class Fitting_gpu:
                         #     result_temp, pcov = scipy.optimize.curve_fit(self.fitting_func_multi, xdata = self.phi_array, ydata = self.data, bounds=self.boundary, p0 = self.initial, method='trf')
                         else:
                             print(i, "\t Temperature : ", self.Fixed_Temperature)
+
                             result_temp, pcov = scipy.optimize.curve_fit(self.fitting_func_multi, xdata = phi_array_sep[i], ydata = data_sep[i], bounds=self.boundary, p0 = self.initial, method='trf')
                         print(result_temp)
                         totalresult.append(result_temp)
                         popt = totalresult
-                
+                print(popt)
                 print("Error : ", self.__error_temp)
                 
 
@@ -261,6 +261,9 @@ class Fitting_gpu:
         # 함수 외부에서 쪼개서 각각을 fitting 했었지만, 이번에는 내부에서 데이터를 쪼개야 함.
         multi_data = [55, 65, 75, 85, 95, 105, 115, 125, 135]
         multi_slope = [0.00023138684077866737, 0.00032327077444578383, 0.0004426004230247412, 0.0004974045871900281, 0.0005646750762371896, 0.0005071353528608789, 0.0005299309414008545, 0.0006254010939585516, 0.0006254010939585516]
+        Free2 = -0.03495215; Free3 = 0.00065111
+
+
         start = 0
         phi_array_sep = []; data_sep = []
         for i in range(self.Number_of_Array):
@@ -305,6 +308,8 @@ class Fitting_gpu:
         return totalresult
 
     def fitting_func_multi(self, phi_array, Free):
+        multi_data = [55, 65, 75, 85, 95, 105, 115, 125, 135]
+        AAA = -0.03495215; BBB = 0.00065111
         self.__md = 1.
         # xx = 5.3; yy = 8.5*10**(-35); zz = 0.22
         if (self.Mode == "Nothing"):
@@ -322,7 +327,7 @@ class Fitting_gpu:
             xx = Free
             yy = self.Fixed_yy; zz = self.Fixed_zz
             kick = self.Fixed_kick
-            Tem = self.Fixed_Temperature          
+            Tem = self.Fixed_Temperature[self.separate_number]          
 
         elif(self.Mode == "Final"):
             xx = Free
@@ -337,7 +342,7 @@ class Fitting_gpu:
         # Aridge = cp.asarray(1/np.sum(cpu.Aridge(pti, yi, Tem[number], self.__m, self.__md, self.__a, self.sqrSnn, self.__mp)*dyi*dpti*2*np.pi))
         # result = self.__multiplicity(phi_array, self.etaf, Aridge, kick, Tem[number], xx, yy, zz)
         Aridge = cp.asarray(1/np.sum(cpu.Aridge(pti, yi, Tem, self.__m, self.__md, self.__a, self.sqrSnn, self.__mp)*dyi*dpti*2*np.pi))
-        result = self.__multiplicity(phi_array, self.etaf, Aridge, kick, Tem, xx, yy, zz)
+        result = self.__MultiNk(1, AAA, BBB, multi_data[self.separate_number]) * self.__multiplicity(phi_array, self.etaf, Aridge, kick, Tem, xx, yy, zz)
         result = result - np.min(result)
         self.__count = self.__count + 1
         if self.__count == 1:
@@ -570,8 +575,8 @@ class Drawing_Graphs:
         self.Free3 = Free3
 
     def __MultiNk_func(self, Free1, Free2, Free3, multi):
-        return Free1*(Free2+Free3*multi)
-        # return Free1*(Free2+Free3*multi*multi)
+        # return Free1*(Free2+Free3*multi)
+        return Free1*(Free2+Free3*multi*multi)
         # return Free1 + Free2*np.exp(-Free3/multi)
 
     def __Ridge_Multi_FinalATLAS(self, multi, ptf, phif_range):
@@ -607,7 +612,7 @@ class Drawing_Graphs:
         ptf, etaf, phif = cp.meshgrid(cp.linspace(ptf_range[0], ptf_range[1], bin), cp.linspace(etaf_range[0], etaf_range[1], bin), cp.linspace(phif_range[0], phif_range[1], bin))
         detaf = (etaf_range[1]-etaf_range[0])/bin
         ridge_integrate = ptf*gpu.Ridge_dist(Aridge, ptf, etaf, phif, kick, Tem, self.sqrSnn, self.__mp, self.__m, self.__mb, self.__md, self.__a)
-        ridge_integrate = ridge_integrate*self.__FrNk(xx, yy, zz, ptf)
+        ridge_integrate = ridge_integrate*self.__FrNk(xx, yy, zz, ptf) * self.__MultiNk_func(1, -0.03495215, 0.00065111, multi)
         # dist_integrate = cp.sum(ridge_integrate, axis = 1)*(4/3)*dptf*detaf/delta_Deltaeta
         if self.type == 'ATLAS':
             dist_integrate = cp.sum(ridge_integrate, axis = 1)*(4/3)*dptf*detaf/delta_Deltaeta
