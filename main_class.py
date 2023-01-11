@@ -691,6 +691,7 @@ def drawgraph_ptdep_frnk():
     plt.xlabel(r'$p_T^{\mathrm{trig}},\, p_T^{\mathrm{trig}(\mathrm{assoc})}$',size=70)
     plt.ylabel(r'$f_{R} \langle N_k \rangle $',size=70)
     plt.xlim(0,10)
+        
 
     ax.yaxis.set_major_formatter(ticker.FuncFormatter(lambda y, _: '${:g}$'.format(y)))
     plt.tick_params(axis='both',which='major',direction='in',width=2,length=30,labelsize=45, top='true')
@@ -794,6 +795,7 @@ multi_atlas_result = [[0.9959725081178606, 1.0957041211582557, 0.219997641172160
 [0.9959725081178606, 1.2294933052925525, 0.506965198918968, 1e-10, 1e-10],
 [0.9959725081178606, 1.2333995588439186, 0.44259079103722004, 1e-10, 1e-10],
 [0.9959725081178606, 1.2333995588439186, 0.44259079103722004, 1e-10, 1e-10]]
+
 def drawgraph_multi_phicorr():
     # "Multiplicity" or "Multiplicity_FinalATLAS"
     mode = "Multiplicity"
