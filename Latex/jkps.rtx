@@ -1,0 +1,335 @@
+%%
+%% This is file `jkps.rtx',
+%% generated with the docstrip utility.
+%%
+%% The original source files were:
+%%
+%% kpstex2.dtx  (with options: `jkps')
+%% 
+%% This file is part of the KPS files.
+%% 
+%% by Jun Hyok Kong (mailto:jhkong@netien.com)
+%% 
+%% Copyright (c) 2000 "The Korean Physical Society".
+%% http://www.kps.or.kr/
+%% mailto:
+%% 
+%% See the KPSTeX 2 README file for restrictions and more information.
+%% 
+\NeedsTeXFormat{LaTeX2e}[1996/12/01]
+\ProvidesFile{jkps.rtx}[2001/11/08  KPSTeX v2.0beta3 substyle file (KPS)]%FileInfo
+\ifx\undefined\substyle@ext
+ \def\@tempa{%
+  \GenericWarning{I must be read in by REVTeX! (Bailing out)}%
+  \endinput%
+ }%
+ \expandafter\else
+  \def\@tempa{}%
+ \expandafter\fi\@tempa
+\def\@society{kps}%
+\def\@journal{jkps}%
+\def\journal@jkps{jkps}%
+\def\journal@np{np}%
+\InputIfFileExists{aps\substyle@ext}%
+  {}{\GenericWarning{REVTeX may be NOT installed!}\endinput}
+\@ifxundefined\groupauthors@sw{%
+ \clo@groupedaddress
+}{}%
+\def\define@headtitle@kps{%
+\@ifx{\@shorttitle\@empty}{%
+\let\headtitle@kps=\@title%
+}{%
+\let\tempa=\@shorttitle%
+\def\headtitle@kps{\tempa$\cdots$}%
+}%
+}%
+\renewcommand\title[2][]{%
+\def\@title{#2}%
+\def\@shorttitle{#1}%
+\let\@AF@join\@title@join
+\define@headtitle@kps%
+}%
+\def\frontmatter@setup{%
+\normalfont
+}%
+\def\frontmatter@title@above{%
+\@ifx{\@journal\journal@jkps}{\vbox to 1.5cm{}}{}%headsep 0.5cm
+\@ifx{\@journal\journal@np}{\vbox to 1.2cm{}}{}%haedsep 0.8cm
+\nointerlineskip
+}%
+\def\frontmatter@title@format{}%
+\def\frontmatter@title@below{%
+\addvspace{0.6cm}
+}%
+\def\frontmatter@above@affilgroup{%
+\addvspace{0.4cm}%
+}%
+\def\frontmatter@authorformatfont@kps{}%
+\def\frontmatter@authorformat{%
+ \skip@\@flushglue
+ \@flushglue\z@ plus.3\hsize\relax
+ \frontmatter@authorformatfont@kps
+ \centering
+ \advance\baselineskip\p@
+ \parskip\z@skip
+ \@flushglue\skip@
+}%
+\def\frontmatter@above@affiliation{%
+ % \preprintsty@sw{}{%
+ \addvspace{0.1cm}
+}%
+\def\frontmatter@RRAPformat#1{%
+ \addvspace{0.3cm}
+ \begingroup
+  \frontmatter@RRAP@format
+  #1\par
+ \endgroup
+}%
+\def\punct@RRAP{,\egroup\ \hbox\bgroup}%
+\def\frontmatter@preabstractspace{0.6cm}%
+\def\frontmatter@postabstractspace{0.3cm}%
+\def\frontmatter@abstractwidth{140mm}%
+\def\frontmatter@finalspace{\addvspace{0.7cm}}%
+\renewcommand*\email[1][E-mail: ]{\begingroup\sanitize@url\@email{#1}}%
+\appdef\class@documenthook{%
+\renewcommand\url{\normalfont}%
+}%
+\def\body@section@format@kps{}%
+\def\body@subsection@format@kps{}%
+\def\body@subsubsection@format@kps{}%
+\def\body@section@pre@format@kps{}%
+\def\body@subsection@pre@format@kps{}%
+\def\body@subsubsection@pre@format@kps{}%
+\def\@seccntformat#1{\csname the#1\endcsname}%
+\def\section{%
+  \@startsection
+    {section}%
+    {1}%
+    {\z@}%
+    {1.0cm plus 0.20cm minus 0.10cm}%\ABOVE@SECTION@SKIP of latex_mini.tex
+    {0.7cm plus 0.14cm minus 0.07cm}%\BELOW@SECTION@SKIP of latex_mini.tex
+    {%
+     \body@section@format@kps%
+    }%
+}%
+\def\subsection{%
+  \@startsection
+    {subsection}%
+    {2}%
+    {0.5cm}%\SUBSECTION@INDENT@SKIP of latex_mini.tex
+    {1.0cm plus 0.20cm minus 0.10cm}%\ABOVE@SECTION@SKIP of latex_mini.tex
+    {0.7cm plus 0.14cm minus 0.07cm}%\BELOW@SECTION@SKIP of latex_mini.tex
+    {%
+     \body@subsection@format@kps%
+    }%
+}%
+\def\subsubsection{%
+  \@startsection
+    {subsubsection}%
+    {3}%
+    {0.5cm}%\SUBSECTION@INDENT@SKIP of latex_mini.tex
+    {1.0cm plus 0.20cm minus 0.10cm}%\ABOVE@SECTION@SKIP of latex_mini.tex
+    {0.7cm plus 0.14cm minus 0.07cm}%\BELOW@SECTION@SKIP of latex_mini.tex
+    {%
+      \body@subsubsection@format@kps%
+    }%
+}%
+
+\def\section@preprintsty{
+  \@startsection
+    {section}%
+    {1}%
+    {\z@}%
+    {1.0cm plus 0.20cm minus 0.10cm}%\ABOVE@SECTION@SKIP of latex_mini.tex
+    {0.7cm plus 0.14cm minus 0.07cm}%\BELOW@SECTION@SKIP of latex_mini.tex
+    {%
+     \body@section@pre@format@kps%
+    }%
+}%
+\def\subsection@preprintsty{%
+  \@startsection
+    {subsection}%
+    {2}%
+    {0.5cm}%\SUBSECTION@INDENT@SKIP of latex_mini.tex
+    {1.0cm plus 0.20cm minus 0.10cm}%\ABOVE@SECTION@SKIP of latex_mini.tex
+    {0.7cm plus 0.14cm minus 0.07cm}%\BELOW@SECTION@SKIP of latex_mini.tex
+    {%
+     \body@subsection@pre@format@kps%
+    }%
+}%
+\def\subsubsection@preprintsty{%
+  \@startsection
+    {subsubsection}%
+    {3}%
+    {0.5cm}%\SUBSECTION@INDENT@SKIP of latex_mini.tex
+    {1.0cm plus 0.20cm minus 0.10cm}%\ABOVE@SECTION@SKIP of latex_mini.tex
+    {0.7cm plus 0.14cm minus 0.07cm}%\BELOW@SECTION@SKIP of latex_mini.tex
+    {%
+      \body@subsubsection@pre@format@kps%
+    }%
+}%
+\def\@xsect#1{%
+ \prevdepth=-1000pt
+  \par
+  \vskip #1
+ \@afterheading
+}
+\@booleantrue\acknowlegments@sw%
+\bibpunct{ [}{]}{{,\hskip -3pt}}{n}{}{,}%
+\def\bibsection{%
+  \let\@hangfroms@section\@hang@froms
+  \section*{\refname}%
+  \@nobreaktrue
+}%
+\@ifxundefined\footinbib@sw{}{%
+ \footinbib@sw{%
+  \class@warn{%
+   Footnotes in bibliography are incompatible with KPS.^^J%
+   Undoing the footinbib option.
+  }%
+ }{}%
+}%
+\@booleanfalse\footinbib@sw
+\renewcommand\thetable{\@arabic\c@table}
+\def\@pointsizemode{0}%
+\@ifnum{\@pointsize=10\relax}{\def\@pointsizemode{1}}{}
+\@ifnum{\@pointsizemode=11\relax}{\def\@pointsizemode{2}}{}
+\@ifnum{\@pointsizemode=12\relax}{\def\@pointsizemode{2}}{}
+
+\@ifnum{\@pointsizemode=1\relax}{
+\def\baselinestretch{1.0}
+\appdef\set@typesize@hook{%
+\def\normalsize{%
+   \@setfontsize\normalsize\@xpt{11.5}%
+   \abovedisplayskip 10\p@ \@plus2\p@ \@minus5\p@
+   \belowdisplayskip \abovedisplayskip
+   \abovedisplayshortskip  \abovedisplayskip
+   \belowdisplayshortskip \abovedisplayskip
+   \let\@listi\@listI
+}%
+
+\appdef\set@pica@hook{%
+ \textheight = 234mm%  \Vsize=234mm of jkps.tex
+}%
+\textwidth 180mm %\Hsize of jkps.tex
+
+\columnsep 8mm
+\columnseprule 0mm
+
+\appdef\class@documenthook{%
+    \oddsidemargin  -10mm
+    \evensidemargin -10mm
+    \marginparwidth 20mm  %????????????
+}%
+\topmargin 0cm
+\headheight 4mm %heading height
+
+\@ifx{\@journal\journal@jkps}{\headsep 0.5cm}{} %\BELOW@HEAD@SKIP of jkps.tex
+\@ifx{\@journal\journal@np}{\headsep 0.8cm}{} %02-01-21 ¿äÃ»
+
+\topskip 10pt
+\footskip 0.5cm %\FIRST@PAGENO@SKIP of jkps.tex
+
+\marginparsep 3mm
+
+\footnotesep 1pt
+\skip\footins 20pt plus 4pt minus 2pt
+\def\footnoterule{%
+\kern-9pt\hrule width \hsize \kern8.6pt\relax
+}
+\parskip 0pt
+
+\def\mathindent{0.5cm}%
+}%
+}{}%
+\newcounter{auth@kps}
+\gdef\firstauthor@kps{}%
+\gdef\secondauthor@kps{}%
+\def\@listcomma@i{}%
+\def\@listcomma@ii{}%
+\def\doauthor#1#2#3{%
+  \ignorespaces#1\unskip\@listcomma@i
+  \def\@tempifx{#3}%
+  \@ifx{\@tempifx\@empty}{%
+   \def\@tempifx{#2}%
+   \@ifx{\@tempifx\@empty}{}{\frontmatter@footnote{#2}}%
+  }{%
+   #3%
+   \def\@tempifx{#2}%
+   \@ifx{\@tempifx\@empty}{}{\comma@space\frontmatter@footnote{#2}}%
+  }%
+  \space \@listcomma@ii \@listand%
+\stepcounter{auth@kps}%
+\@ifnum{\theauth@kps=\@ne}{%
+\gdef\firstauthor@kps{#1}%
+}{%
+\@ifnum{\theauth@kps=\tw@}{%
+\gdef\secondauthor@kps{#1}%
+}{}%
+}%
+}%
+
+\def\figurename{Fig.}%
+\def\tablename{Table}%
+\def\journalname{Journal of the Korean Physical Society}%
+\def\volumename{Vol.}%
+\def\numbername{No.}%
+\def\ppname{pp.}%
+\def\frontmatter@setup{%
+ }%
+\def\frontmatter@title@format{\Large\sffamily\bfseries\centering\ignorespaces}%
+\def\surname#1{\begingroup\scshape#1\endgroup}%
+\def\frontmatter@authorformatfont@kps{}%
+\def\@listcomma@i{\@ifnum{\@tempcnta>\tw@}{,}{}}%
+\def\@listcomma@ii{}%{\@ifnum{\@tempcnta>\@ne}{}{}}%
+
+\def\thesection{\Roman{section}. }%
+\def\thesubsection{\arabic{subsection}. }%
+\def\thesubsubsection{\Alph{subsubsection}. }%
+
+\def\body@section@format@kps{%
+\normalfont\bfseries%
+\centering%
+\MakeTextUppercase%
+}%
+\def\body@subsection@format@kps{%
+\normalfont\small\bfseries%
+}%
+\def\body@subsubsection@format@kps{%
+\normalfont\small\itshape%
+}%
+\def\body@section@pre@format@kps{%
+\normalfont\bfseries%
+\MakeTextUppercase%
+}%
+\def\body@subsection@pre@format@kps{%
+\normalfont\small\bfseries%
+}%
+\def\body@subsubsection@pre@format@kps{%
+\normalfont\small\itshape%
+}%
+\setlength\abovecaptionskip{2mm}
+\long\def\@makecaption#1#2{%
+  \par
+  \nobreak
+  \vskip\abovecaptionskip
+  \begingroup
+   \small\rmfamily
+   \sbox\@tempboxa{#1. #2}%  ¼öÁ¤µÈ ºÎºÐ
+    \begingroup
+     \flushing \hskip0.4cm
+     \let\footnote\@footnotemark@gobble
+     #1. #2\par%  ¼öÁ¤µÈ ºÎºÐ
+    \endgroup
+  \endgroup
+  \vskip\belowcaptionskip
+}%
+\def\@editfile@kps{edit}
+\ifx\undefined\@editfile@kps%
+ \def\@tempa{}%
+ \expandafter\else
+  \def\@tempa{\InputIfFileExists{\@editfile@kps\substyle@ext}{}{}}%
+ \expandafter\fi\@tempa%
+\endinput
+%%
+%% End of file `jkps.rtx'.

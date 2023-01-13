@@ -1,0 +1,437 @@
+\begin{thebibliography}{37}
+\expandafter\ifx\csname natexlab\endcsname\relax\def\natexlab#1{#1}\fi
+\expandafter\ifx\csname bibnamefont\endcsname\relax
+  \def\bibnamefont#1{#1}\fi
+\expandafter\ifx\csname bibfnamefont\endcsname\relax
+  \def\bibfnamefont#1{#1}\fi
+\expandafter\ifx\csname citenamefont\endcsname\relax
+  \def\citenamefont#1{#1}\fi
+\expandafter\ifx\csname url\endcsname\relax
+  \def\url#1{\texttt{#1}}\fi
+\expandafter\ifx\csname urlprefix\endcsname\relax\def\urlprefix{URL }\fi
+\providecommand{\bibinfo}[2]{#2}
+\providecommand{\eprint}[2][]{\url{#2}}
+
+\bibitem[{\citenamefont{Adams et~al.}(2005)\citenamefont{Adams, Adler,
+  Aggarwal, Ahammed, Amonett, Anderson, Arkhipkin, Averichev, Badyal, Balewski
+  et~al.}}]{ref12}
+\bibinfo{author}{\bibfnamefont{J.}~\bibnamefont{Adams}},
+  \bibinfo{author}{\bibfnamefont{C.}~\bibnamefont{Adler}},
+  \bibinfo{author}{\bibfnamefont{M.~M.} \bibnamefont{Aggarwal}},
+  \bibinfo{author}{\bibfnamefont{Z.}~\bibnamefont{Ahammed}},
+  \bibinfo{author}{\bibfnamefont{J.}~\bibnamefont{Amonett}},
+  \bibinfo{author}{\bibfnamefont{B.~D.} \bibnamefont{Anderson}},
+  \bibinfo{author}{\bibfnamefont{D.}~\bibnamefont{Arkhipkin}},
+  \bibinfo{author}{\bibfnamefont{G.~S.} \bibnamefont{Averichev}},
+  \bibinfo{author}{\bibfnamefont{S.~K.} \bibnamefont{Badyal}},
+  \bibinfo{author}{\bibfnamefont{J.}~\bibnamefont{Balewski}},
+  \bibnamefont{et~al.} (\bibinfo{collaboration}{STAR Collaboration}),
+  \bibinfo{journal}{Phys. Rev. Lett.} \textbf{\bibinfo{volume}{95}},
+  \bibinfo{pages}{152301} (\bibinfo{year}{2005}),
+  \urlprefix\url{https://link.aps.org/doi/10.1103/PhysRevLett.95.152301}.
+
+\bibitem[{\citenamefont{Adams et~al.}(2006)\citenamefont{Adams, Aggarwal,
+  Ahammed, Amonett, Anderson, Anderson, Arkhipkin, Averichev, Bai, Balewski
+  et~al.}}]{ref13}
+\bibinfo{author}{\bibfnamefont{J.}~\bibnamefont{Adams}},
+  \bibinfo{author}{\bibfnamefont{M.~M.} \bibnamefont{Aggarwal}},
+  \bibinfo{author}{\bibfnamefont{Z.}~\bibnamefont{Ahammed}},
+  \bibinfo{author}{\bibfnamefont{J.}~\bibnamefont{Amonett}},
+  \bibinfo{author}{\bibfnamefont{B.~D.} \bibnamefont{Anderson}},
+  \bibinfo{author}{\bibfnamefont{M.}~\bibnamefont{Anderson}},
+  \bibinfo{author}{\bibfnamefont{D.}~\bibnamefont{Arkhipkin}},
+  \bibinfo{author}{\bibfnamefont{G.~S.} \bibnamefont{Averichev}},
+  \bibinfo{author}{\bibfnamefont{Y.}~\bibnamefont{Bai}},
+  \bibinfo{author}{\bibfnamefont{J.}~\bibnamefont{Balewski}},
+  \bibnamefont{et~al.} (\bibinfo{collaboration}{STAR Collaboration}),
+  \bibinfo{journal}{Phys. Rev. C} \textbf{\bibinfo{volume}{73}},
+  \bibinfo{pages}{064907} (\bibinfo{year}{2006}),
+  \urlprefix\url{https://link.aps.org/doi/10.1103/PhysRevC.73.064907}.
+
+\bibitem[{\citenamefont{Allison et~al.}(2007)\citenamefont{Allison, Cobb,
+  Holmes, Fernow, and Palmer}}]{ref14}
+\bibinfo{author}{\bibfnamefont{W.~W.~M.} \bibnamefont{Allison}},
+  \bibinfo{author}{\bibfnamefont{J.~H.} \bibnamefont{Cobb}},
+  \bibinfo{author}{\bibfnamefont{S.~J.} \bibnamefont{Holmes}},
+  \bibinfo{author}{\bibfnamefont{R.~C.} \bibnamefont{Fernow}},
+  \bibnamefont{and} \bibinfo{author}{\bibfnamefont{R.~B.}
+  \bibnamefont{Palmer}}, \bibinfo{journal}{J. Phys. G}
+  \textbf{\bibinfo{volume}{34}}, \bibinfo{pages}{679} (\bibinfo{year}{2007}),
+  \eprint{physics/0609195}.
+
+\bibitem[{\citenamefont{Sisodiya et~al.}(2007)\citenamefont{Sisodiya, Kaushal,
+  Parashar, and Bhasin}}]{ref15}
+\bibinfo{author}{\bibfnamefont{A.~K.} \bibnamefont{Sisodiya}},
+  \bibinfo{author}{\bibfnamefont{R.~S.} \bibnamefont{Kaushal}},
+  \bibinfo{author}{\bibfnamefont{D.}~\bibnamefont{Parashar}}, \bibnamefont{and}
+  \bibinfo{author}{\bibfnamefont{V.~S.} \bibnamefont{Bhasin}},
+  \bibinfo{journal}{J. Phys. G} \textbf{\bibinfo{volume}{34}},
+  \bibinfo{pages}{929} (\bibinfo{year}{2007}).
+
+\bibitem[{\citenamefont{Molnar and the STAR~Collaboration}(2007)}]{ref16}
+\bibinfo{author}{\bibfnamefont{L.}~\bibnamefont{Molnar}} \bibnamefont{and}
+  \bibinfo{author}{\bibnamefont{the STAR~Collaboration}},
+  \bibinfo{journal}{Journal of Physics G: Nuclear and Particle Physics}
+  \textbf{\bibinfo{volume}{34}}, \bibinfo{pages}{S593} (\bibinfo{year}{2007}),
+  \urlprefix\url{https://doi.org/10.1088/0954-3899/34/8/s51}.
+
+\bibitem[{\citenamefont{Longacre}(2007)}]{ref17}
+\bibinfo{author}{\bibfnamefont{R.~S.} \bibnamefont{Longacre}},
+  \bibinfo{journal}{Int. J. Mod. Phys. E} \textbf{\bibinfo{volume}{16}},
+  \bibinfo{pages}{2149} (\bibinfo{year}{2007}), \eprint{nucl-ex/0702008}.
+
+\bibitem[{\citenamefont{Nattrass}(2008)}]{ref18}
+\bibinfo{author}{\bibfnamefont{C.}~\bibnamefont{Nattrass}},
+  \bibinfo{journal}{J. Phys. G} \textbf{\bibinfo{volume}{35}},
+  \bibinfo{pages}{104110} (\bibinfo{year}{2008}), \eprint{0804.4683}.
+
+\bibitem[{\citenamefont{Feng}(2008)}]{ref19}
+\bibinfo{author}{\bibfnamefont{A.}~\bibnamefont{Feng}}
+  (\bibinfo{collaboration}{STAR}), \bibinfo{journal}{J. Phys. G}
+  \textbf{\bibinfo{volume}{35}}, \bibinfo{pages}{104082}
+  (\bibinfo{year}{2008}), \eprint{0807.4606}.
+
+\bibitem[{\citenamefont{Netrakanti}(2008)}]{ref20}
+\bibinfo{author}{\bibfnamefont{P.~K.} \bibnamefont{Netrakanti}}
+  (\bibinfo{collaboration}{STAR}), \bibinfo{journal}{J. Phys. G}
+  \textbf{\bibinfo{volume}{35}}, \bibinfo{pages}{104010}
+  (\bibinfo{year}{2008}), \eprint{0804.4417}.
+
+\bibitem[{\citenamefont{Barannikova}(2008)}]{ref21}
+\bibinfo{author}{\bibfnamefont{O.}~\bibnamefont{Barannikova}}
+  (\bibinfo{collaboration}{STAR}), \bibinfo{journal}{J. Phys. G}
+  \textbf{\bibinfo{volume}{35}}, \bibinfo{pages}{104086}
+  (\bibinfo{year}{2008}).
+
+\bibitem[{\citenamefont{Daugherity}(2008)}]{ref22}
+\bibinfo{author}{\bibfnamefont{M.}~\bibnamefont{Daugherity}}
+  (\bibinfo{collaboration}{STAR}), \bibinfo{journal}{J. Phys. G}
+  \textbf{\bibinfo{volume}{35}}, \bibinfo{pages}{104090}
+  (\bibinfo{year}{2008}), \eprint{0806.2121}.
+
+\bibitem[{\citenamefont{van Leeuwen}(2009)}]{ref23}
+\bibinfo{author}{\bibfnamefont{M.}~\bibnamefont{van Leeuwen}}
+  (\bibinfo{collaboration}{STAR}), \bibinfo{journal}{Eur. Phys. J. C}
+  \textbf{\bibinfo{volume}{61}}, \bibinfo{pages}{569} (\bibinfo{year}{2009}),
+  \eprint{0808.4096}.
+
+\bibitem[{\citenamefont{Adare et~al.}(2016)\citenamefont{Adare, Afanasiev,
+  Aidala, Ajitanand, Akiba, Akimoto, Al-Bataineh, Alexander, Alfred, Al-Ta'ani
+  et~al.}}]{ref24}
+\bibinfo{author}{\bibfnamefont{A.}~\bibnamefont{Adare}},
+  \bibinfo{author}{\bibfnamefont{S.}~\bibnamefont{Afanasiev}},
+  \bibinfo{author}{\bibfnamefont{C.}~\bibnamefont{Aidala}},
+  \bibinfo{author}{\bibfnamefont{N.~N.} \bibnamefont{Ajitanand}},
+  \bibinfo{author}{\bibfnamefont{Y.}~\bibnamefont{Akiba}},
+  \bibinfo{author}{\bibfnamefont{R.}~\bibnamefont{Akimoto}},
+  \bibinfo{author}{\bibfnamefont{H.}~\bibnamefont{Al-Bataineh}},
+  \bibinfo{author}{\bibfnamefont{J.}~\bibnamefont{Alexander}},
+  \bibinfo{author}{\bibfnamefont{M.}~\bibnamefont{Alfred}},
+  \bibinfo{author}{\bibfnamefont{H.}~\bibnamefont{Al-Ta'ani}},
+  \bibnamefont{et~al.} (\bibinfo{collaboration}{PHENIX Collaboration}),
+  \bibinfo{journal}{Phys. Rev. C} \textbf{\bibinfo{volume}{94}},
+  \bibinfo{pages}{064901} (\bibinfo{year}{2016}),
+  \urlprefix\url{https://link.aps.org/doi/10.1103/PhysRevC.94.064901}.
+
+\bibitem[{\citenamefont{McCumber}(2008)}]{ref25}
+\bibinfo{author}{\bibfnamefont{M.~P.} \bibnamefont{McCumber}}
+  (\bibinfo{collaboration}{PHENIX}), \bibinfo{journal}{J. Phys. G}
+  \textbf{\bibinfo{volume}{35}}, \bibinfo{pages}{104081}
+  (\bibinfo{year}{2008}), \eprint{0804.4319}.
+
+\bibitem[{\citenamefont{Jia}(2008)}]{ref26}
+\bibinfo{author}{\bibfnamefont{J.}~\bibnamefont{Jia}}, \bibinfo{journal}{J.
+  Phys. G} \textbf{\bibinfo{volume}{35}}, \bibinfo{pages}{104033}
+  (\bibinfo{year}{2008}), \eprint{0805.0160}.
+
+\bibitem[{\citenamefont{Alver et~al.}(2008)}]{ref27}
+\bibinfo{author}{\bibfnamefont{B.}~\bibnamefont{Alver}} \bibnamefont{et~al.}
+  (\bibinfo{collaboration}{PHOBOS}), \bibinfo{journal}{J. Phys. G}
+  \textbf{\bibinfo{volume}{35}}, \bibinfo{pages}{104080}
+  (\bibinfo{year}{2008}), \eprint{0804.3038}.
+
+\bibitem[{\citenamefont{Khachatryan et~al.}(2010)\citenamefont{Khachatryan,
+  Sirunyan, Tumasyan, Adam, Bergauer, Dragicevic, Er{\"o}, Fabjan, Friedl,
+  Fr{\"u}hwirth et~al.}}]{ref1}
+\bibinfo{author}{\bibfnamefont{V.}~\bibnamefont{Khachatryan}},
+  \bibinfo{author}{\bibfnamefont{A.~M.} \bibnamefont{Sirunyan}},
+  \bibinfo{author}{\bibfnamefont{A.}~\bibnamefont{Tumasyan}},
+  \bibinfo{author}{\bibfnamefont{W.}~\bibnamefont{Adam}},
+  \bibinfo{author}{\bibfnamefont{T.}~\bibnamefont{Bergauer}},
+  \bibinfo{author}{\bibfnamefont{M.}~\bibnamefont{Dragicevic}},
+  \bibinfo{author}{\bibfnamefont{J.}~\bibnamefont{Er{\"o}}},
+  \bibinfo{author}{\bibfnamefont{C.}~\bibnamefont{Fabjan}},
+  \bibinfo{author}{\bibfnamefont{M.}~\bibnamefont{Friedl}},
+  \bibinfo{author}{\bibfnamefont{R.}~\bibnamefont{Fr{\"u}hwirth}},
+  \bibnamefont{et~al.}, \bibinfo{journal}{Journal of High Energy Physics}
+  \textbf{\bibinfo{volume}{2010}}, \bibinfo{pages}{91} (\bibinfo{year}{2010}),
+  ISSN \bibinfo{issn}{1029-8479},
+  \urlprefix\url{https://doi.org/10.1007/JHEP09(2010)091}.
+
+\bibitem[{\citenamefont{Chatrchyan et~al.}(2011)\citenamefont{Chatrchyan,
+  Khachatryan, Sirunyan, Tumasyan, Adam, Bergauer, Dragicevic, Er{\"o}, Fabjan,
+  Friedl et~al.}}]{ref2}
+\bibinfo{author}{\bibfnamefont{S.}~\bibnamefont{Chatrchyan}},
+  \bibinfo{author}{\bibfnamefont{V.}~\bibnamefont{Khachatryan}},
+  \bibinfo{author}{\bibfnamefont{A.~M.} \bibnamefont{Sirunyan}},
+  \bibinfo{author}{\bibfnamefont{A.}~\bibnamefont{Tumasyan}},
+  \bibinfo{author}{\bibfnamefont{W.}~\bibnamefont{Adam}},
+  \bibinfo{author}{\bibfnamefont{T.}~\bibnamefont{Bergauer}},
+  \bibinfo{author}{\bibfnamefont{M.}~\bibnamefont{Dragicevic}},
+  \bibinfo{author}{\bibfnamefont{J.}~\bibnamefont{Er{\"o}}},
+  \bibinfo{author}{\bibfnamefont{C.}~\bibnamefont{Fabjan}},
+  \bibinfo{author}{\bibfnamefont{M.}~\bibnamefont{Friedl}},
+  \bibnamefont{et~al.}, \bibinfo{journal}{Journal of High Energy Physics}
+  \textbf{\bibinfo{volume}{2011}}, \bibinfo{pages}{76} (\bibinfo{year}{2011}),
+  ISSN \bibinfo{issn}{1029-8479},
+  \urlprefix\url{https://doi.org/10.1007/JHEP07(2011)076}.
+
+\bibitem[{\citenamefont{Chatrchyan
+  et~al.}(2013{\natexlab{a}})\citenamefont{Chatrchyan, Khachatryan, Sirunyan,
+  Tumasyan, Adam, Aguilo, Bergauer, Dragicevic, Erö, Fabjan et~al.}}]{ref3}
+\bibinfo{author}{\bibfnamefont{S.}~\bibnamefont{Chatrchyan}},
+  \bibinfo{author}{\bibfnamefont{V.}~\bibnamefont{Khachatryan}},
+  \bibinfo{author}{\bibfnamefont{A.}~\bibnamefont{Sirunyan}},
+  \bibinfo{author}{\bibfnamefont{A.}~\bibnamefont{Tumasyan}},
+  \bibinfo{author}{\bibfnamefont{W.}~\bibnamefont{Adam}},
+  \bibinfo{author}{\bibfnamefont{E.}~\bibnamefont{Aguilo}},
+  \bibinfo{author}{\bibfnamefont{T.}~\bibnamefont{Bergauer}},
+  \bibinfo{author}{\bibfnamefont{M.}~\bibnamefont{Dragicevic}},
+  \bibinfo{author}{\bibfnamefont{J.}~\bibnamefont{Erö}},
+  \bibinfo{author}{\bibfnamefont{C.}~\bibnamefont{Fabjan}},
+  \bibnamefont{et~al.}, \bibinfo{journal}{Physics Letters B}
+  \textbf{\bibinfo{volume}{718}}, \bibinfo{pages}{795}
+  (\bibinfo{year}{2013}{\natexlab{a}}), ISSN \bibinfo{issn}{0370-2693},
+  \urlprefix\url{https://www.sciencedirect.com/science/article/pii/S0370269312011768}.
+
+\bibitem[{\citenamefont{Chatrchyan
+  et~al.}(2013{\natexlab{b}})\citenamefont{Chatrchyan, Khachatryan, Sirunyan,
+  Tumasyan, Adam, Bergauer, Dragicevic, Erö, Fabjan, Friedl et~al.}}]{ref4}
+\bibinfo{author}{\bibfnamefont{S.}~\bibnamefont{Chatrchyan}},
+  \bibinfo{author}{\bibfnamefont{V.}~\bibnamefont{Khachatryan}},
+  \bibinfo{author}{\bibfnamefont{A.}~\bibnamefont{Sirunyan}},
+  \bibinfo{author}{\bibfnamefont{A.}~\bibnamefont{Tumasyan}},
+  \bibinfo{author}{\bibfnamefont{W.}~\bibnamefont{Adam}},
+  \bibinfo{author}{\bibfnamefont{T.}~\bibnamefont{Bergauer}},
+  \bibinfo{author}{\bibfnamefont{M.}~\bibnamefont{Dragicevic}},
+  \bibinfo{author}{\bibfnamefont{J.}~\bibnamefont{Erö}},
+  \bibinfo{author}{\bibfnamefont{C.}~\bibnamefont{Fabjan}},
+  \bibinfo{author}{\bibfnamefont{M.}~\bibnamefont{Friedl}},
+  \bibnamefont{et~al.}, \bibinfo{journal}{Physics Letters B}
+  \textbf{\bibinfo{volume}{724}}, \bibinfo{pages}{213}
+  (\bibinfo{year}{2013}{\natexlab{b}}), ISSN \bibinfo{issn}{0370-2693},
+  \urlprefix\url{https://www.sciencedirect.com/science/article/pii/S0370269313005030}.
+
+\bibitem[{\citenamefont{Chatrchyan et~al.}(2014)\citenamefont{Chatrchyan,
+  Khachatryan, Sirunyan, Tumasyan, Adam, Bergauer, Dragicevic, Er{\"o}, Fabjan,
+  Friedl et~al.}}]{ref5}
+\bibinfo{author}{\bibfnamefont{S.}~\bibnamefont{Chatrchyan}},
+  \bibinfo{author}{\bibfnamefont{V.}~\bibnamefont{Khachatryan}},
+  \bibinfo{author}{\bibfnamefont{A.~M.} \bibnamefont{Sirunyan}},
+  \bibinfo{author}{\bibfnamefont{A.}~\bibnamefont{Tumasyan}},
+  \bibinfo{author}{\bibfnamefont{W.}~\bibnamefont{Adam}},
+  \bibinfo{author}{\bibfnamefont{T.}~\bibnamefont{Bergauer}},
+  \bibinfo{author}{\bibfnamefont{M.}~\bibnamefont{Dragicevic}},
+  \bibinfo{author}{\bibfnamefont{J.}~\bibnamefont{Er{\"o}}},
+  \bibinfo{author}{\bibfnamefont{C.}~\bibnamefont{Fabjan}},
+  \bibinfo{author}{\bibfnamefont{M.}~\bibnamefont{Friedl}},
+  \bibnamefont{et~al.}, \bibinfo{journal}{Journal of High Energy Physics}
+  \textbf{\bibinfo{volume}{2014}}, \bibinfo{pages}{88} (\bibinfo{year}{2014}),
+  ISSN \bibinfo{issn}{1029-8479},
+  \urlprefix\url{https://doi.org/10.1007/JHEP02(2014)088}.
+
+\bibitem[{\citenamefont{Khachatryan
+  et~al.}(2015{\natexlab{a}})\citenamefont{Khachatryan, Sirunyan, Tumasyan,
+  Adam, Bergauer, Dragicevic, Erö, Fabjan, Friedl, Frühwirth et~al.}}]{ref6}
+\bibinfo{author}{\bibfnamefont{V.}~\bibnamefont{Khachatryan}},
+  \bibinfo{author}{\bibfnamefont{A.}~\bibnamefont{Sirunyan}},
+  \bibinfo{author}{\bibfnamefont{A.}~\bibnamefont{Tumasyan}},
+  \bibinfo{author}{\bibfnamefont{W.}~\bibnamefont{Adam}},
+  \bibinfo{author}{\bibfnamefont{T.}~\bibnamefont{Bergauer}},
+  \bibinfo{author}{\bibfnamefont{M.}~\bibnamefont{Dragicevic}},
+  \bibinfo{author}{\bibfnamefont{J.}~\bibnamefont{Erö}},
+  \bibinfo{author}{\bibfnamefont{C.}~\bibnamefont{Fabjan}},
+  \bibinfo{author}{\bibfnamefont{M.}~\bibnamefont{Friedl}},
+  \bibinfo{author}{\bibfnamefont{R.}~\bibnamefont{Frühwirth}},
+  \bibnamefont{et~al.}, \bibinfo{journal}{Physics Letters B}
+  \textbf{\bibinfo{volume}{742}}, \bibinfo{pages}{200}
+  (\bibinfo{year}{2015}{\natexlab{a}}), ISSN \bibinfo{issn}{0370-2693},
+  \urlprefix\url{https://www.sciencedirect.com/science/article/pii/S0370269315000441}.
+
+\bibitem[{\citenamefont{Khachatryan
+  et~al.}(2015{\natexlab{b}})\citenamefont{Khachatryan, Sirunyan, Tumasyan,
+  Adam, Bergauer, Dragicevic, Er\"o, Friedl, Fr\"uhwirth, Ghete et~al.}}]{ref7}
+\bibinfo{author}{\bibfnamefont{V.}~\bibnamefont{Khachatryan}},
+  \bibinfo{author}{\bibfnamefont{A.~M.} \bibnamefont{Sirunyan}},
+  \bibinfo{author}{\bibfnamefont{A.}~\bibnamefont{Tumasyan}},
+  \bibinfo{author}{\bibfnamefont{W.}~\bibnamefont{Adam}},
+  \bibinfo{author}{\bibfnamefont{T.}~\bibnamefont{Bergauer}},
+  \bibinfo{author}{\bibfnamefont{M.}~\bibnamefont{Dragicevic}},
+  \bibinfo{author}{\bibfnamefont{J.}~\bibnamefont{Er\"o}},
+  \bibinfo{author}{\bibfnamefont{M.}~\bibnamefont{Friedl}},
+  \bibinfo{author}{\bibfnamefont{R.}~\bibnamefont{Fr\"uhwirth}},
+  \bibinfo{author}{\bibfnamefont{V.~M.} \bibnamefont{Ghete}},
+  \bibnamefont{et~al.} (\bibinfo{collaboration}{CMS Collaboration}),
+  \bibinfo{journal}{Phys. Rev. Lett.} \textbf{\bibinfo{volume}{115}},
+  \bibinfo{pages}{012301} (\bibinfo{year}{2015}{\natexlab{b}}),
+  \urlprefix\url{https://link.aps.org/doi/10.1103/PhysRevLett.115.012301}.
+
+\bibitem[{\citenamefont{Khachatryan
+  et~al.}(2016{\natexlab{a}})\citenamefont{Khachatryan, Sirunyan, Tumasyan,
+  Adam, Asilar, Bergauer, Brandstetter, Brondolin, Dragicevic, Er{\"o}
+  et~al.}}]{ref8}
+\bibinfo{author}{\bibfnamefont{V.}~\bibnamefont{Khachatryan}},
+  \bibinfo{author}{\bibfnamefont{A.~M.} \bibnamefont{Sirunyan}},
+  \bibinfo{author}{\bibfnamefont{A.}~\bibnamefont{Tumasyan}},
+  \bibinfo{author}{\bibfnamefont{W.}~\bibnamefont{Adam}},
+  \bibinfo{author}{\bibfnamefont{E.}~\bibnamefont{Asilar}},
+  \bibinfo{author}{\bibfnamefont{T.}~\bibnamefont{Bergauer}},
+  \bibinfo{author}{\bibfnamefont{J.}~\bibnamefont{Brandstetter}},
+  \bibinfo{author}{\bibfnamefont{E.}~\bibnamefont{Brondolin}},
+  \bibinfo{author}{\bibfnamefont{M.}~\bibnamefont{Dragicevic}},
+  \bibinfo{author}{\bibfnamefont{J.}~\bibnamefont{Er{\"o}}},
+  \bibnamefont{et~al.}, \bibinfo{journal}{Journal of High Energy Physics}
+  \textbf{\bibinfo{volume}{2016}}, \bibinfo{pages}{156}
+  (\bibinfo{year}{2016}{\natexlab{a}}), ISSN \bibinfo{issn}{1029-8479},
+  \urlprefix\url{https://doi.org/10.1007/JHEP02(2016)156}.
+
+\bibitem[{\citenamefont{Khachatryan et~al.}(2017)\citenamefont{Khachatryan,
+  Sirunyan, Tumasyan, Adam, Asilar, Bergauer, Brandstetter, Brondolin,
+  Dragicevic, Erö et~al.}}]{ref9}
+\bibinfo{author}{\bibfnamefont{V.}~\bibnamefont{Khachatryan}},
+  \bibinfo{author}{\bibfnamefont{A.}~\bibnamefont{Sirunyan}},
+  \bibinfo{author}{\bibfnamefont{A.}~\bibnamefont{Tumasyan}},
+  \bibinfo{author}{\bibfnamefont{W.}~\bibnamefont{Adam}},
+  \bibinfo{author}{\bibfnamefont{E.}~\bibnamefont{Asilar}},
+  \bibinfo{author}{\bibfnamefont{T.}~\bibnamefont{Bergauer}},
+  \bibinfo{author}{\bibfnamefont{J.}~\bibnamefont{Brandstetter}},
+  \bibinfo{author}{\bibfnamefont{E.}~\bibnamefont{Brondolin}},
+  \bibinfo{author}{\bibfnamefont{M.}~\bibnamefont{Dragicevic}},
+  \bibinfo{author}{\bibfnamefont{J.}~\bibnamefont{Erö}}, \bibnamefont{et~al.},
+  \bibinfo{journal}{Physics Letters B} \textbf{\bibinfo{volume}{765}},
+  \bibinfo{pages}{193} (\bibinfo{year}{2017}), ISSN \bibinfo{issn}{0370-2693},
+  \urlprefix\url{https://www.sciencedirect.com/science/article/pii/S037026931630747X}.
+
+\bibitem[{\citenamefont{Abelev et~al.}(2013)\citenamefont{Abelev, Adam,
+  Adamová, Adare, Aggarwal, {Aglieri Rinella}, Agnello, Agocs, Agostinelli,
+  Ahammed et~al.}}]{ref10}
+\bibinfo{author}{\bibfnamefont{B.}~\bibnamefont{Abelev}},
+  \bibinfo{author}{\bibfnamefont{J.}~\bibnamefont{Adam}},
+  \bibinfo{author}{\bibfnamefont{D.}~\bibnamefont{Adamová}},
+  \bibinfo{author}{\bibfnamefont{A.}~\bibnamefont{Adare}},
+  \bibinfo{author}{\bibfnamefont{M.}~\bibnamefont{Aggarwal}},
+  \bibinfo{author}{\bibfnamefont{G.}~\bibnamefont{{Aglieri Rinella}}},
+  \bibinfo{author}{\bibfnamefont{M.}~\bibnamefont{Agnello}},
+  \bibinfo{author}{\bibfnamefont{A.}~\bibnamefont{Agocs}},
+  \bibinfo{author}{\bibfnamefont{A.}~\bibnamefont{Agostinelli}},
+  \bibinfo{author}{\bibfnamefont{Z.}~\bibnamefont{Ahammed}},
+  \bibnamefont{et~al.}, \bibinfo{journal}{Physics Letters B}
+  \textbf{\bibinfo{volume}{726}}, \bibinfo{pages}{164} (\bibinfo{year}{2013}),
+  ISSN \bibinfo{issn}{0370-2693},
+  \urlprefix\url{https://www.sciencedirect.com/science/article/pii/S0370269313006503}.
+
+\bibitem[{\citenamefont{Adam et~al.}(2016)\citenamefont{Adam, Adamová,
+  Aggarwal, {Aglieri Rinella}, Agnello, Agrawal, Ahammed, Ahn, Aimo, Aiola
+  et~al.}}]{ref11}
+\bibinfo{author}{\bibfnamefont{J.}~\bibnamefont{Adam}},
+  \bibinfo{author}{\bibfnamefont{D.}~\bibnamefont{Adamová}},
+  \bibinfo{author}{\bibfnamefont{M.}~\bibnamefont{Aggarwal}},
+  \bibinfo{author}{\bibfnamefont{G.}~\bibnamefont{{Aglieri Rinella}}},
+  \bibinfo{author}{\bibfnamefont{M.}~\bibnamefont{Agnello}},
+  \bibinfo{author}{\bibfnamefont{N.}~\bibnamefont{Agrawal}},
+  \bibinfo{author}{\bibfnamefont{Z.}~\bibnamefont{Ahammed}},
+  \bibinfo{author}{\bibfnamefont{S.}~\bibnamefont{Ahn}},
+  \bibinfo{author}{\bibfnamefont{I.}~\bibnamefont{Aimo}},
+  \bibinfo{author}{\bibfnamefont{S.}~\bibnamefont{Aiola}},
+  \bibnamefont{et~al.}, \bibinfo{journal}{Physics Letters B}
+  \textbf{\bibinfo{volume}{753}}, \bibinfo{pages}{126} (\bibinfo{year}{2016}),
+  ISSN \bibinfo{issn}{0370-2693},
+  \urlprefix\url{https://www.sciencedirect.com/science/article/pii/S0370269315009533}.
+
+\bibitem[{\citenamefont{Wong}(2007)}]{Wong_2}
+\bibinfo{author}{\bibfnamefont{C.-Y.} \bibnamefont{Wong}},
+  \bibinfo{journal}{Phys. Rev. C} \textbf{\bibinfo{volume}{76}},
+  \bibinfo{pages}{054908} (\bibinfo{year}{2007}),
+  \urlprefix\url{https://link.aps.org/doi/10.1103/PhysRevC.76.054908}.
+
+\bibitem[{\citenamefont{Wong}(2008)}]{Wong_3}
+\bibinfo{author}{\bibfnamefont{C.-Y.} \bibnamefont{Wong}},
+  \bibinfo{journal}{Phys. Rev. C} \textbf{\bibinfo{volume}{78}},
+  \bibinfo{pages}{064905} (\bibinfo{year}{2008}),
+  \urlprefix\url{https://link.aps.org/doi/10.1103/PhysRevC.78.064905}.
+
+\bibitem[{\citenamefont{Wong}(2009)}]{Wong_4}
+\bibinfo{author}{\bibfnamefont{C.-Y.} \bibnamefont{Wong}},
+  \bibinfo{journal}{Phys. Rev. C} \textbf{\bibinfo{volume}{80}},
+  \bibinfo{pages}{034908} (\bibinfo{year}{2009}),
+  \urlprefix\url{https://link.aps.org/doi/10.1103/PhysRevC.80.034908}.
+
+\bibitem[{\citenamefont{Wong}(2011)}]{Wong_5}
+\bibinfo{author}{\bibfnamefont{C.-Y.} \bibnamefont{Wong}},
+  \bibinfo{journal}{Phys. Rev. C} \textbf{\bibinfo{volume}{84}},
+  \bibinfo{pages}{024901} (\bibinfo{year}{2011}),
+  \urlprefix\url{https://link.aps.org/doi/10.1103/PhysRevC.84.024901}.
+
+\bibitem[{\citenamefont{Cheuk-Yin}(2008)}]{Wong_1}
+\bibinfo{author}{\bibfnamefont{W.}~\bibnamefont{Cheuk-Yin}},
+  \bibinfo{journal}{Chinese Physics Letters} \textbf{\bibinfo{volume}{25}},
+  \bibinfo{pages}{3936} (\bibinfo{year}{2008}),
+  \urlprefix\url{https://doi.org/10.1088/0256-307x/25/11/027}.
+
+\bibitem[{\citenamefont{Youn and Yoon}(2017)}]{PbPb}
+\bibinfo{author}{\bibfnamefont{T.}~\bibnamefont{Youn}} \bibnamefont{and}
+  \bibinfo{author}{\bibfnamefont{J.-H.} \bibnamefont{Yoon}},
+  \bibinfo{journal}{Journal of the Korean Physical Society}
+  \textbf{\bibinfo{volume}{71}}, \bibinfo{pages}{917} (\bibinfo{year}{2017}).
+
+\bibitem[{\citenamefont{Kim et~al.}(2021)\citenamefont{Kim, Youn, Cho, and
+  Yoon}}]{Hanul}
+\bibinfo{author}{\bibfnamefont{B.}~\bibnamefont{Kim}},
+  \bibinfo{author}{\bibfnamefont{H.}~\bibnamefont{Youn}},
+  \bibinfo{author}{\bibfnamefont{S.}~\bibnamefont{Cho}}, \bibnamefont{and}
+  \bibinfo{author}{\bibfnamefont{J.-H.} \bibnamefont{Yoon}},
+  \bibinfo{journal}{International Journal of Theoretical Physics}
+  \textbf{\bibinfo{volume}{60}}, \bibinfo{pages}{1246} (\bibinfo{year}{2021}),
+  \urlprefix\url{https://doi.org/10.1007/s10773-021-04750-y}.
+
+\bibitem[{\citenamefont{Acharya et~al.}(2021)}]{alice}
+\bibinfo{author}{\bibfnamefont{S.}~\bibnamefont{Acharya}} \bibnamefont{et~al.}
+  (\bibinfo{collaboration}{ALICE}), \bibinfo{journal}{JHEP}
+  \textbf{\bibinfo{volume}{05}}, \bibinfo{pages}{290} (\bibinfo{year}{2021}),
+  \eprint{2101.03110}.
+
+\bibitem[{\citenamefont{Khachatryan
+  et~al.}(2016{\natexlab{b}})\citenamefont{Khachatryan, Sirunyan, Tumasyan,
+  Adam, Asilar, Bergauer, Brandstetter, Brondolin, Dragicevic, Erö
+  et~al.}}]{cms}
+\bibinfo{author}{\bibfnamefont{V.}~\bibnamefont{Khachatryan}},
+  \bibinfo{author}{\bibfnamefont{A.~M.} \bibnamefont{Sirunyan}},
+  \bibinfo{author}{\bibfnamefont{A.}~\bibnamefont{Tumasyan}},
+  \bibinfo{author}{\bibfnamefont{W.}~\bibnamefont{Adam}},
+  \bibinfo{author}{\bibfnamefont{E.}~\bibnamefont{Asilar}},
+  \bibinfo{author}{\bibfnamefont{T.}~\bibnamefont{Bergauer}},
+  \bibinfo{author}{\bibfnamefont{J.}~\bibnamefont{Brandstetter}},
+  \bibinfo{author}{\bibfnamefont{E.}~\bibnamefont{Brondolin}},
+  \bibinfo{author}{\bibfnamefont{M.}~\bibnamefont{Dragicevic}},
+  \bibinfo{author}{\bibfnamefont{J.}~\bibnamefont{Erö}}, \bibnamefont{et~al.},
+  \bibinfo{journal}{Physical Review Letters} \textbf{\bibinfo{volume}{116}}
+  (\bibinfo{year}{2016}{\natexlab{b}}).
+
+\bibitem[{\citenamefont{Aad et~al.}(2016)\citenamefont{Aad, Abbott, Abdallah,
+  Abdinov, Aben, Abolins, AbouZeid, Abramowicz, Abreu, Abreu et~al.}}]{atlas}
+\bibinfo{author}{\bibfnamefont{G.}~\bibnamefont{Aad}},
+  \bibinfo{author}{\bibfnamefont{B.}~\bibnamefont{Abbott}},
+  \bibinfo{author}{\bibfnamefont{J.}~\bibnamefont{Abdallah}},
+  \bibinfo{author}{\bibfnamefont{O.}~\bibnamefont{Abdinov}},
+  \bibinfo{author}{\bibfnamefont{R.}~\bibnamefont{Aben}},
+  \bibinfo{author}{\bibfnamefont{M.}~\bibnamefont{Abolins}},
+  \bibinfo{author}{\bibfnamefont{O.~S.} \bibnamefont{AbouZeid}},
+  \bibinfo{author}{\bibfnamefont{H.}~\bibnamefont{Abramowicz}},
+  \bibinfo{author}{\bibfnamefont{H.}~\bibnamefont{Abreu}},
+  \bibinfo{author}{\bibfnamefont{R.}~\bibnamefont{Abreu}}, \bibnamefont{et~al.}
+  (\bibinfo{collaboration}{ATLAS Collaboration}), \bibinfo{journal}{Phys. Rev.
+  Lett.} \textbf{\bibinfo{volume}{116}}, \bibinfo{pages}{172301}
+  (\bibinfo{year}{2016}),
+  \urlprefix\url{https://link.aps.org/doi/10.1103/PhysRevLett.116.172301}.
+
+\end{thebibliography}

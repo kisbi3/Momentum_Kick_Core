@@ -395,7 +395,7 @@ def fit_multipl():
     multi_atlas = classes.Fitting_gpu(13000, phi_13TeV_multi_atlas_fitting, dat_13TeV_multi_atlas_fitting, None, multiplicity_atlas, (0.5, 5), (2, 5), boundary, initial, "Multiplicity")
 
     # You can choice fitting mode : "free kick", "free Tem", "free fRNk xx", "Free kick and fRNk xx_FixedTem", "Free kick and fRNk xx", "Final", "Final_ATLAS"
-    multiplicity_fittingmode = "Free fRNk xx"
+    multiplicity_fittingmode = "Final_ATLAS"
     multi_atlas.multiplicity_fitting_mode(multiplicity_fittingmode)                                                                        # Temperature를 pT mean으로 결정하는 경우
     # result, multi_atlas_error = multi_atlas.fitting(None, (Fixed_Temperature_fitting, ptdep_result[2:]))                  # Temperature를 pT mean으로 결정하는 경우
 
@@ -511,7 +511,7 @@ def fit_cmenerg():
 
 # fit_13tev()
 # fit_7tev()
-# fit_multipl()
+fit_multipl()
 # fit_cmenerg()
 
 
@@ -785,20 +785,20 @@ def drawgraph_cmdep_phicorr():
     plt.show()
     fig3.savefig('./Results/CMenerg_FrNk.png')
 
-multi_atlas_result = [[0.9959725081178606, 1.0957041211582557, 0.2199976411721605, 1e-10, 1e-10],
-[0.9959725081178606, 1.1171885156907704, 0.29170011767129267, 1e-10, 1e-10],
-[0.9959725081178606, 1.1376963468354437, 0.30788229034868314, 1e-10, 1e-10],
-[0.9959725081178606, 1.1572276145922755, 0.3565012819426457, 1e-10, 1e-10],
-[0.9959725081178606, 1.1718760654098992, 0.4215086403125915, 1e-10, 1e-10],
-[0.9959725081178606, 1.1875010796153644, 0.3590464478185322, 1e-10, 1e-10],
-[0.9959725081178606, 1.2119151643114041, 0.4292587869258647, 1e-10, 1e-10],
-[0.9959725081178606, 1.2294933052925525, 0.506965198918968, 1e-10, 1e-10],
-[0.9959725081178606, 1.2333995588439186, 0.44259079103722004, 1e-10, 1e-10],
-[0.9959725081178606, 1.2333995588439186, 0.44259079103722004, 1e-10, 1e-10]]
+# multi_atlas_result = [[0.9959725081178606, 1.0957041211582557, 0.2199976411721605, 1e-10, 1e-10],
+# [0.9959725081178606, 1.1171885156907704, 0.29170011767129267, 1e-10, 1e-10],
+# [0.9959725081178606, 1.1376963468354437, 0.30788229034868314, 1e-10, 1e-10],
+# [0.9959725081178606, 1.1572276145922755, 0.3565012819426457, 1e-10, 1e-10],
+# [0.9959725081178606, 1.1718760654098992, 0.4215086403125915, 1e-10, 1e-10],
+# [0.9959725081178606, 1.1875010796153644, 0.3590464478185322, 1e-10, 1e-10],
+# [0.9959725081178606, 1.2119151643114041, 0.4292587869258647, 1e-10, 1e-10],
+# [0.9959725081178606, 1.2294933052925525, 0.506965198918968, 1e-10, 1e-10],
+# [0.9959725081178606, 1.2333995588439186, 0.44259079103722004, 1e-10, 1e-10],
+# [0.9959725081178606, 1.2333995588439186, 0.44259079103722004, 1e-10, 1e-10]]
 
 def drawgraph_multi_phicorr():
     # "Multiplicity" or "Multiplicity_FinalATLAS"
-    mode = "Multiplicity"
+    mode = "Multiplicity_FinalATLAS"
     fig1, axes1 = plt.subplots(nrows=3, ncols=3,figsize=(90,90),sharey='row', sharex='col')
     #그래프 그리기
     # alice = classes.Drawing_Graphs((1.6, 1.8), *ptdep_alice_result, None, None)
@@ -812,7 +812,7 @@ def drawgraph_multi_phicorr():
                 atlas = classes.Drawing_Graphs(13000, (2, 5), *multi_atlas_result[i+3*j], None, None, 'ATLAS')
             if mode == "Multiplicity_FinalATLAS":
                 # multi_atlas_result[6] = -0.03495215; multi_atlas_result[7] = 0.00065111
-                multi_atlas_result.extend([1, -0.03495215, 0.00065111])
+                # multi_atlas_result.extend([1, -0.03495215, 0.00065111])
                 Temperature = multi_atlas_result[1][i+3*j]
                 parameters = [multi_atlas_result[0], Temperature, multi_atlas_result[2], multi_atlas_result[3], multi_atlas_result[4]]
                 print(parameters, multi_atlas_result[5], multi_atlas_result[6], multi_atlas_result[7])
