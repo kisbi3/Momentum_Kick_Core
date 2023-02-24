@@ -140,8 +140,8 @@ Therefore, we apply ZYAM method when we use ATLAS experiment data for consistenc
 \subsection{Does $f_R\langle N_k \rangle$ have $p_T$ dependence?}
 \label{subsec: pT depnedence}
 
-Since the initial parton momentum distribution is normalized, $f_R\langle N_k \rangle$ describe the number of particles, which survives and is detected at the detector.
-We set $f_R\langle N_k \rangle = Ae^{-{B} / p_T -C p_{T}}$ form (A, B, and C are positive real number), which is the same $f_R\langle N_k \rangle$ form in PbPb at 2.76TeV result\cite{PbPb}.
+Since the initial parton momentum distribution is normalized, $f_R\langle N_k \rangle$ describes the number of particles, which $f_R$ means survival ratio of initial partons and $\langle N_k \rangle$ is number of kicked medium partons.
+We set $f_R\langle N_k \rangle = Ae^{-{B} / p_T -C p_{T}}$ form (A, B, and C are positive real number), which is the same function form in PbPb at 2.76TeV result\cite{PbPb}.
 So, we need to check $f_R\langle N_k \rangle = Ae^{-{B} / p_T -C p_{T}}$ form.
 However, the least square method via the Levenberg-Marquardt algorithm eliminates $e^{-Cp_T}$ term.
 And the $e^{-B/p_T}$ term only effect at the $0.1<p_T<1$GeV range, which has high fluctuation and low statistics data.
@@ -161,7 +161,26 @@ Since two results are different only at the $0.1<p_T<1$GeV range in the \ref{fig
 \label{subsec: comparing parameter}
 
 
-We compare physical parameters in the ridge component of Momentum-Kick model at STAR AuAu at 200GeV\cite{Wong_1}, CMS PbPb at 2.76TeV\cite{PbPb} and pp at 13TeV, in which ALICE, CMS and ATLAS data are used from reference\cite{alice, cms, atlas}. Parameters of ridge component are summarized in Table \ref{table:param}.
+We compare physical parameters in the ridge component of Momentum-Kick model at STAR AuAu at 200GeV\cite{Wong_1}, CMS PbPb at 2.76TeV\cite{PbPb}, CMS pp 7TeV\cite{cms} and pp at 13TeV, in which ALICE, CMS and ATLAS data are used from reference\cite{alice, cms, atlas}.
+Since the number of pp 13 TeV data is sufficient, all parameters of pp at 13 TeV set free parameters.
+We want to fix some of the pp at 7 TeV parameters.
+Since temperature has $\langle p_T \rangle$ dependence, we can fix temperatrue of pp at 7TeV.
+We calculate the temperature of 7 TeV as a ratio of $\langle p_T \rangle$ and it is expressed as:
+
+\begin{equation} \label{equation:Tempratio}
+T_{7 \text{Tev}} = T_{13 \text{Tev}} \times \frac{\langle p_T \rangle_{7 \text{TeV}}}{\langle p_T \rangle_{13 \text{TeV}}}
+\end{equation}
+
+And we use $\langle p_T \rangle$ data in the ATLAS experiments\cite{}.
+We use $\langle p_T \rangle _{7 \text{TeV}} = 1.226$, which is $99.5 < N_{ch} <120.5$.
+We also set $\langle p_T \rangle _{13 \text{TeV}} = 1.245$, which is the average value of $100.5 < N_{ch} <150.5$.
+
+\begin{equation} \label{equation:7TeVTemp}
+T_{7 \text{TeV}} = 1.18 \times \frac{1.226}{1.245} \approx 1.16
+\end{equation}
+
+We find free parameters as least square method.
+Parameters of ridge component are summarized in Table \ref{table:param}.
 
 \begin{table}[ht]
   \centering
@@ -177,13 +196,7 @@ We compare physical parameters in the ridge component of Momentum-Kick model at 
  \label{table:param}
 \end{table}
 
-Since pp at 7 TeV data isn't sufficient compared to pp at 13 TeV, we set the temperature of 7 TeV as a ratio of $\langle p_T \rangle$ and it is expressed as:
 
-\begin{equation} \label{equation:Tempratio}
-T_{7 \text{Tev}} = T_{13 \text{Tev}} \times \frac{\langle p_T \rangle_{7 \text{TeV}}}{\langle p_T \rangle_{13 \text{TeV}}}
-\end{equation}
-
-And we set $\langle p_T \rangle _{13 \text{TeV}} = $
 % 이 부분은 '이 논문에서 이렇게 해석했었다' 라는 형태로 변경하는중.
 % 현재, 각 파라미터에 대해서 비교하는중 -> 실험결과별로 변경하는중
 % ex) PbPb 2.76 TeV 는 AuAu 200 GeV에 비해서 T는 어떻게...q는 어떻게...
