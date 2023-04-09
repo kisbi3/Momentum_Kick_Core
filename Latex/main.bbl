@@ -1,4 +1,4 @@
-\begin{thebibliography}{37}
+\begin{thebibliography}{39}
 \expandafter\ifx\csname natexlab\endcsname\relax\def\natexlab#1{#1}\fi
 \expandafter\ifx\csname bibnamefont\endcsname\relax
   \def\bibnamefont#1{#1}\fi
@@ -417,8 +417,9 @@
   \bibinfo{journal}{Physical Review Letters} \textbf{\bibinfo{volume}{116}}
   (\bibinfo{year}{2016}{\natexlab{b}}).
 
-\bibitem[{\citenamefont{Aad et~al.}(2016)\citenamefont{Aad, Abbott, Abdallah,
-  Abdinov, Aben, Abolins, AbouZeid, Abramowicz, Abreu, Abreu et~al.}}]{atlas}
+\bibitem[{\citenamefont{Aad et~al.}(2016{\natexlab{a}})\citenamefont{Aad,
+  Abbott, Abdallah, Abdinov, Aben, Abolins, AbouZeid, Abramowicz, Abreu, Abreu
+  et~al.}}]{atlas}
 \bibinfo{author}{\bibfnamefont{G.}~\bibnamefont{Aad}},
   \bibinfo{author}{\bibfnamefont{B.}~\bibnamefont{Abbott}},
   \bibinfo{author}{\bibfnamefont{J.}~\bibnamefont{Abdallah}},
@@ -431,7 +432,19 @@
   \bibinfo{author}{\bibfnamefont{R.}~\bibnamefont{Abreu}}, \bibnamefont{et~al.}
   (\bibinfo{collaboration}{ATLAS Collaboration}), \bibinfo{journal}{Phys. Rev.
   Lett.} \textbf{\bibinfo{volume}{116}}, \bibinfo{pages}{172301}
-  (\bibinfo{year}{2016}),
+  (\bibinfo{year}{2016}{\natexlab{a}}),
   \urlprefix\url{https://link.aps.org/doi/10.1103/PhysRevLett.116.172301}.
+
+\bibitem[{\citenamefont{Aad et~al.}(2011)}]{ATLAS:2010jvh}
+\bibinfo{author}{\bibfnamefont{G.}~\bibnamefont{Aad}} \bibnamefont{et~al.}
+  (\bibinfo{collaboration}{ATLAS}), \bibinfo{journal}{New J. Phys.}
+  \textbf{\bibinfo{volume}{13}}, \bibinfo{pages}{053033}
+  (\bibinfo{year}{2011}), \eprint{1012.5104}.
+
+\bibitem[{\citenamefont{Aad et~al.}(2016{\natexlab{b}})}]{ATLAS:2016zkp}
+\bibinfo{author}{\bibfnamefont{G.}~\bibnamefont{Aad}} \bibnamefont{et~al.}
+  (\bibinfo{collaboration}{ATLAS}), \bibinfo{journal}{Phys. Lett. B}
+  \textbf{\bibinfo{volume}{758}}, \bibinfo{pages}{67}
+  (\bibinfo{year}{2016}{\natexlab{b}}), \eprint{1602.01633}.
 
 \end{thebibliography}

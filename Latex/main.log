@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.23 (TeX Live 2021/W32TeX) (preloaded format=pdflatex 2021.8.2)  27 FEB 2023 15:59
+This is pdfTeX, Version 3.141592653-2.6-1.40.23 (TeX Live 2021/W32TeX) (preloaded format=pdflatex 2021.8.2)  8 APR 2023 21:32
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -323,47 +323,47 @@ Package epstopdf-base Info: Redefining graphics rule for `.eps' on input line 48
  (c:/texlive/2021/texmf-dist/tex/latex/latexconfig/epstopdf-sys.cfg
 File: epstopdf-sys.cfg 2010/07/13 v1.3 Configuration of (r)epstopdf for TeX Live
 ))
-LaTeX Font Info:    Trying to load font information for U+msa on input line 43.
+LaTeX Font Info:    Trying to load font information for U+msa on input line 44.
  (c:/texlive/2021/texmf-dist/tex/latex/amsfonts/umsa.fd
 File: umsa.fd 2013/01/14 v3.01 AMS symbols A
 )
-LaTeX Font Info:    Trying to load font information for U+msb on input line 43.
+LaTeX Font Info:    Trying to load font information for U+msb on input line 44.
  (c:/texlive/2021/texmf-dist/tex/latex/amsfonts/umsb.fd
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 ) [1{c:/texlive/2021/texmf-var/fonts/map/pdftex/updmap/pdftex.map}] [2]
 <./Figures/ptVSnone.png, id=28, 2521.42pt x 1187.43625pt>
 File: ./Figures/ptVSnone.png Graphic file (type png)
 <use ./Figures/ptVSnone.png>
-Package pdftex.def Info: ./Figures/ptVSnone.png  used on input line 152.
+Package pdftex.def Info: ./Figures/ptVSnone.png  used on input line 153.
 (pdftex.def)             Requested size: 341.4158pt x 170.71529pt.
-
-Overfull \hbox (13.53596pt too wide) in paragraph at lines 192--192
+<./Figures/Paper_phiCorr.png, id=30, 9033.75pt x 1445.4pt>
+File: ./Figures/Paper_phiCorr.png Graphic file (type png)
+<use ./Figures/Paper_phiCorr.png>
+Package pdftex.def Info: ./Figures/Paper_phiCorr.png  used on input line 173.
+(pdftex.def)             Requested size: 512.08952pt x 85.35284pt.
+<./Figures/Paper_pTdis.png, id=31, 2890.8pt x 1445.4pt>
+File: ./Figures/Paper_pTdis.png Graphic file (type png)
+<use ./Figures/Paper_pTdis.png>
+Package pdftex.def Info: ./Figures/Paper_pTdis.png  used on input line 182.
+(pdftex.def)             Requested size: 341.41139pt x 170.70569pt.
+ [3 <./Figures/ptVSnone.png>]
+Overfull \hbox (13.53596pt too wide) in paragraph at lines 229--229
  []|$\OT1/cmr/m/n/9 20\OML/cmm/m/it/9 :\OT1/cmr/m/n/9 2\OML/cmm/m/it/9 e[]$| 
  []
 
-[3 <./Figures/ptVSnone.png>]
-<./Figures/Paper_frnk.png, id=38, 2529.45pt x 1194.6231pt>
+[4 <./Figures/Paper_phiCorr.png> <./Figures/Paper_pTdis.png>]
+<./Figures/Paper_frnk.png, id=45, 2529.45pt x 1194.6231pt>
 File: ./Figures/Paper_frnk.png Graphic file (type png)
 <use ./Figures/Paper_frnk.png>
-Package pdftex.def Info: ./Figures/Paper_frnk.png  used on input line 241.
+Package pdftex.def Info: ./Figures/Paper_frnk.png  used on input line 278.
 (pdftex.def)             Requested size: 341.42242pt x 170.7095pt.
-<./Figures/Paper_phiCorr.png, id=39, 9033.75pt x 1445.4pt>
-File: ./Figures/Paper_phiCorr.png Graphic file (type png)
-<use ./Figures/Paper_phiCorr.png>
-Package pdftex.def Info: ./Figures/Paper_phiCorr.png  used on input line 258.
-(pdftex.def)             Requested size: 512.08952pt x 85.35284pt.
-<./Figures/Paper_pTdis.png, id=40, 2890.8pt x 1445.4pt>
-File: ./Figures/Paper_pTdis.png Graphic file (type png)
-<use ./Figures/Paper_pTdis.png>
-Package pdftex.def Info: ./Figures/Paper_pTdis.png  used on input line 267.
-(pdftex.def)             Requested size: 341.41139pt x 170.70569pt.
- [4 <./Figures/Paper_frnk.png>]
-<./Figures/rezero_atlas_Nk.png, id=45, 6504.3pt x 6504.3pt>
+ [5 <./Figures/Paper_frnk.png>]
+<./Figures/rezero_atlas_Nk.png, id=50, 6504.3pt x 6504.3pt>
 File: ./Figures/rezero_atlas_Nk.png Graphic file (type png)
 <use ./Figures/rezero_atlas_Nk.png>
-Package pdftex.def Info: ./Figures/rezero_atlas_Nk.png  used on input line 297.
+Package pdftex.def Info: ./Figures/rezero_atlas_Nk.png  used on input line 335.
 (pdftex.def)             Requested size: 426.76425pt x 426.76425pt.
- [5 <./Figures/Paper_phiCorr.png> <./Figures/Paper_pTdis.png>] (./main.bbl
+ (./main.bbl
 Underfull \hbox (badness 2671) in paragraph at lines 18--32
 []\OT1/cmr/m/n/9 J. Adams, C. Adler, M. M. Ag-gar-wal, Z. Ahammed, J. Amon-ett, B. D. An-der-son, D. Arkhip-kin, G. S.
  []
@@ -378,7 +378,7 @@ Underfull \hbox (badness 1642) in paragraph at lines 36--50
 \OT1/cmr/m/n/9 G. S. Averichev, Y. Bai, J. Balewski, et al. (STAR Col-lab-o-ra-tion), Phys. Rev. C \OT1/cmr/bx/n/9 73\OT1/cmr/m/n/9 , 064907 (2006), URL
  []
 
-[6 <./Figures/rezero_atlas_Nk.png>]
+[6]
 Underfull \hbox (badness 2799) in paragraph at lines 121--135
 []\OT1/cmr/m/n/9 A. Adare, S. Afanasiev, C. Aidala, N. N. Aji-tanand, Y. Ak-iba, R. Aki-moto, H. Al-Bataineh, J. Alexan-
  []
@@ -423,7 +423,7 @@ Underfull \hbox (badness 5119) in paragraph at lines 210--224
 \OT1/cmr/m/n/9 vic, J. Er^^?o, C. Fab-jan, M. Friedl, et al., Physics Let-ters B \OT1/cmr/bx/n/9 724\OT1/cmr/m/n/9 , 213 (2013), ISSN 0370-2693, URL
  []
 
-
+[7 <./Figures/rezero_atlas_Nk.png>]
 Underfull \hbox (badness 3977) in paragraph at lines 228--242
 []\OT1/cmr/m/n/9 S. Cha-trchyan, V. Khacha-tryan, A. M. Sirun-yan, A. Tu-masyan, W. Adam, T. Bergauer, M. Drag-ice-vic,
  []
@@ -479,26 +479,26 @@ Underfull \hbox (badness 10000) in paragraph at lines 336--350
  []
 
 
-Underfull \hbox (badness 5064) in paragraph at lines 422--436
+Underfull \hbox (badness 5064) in paragraph at lines 423--437
 []\OT1/cmr/m/n/9 G. Aad, B. Ab-bott, J. Ab-dal-lah, O. Ab-di-nov, R. Aben, M. Abolins, O. S. AbouZeid, H. Abramow-
  []
 
 
-Underfull \hbox (badness 6412) in paragraph at lines 422--436
+Underfull \hbox (badness 6412) in paragraph at lines 423--437
 \OT1/cmr/m/n/9 icz, H. Abreu, R. Abreu, et al. (AT-LAS Col-lab-o-ra-tion), Phys. Rev. Lett. \OT1/cmr/bx/n/9 116\OT1/cmr/m/n/9 , 172301 (2016), URL
  []
 
-[7]) [8] (./main.aux) ) 
+) [8] (./main.aux) ) 
 Here is how much of TeX's memory you used:
- 5327 strings out of 478542
- 70458 string characters out of 5854403
- 417984 words of memory out of 5000000
- 23162 multiletter control sequences out of 15000+600000
+ 5335 strings out of 478542
+ 70661 string characters out of 5854403
+ 421564 words of memory out of 5000000
+ 23170 multiletter control sequences out of 15000+600000
  416846 words of font info for 76 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 57i,16n,66p,531b,374s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 57i,16n,66p,531b,335s stack positions out of 5000i,500n,10000p,200000b,80000s
 <c:/texlive/2021/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb><c:/texlive/2021/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx7.pfb><c:/texlive/2021/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx9.pfb><c:/texlive/2021/texmf-dist/fonts/type1/public/amsfonts/cm/cmcsc10.pfb><c:/texlive/2021/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb><c:/texlive/2021/texmf-dist/fonts/type1/public/amsfonts/cmextra/cmex7.pfb><c:/texlive/2021/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb><c:/texlive/2021/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi5.pfb><c:/texlive/2021/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi6.pfb><c:/texlive/2021/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi7.pfb><c:/texlive/2021/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi9.pfb><c:/texlive/2021/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb><c:/texlive/2021/texmf-dist/fonts/type1/public/amsfonts/cm/cmr5.pfb><c:/texlive/2021/texmf-dist/fonts/type1/public/amsfonts/cm/cmr6.pfb><c:/texlive/2021/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb><c:/texlive/2021/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb><c:/texlive/2021/texmf-dist/fonts/type1/public/amsfonts/cm/cmr9.pfb><c:/texlive/2021/texmf-dist/fonts/type1/public/amsfonts/cm/cmssbx10.pfb><c:/texlive/2021/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb><c:/texlive/2021/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy5.pfb><c:/texlive/2021/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy6.pfb><c:/texlive/2021/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb><c:/texlive/2021/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy9.pfb><c:/texlive/2021/texmf-dist/fonts/type1/public/amsfonts/cm/cmti9.pfb>
-Output written on main.pdf (8 pages, 3094033 bytes).
+Output written on main.pdf (8 pages, 3098777 bytes).
 PDF statistics:
  162 PDF objects out of 1000 (max. 8388607)
  93 compressed objects within 1 object stream

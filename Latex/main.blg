@@ -20,48 +20,46 @@ Reallocated str_pool (elt_size=1) to 130000 items from 65000.
 Reallocated str_pool (elt_size=1) to 195000 items from 130000.
 Reallocated str_pool (elt_size=1) to 260000 items from 195000.
 Reallocated str_pool (elt_size=1) to 325000 items from 260000.
-Warning--I didn't find a database entry for ""
 Reallocated wiz_functions (elt_size=4) to 6000 items from 3000.
 Reallocated singl_function (elt_size=4) to 100 items from 50.
-You've used 37 entries,
+You've used 39 entries,
             3411 wiz_defined-function locations,
-            1418 strings with 313209 characters,
-and the built_in function-call counts, 35462 in all, are:
-= -- 1719
-> -- 1679
-< -- 226
-+ -- 1543
-- -- 422
-* -- 5209
-:= -- 3564
-add.period$ -- 37
-call.type$ -- 37
-change.case$ -- 148
-chr.to.int$ -- 34
-cite$ -- 37
-duplicate$ -- 3077
-empty$ -- 2747
-format.name$ -- 933
-if$ -- 6540
-int.to.chr$ -- 4
-int.to.str$ -- 38
-missing$ -- 469
-newline$ -- 126
-num.names$ -- 111
-pop$ -- 403
+            1433 strings with 313564 characters,
+and the built_in function-call counts, 36736 in all, are:
+= -- 1801
+> -- 1711
+< -- 230
++ -- 1568
+- -- 430
+* -- 5383
+:= -- 3712
+add.period$ -- 39
+call.type$ -- 39
+change.case$ -- 156
+chr.to.int$ -- 35
+cite$ -- 39
+duplicate$ -- 3191
+empty$ -- 2859
+format.name$ -- 957
+if$ -- 6786
+int.to.chr$ -- 5
+int.to.str$ -- 40
+missing$ -- 487
+newline$ -- 132
+num.names$ -- 117
+pop$ -- 424
 preamble$ -- 1
-purify$ -- 148
+purify$ -- 156
 quote$ -- 0
-skip$ -- 1578
+skip$ -- 1626
 stack$ -- 0
-substring$ -- 923
-swap$ -- 2742
-text.length$ -- 208
+substring$ -- 971
+swap$ -- 2832
+text.length$ -- 210
 text.prefix$ -- 0
 top$ -- 0
-type$ -- 222
+type$ -- 234
 warning$ -- 0
-while$ -- 110
+while$ -- 116
 width$ -- 0
-write$ -- 427
-(There was 1 warning)
+write$ -- 449

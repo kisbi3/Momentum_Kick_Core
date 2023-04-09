@@ -1,12 +1,12 @@
 # Fdb version 3
-["bibtex main"] 1677481153 "main.aux" "main.bbl" "main" 1677481167
-  "Bibliography.bib" 1673507382 332066 1acf6ed394048e1c7db9cc6fbc5f4786 ""
+["bibtex main"] 1680957168 "main.aux" "main.bbl" "main" 1680957201
+  "Bibliography.bib" 1680950034 333013 931acae49b2eb06ba5c79b5457712df2 ""
   "c:/texlive/2021/texmf-dist/bibtex/bst/revtex4/apsrev.bst" 1627888245 43844 78e58abfb2d07832103f1e2f30cf6375 ""
-  "main.aux" 1677481164 8105 d804bee9907b4fc39f28c81dec45d0bd "pdflatex"
+  "main.aux" 1680957197 8541 b98b83bdb859155b3520bc8066c5d842 "pdflatex"
   (generated)
-  "main.blg"
   "main.bbl"
-["pdflatex"] 1677481154 "d:/내 드라이브/Github/Momentum_Kick_Core/Latex/main.tex" "main.pdf" "main" 1677481167
+  "main.blg"
+["pdflatex"] 1680957172 "d:/내 드라이브/Github/Momentum_Kick_Core/Latex/main.tex" "main.pdf" "main" 1680957201
   "Figures/Paper_frnk.png" 1673505547 258272 c82805803da3453bbfb099b615d2c7c1 ""
   "Figures/Paper_pTdis.png" 1673505547 291444 ed8618ef2f63a92c604732ca62e1ad31 ""
   "Figures/Paper_phiCorr.png" 1673505547 1138993 f5d7a11dcb43afd263e0dd9ca390e1b1 ""
@@ -123,11 +123,11 @@
   "c:/texlive/2021/texmf-var/fonts/map/pdftex/updmap/pdftex.map" 1627890084 5227287 e151fc6fd8e09c44e5f41e1c855f0ff4 ""
   "c:/texlive/2021/texmf-var/web2c/pdftex/pdflatex.fmt" 1627890346 2801563 7913a890ec830d13e92b100d556b976a ""
   "c:/texlive/2021/texmf.cnf" 1627890001 713 e69b156964470283e0530f5060668171 ""
-  "d:/내 드라이브/Github/Momentum_Kick_Core/Latex/main.tex" 1677481138 23147 b1b75e306581c6ea5ec8199328497a20 ""
+  "d:/내 드라이브/Github/Momentum_Kick_Core/Latex/main.tex" 1680957060 26066 0ee57f347784b4bd30a0ed12357cb7c2 ""
   "jkps.rtx" 1673505574 8499 3244f40ac105fbfca95729ffc3d8f7ef ""
-  "main.aux" 1677481164 8105 d804bee9907b4fc39f28c81dec45d0bd "pdflatex"
-  "main.bbl" 1677481153 24265 1d3a0b948b389ee0514d33bbcc7c4f2e "bibtex main"
+  "main.aux" 1680957197 8541 b98b83bdb859155b3520bc8066c5d842 "pdflatex"
+  "main.bbl" 1680957171 24934 a723f61e64fddcd2fb2acb39174622b1 "bibtex main"
   (generated)
   "main.aux"
-  "main.log"
   "main.pdf"
+  "main.log"

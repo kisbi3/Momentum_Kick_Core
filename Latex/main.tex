@@ -29,14 +29,15 @@
 
 
 \begin{abstract}
-The near-side ridge structure was observed at the long-range in the two-particle correlations, which is observed in heavy-ion collisions like AuAu collision at the Relativistic Heavy Ion Collider (RHIC), PbPb and pPb collisions at the Large Hadron Collider(LHC).
-The ridge structure in the heavy-ion collisions could be understood by hydrodynamic models.
-However, the ridge structure is also observed in a small-system, which is observed in the proton-proton collision at the LHC experiments.
-Since the small system creates a lower density than heavy-ion collisions, we assume that the effect of kinematics is increased.
-The Momentum-Kick model is based on kinematics, which explains the ridge structure as kicked medium partons by jet particles.
-Therefore, we expect that the Momentum-Kick model can explain proton-proton collision in various momentum at 13TeV in the LHC.
-We already know that the Momentum-Kick model makes clear the near-side ridge structure in the proton-proton collision.
-Therefore, we check whether the Momentum-Kick model applies to various momentum, we conclude the Momentum-Kick model can describe the ridge structure well in diverse momentum, and we need to further study for various energy and multiplicity cuts.
+  The near-side ridge structure was observed at the long-range in the two-particle correlations, which is observed in heavy-ion collisions like AuAu collision at the Relativistic Heavy Ion Collider (RHIC), PbPb and pPb collisions at the Large Hadron Collider(LHC).
+  The ridge structure in the heavy-ion collisions could be understood by hydrodynamic models.
+  However, the ridge structure is also observed in the proton-proton collision, which is a small system, in the LHC experiments.
+  Since the small system creates a lower density than heavy-ion collisions, we assume that the effect of kinematics is increased.
+  In this study, we invWestigate the applicability of the Momentum-Kick model.
+  The Momentum-Kick model is based on kinematics, which explains the ridge structure as kicked medium partons by jet particles.
+  Therefore, we expect that the Momentum-Kick model can explain proton-proton collision at 13TeV in the LHC for various momenta and multiplicity.
+  And we conclude that the Momentum-Kick model makes clear the near-side ridge structure in the proton-proton collision.
+  Although the center of mass energy of LHC Run 3 is similar to LHC Run 2, we also need to study that the Momentum-Kick model can explain LHC Run 3.
 \end{abstract}
 
 
@@ -105,7 +106,7 @@ where $y_b$ is the rapidity of the beam defined as $y_b=\cosh^{-1}{\sqrt{s_\text
 
 
 \section*{FITTING RESULTS}
-\label{sec:Fitting results}
+\label{sec:FITTING RESULTS}
 
 \subsection{Experimental environment}
 \label{subsec:Experimental environment}
@@ -140,12 +141,12 @@ Therefore, we apply ZYAM method when we use ATLAS experiment data for consistenc
 \subsection{Does $f_R\langle N_k \rangle$ have $p_T$ dependence?}
 \label{subsec: pT depnedence}
 
-Since the initial parton momentum distribution is normalized, $f_R\langle N_k \rangle$ describes the number of particles, which $f_R$ means survival ratio of initial partons and $\langle N_k \rangle$ is number of kicked medium partons.
-We set $f_R\langle N_k \rangle = Ae^{-{B} / p_T -C p_{T}}$ form (A, B, and C are positive real number), which is the same function form in PbPb at 2.76TeV result\cite{PbPb}.
-So, we need to check $f_R\langle N_k \rangle = Ae^{-{B} / p_T -C p_{T}}$ form.
-However, the least square method via the Levenberg-Marquardt algorithm eliminates $e^{-Cp_T}$ term.
-And the $e^{-B/p_T}$ term only effect at the $0.1<p_T<1$GeV range, which has high fluctuation and low statistics data.
-Therefore, we also check $f_R\langle N_k \rangle$ as constant, and Fig\ref{figure:ptVSnone} is a graph compared the fitting result of $f_R\langle N_k \rangle$ as $Ae^{-{B} / p_T -C p_{T}}$ form and constant.
+Since the initial parton momentum distribution is normalized, $f_R\langle N_k \rangle$ describes the number of particles, which $f_R$ means the survival ratio of initial partons and $\langle N_k \rangle$ is the number of kicked medium partons.
+Therefore, we can assume that $f_R\langle N_k \rangle$ has $p_T$ dependence.
+This assumption was already introduced in paper\cite{PbPb}, and the paper successfully explained the PbPb at 2.76 TeV results.
+Hence, we need to check whether this assumption applies to proton-proton collisions.
+Following figure is the fitting results of $f_R\langle N_k \rangle$.
+We can find the difference between $Ae^{-{B} / p_T -C p_{T}}$ and constant.
 
 \begin{figure}[ht]
 \centering
@@ -154,16 +155,50 @@ Therefore, we also check $f_R\langle N_k \rangle$ as constant, and Fig\ref{figur
 \label{figure:ptVSnone}
 \end{figure}
 
-Since two results are different only at the $0.1<p_T<1$GeV range in the \ref{figure:ptVSnone}, we use $f_R\langle N_k \rangle$ as constant.
+According to Fig.\ref{figure:ptVSnone}, two $f_R \langle N_k \rangle$ results only different in the $0.1<p_T<1$GeV range.
+This is because, the least square method via the Levenberg-Marquardt algorithm eliminates $e^{-Cp_T}$ term, and the $e^{-B/p_T}$ term only effect the $0.1<p_T<1$GeV range.
+However, this range is not covered in the ALICE data, and the CMS and ATLAS data in the range have high statistical errors.
+Consequently, we cannot determine whether there is a $p_T$ dependence of $f_R\langle N_k \rangle$ in the $0.1<p_T<1$GeV range.
+Hence, we assume that $f_R\langle N_k \rangle$ is a constant in this paper.
 
 
-\subsection{Comparing ridge component parameters with previous results}
-\label{subsec: comparing parameter}
+\subsection{pp collisions at 13 and 7 TeV Fitting results}
+\label{subsec: pp collisions Fitting results}
+%순서 자체를 바꿔야 함. fitting result들을 먼저 보여주고, 이전 결과들과 비교해야 함.
+
+We fit the Momentum-Kick model as a least square method to the ALICE and CMS proton-proton collision 13TeV at high-multiplicity\cite{alice, cms}, and we also draw the ATLAS high-multiplicity pp collision results\cite{atlas}.
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=18cm, height=3cm]{./Figures/Paper_phiCorr}
+\caption{Result for $\Delta \phi$ correlation. All curves are the Momentum-Kick model result, plots are experimental data.
+Red is the result from ALICE, black is from CMS and blue is from ATLAS.
+For ALICE and CMS data, we draw the case of $1<p_T<2, 2<p_T<3, 3<p_T<4$, and we also draw $0.1<p_T<1$ case for CMS data. And in ATLAS data, we draw for $0.5<p_T<5$.}
+\label{figure:phicorr}
+\end{figure}
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=12cm, height=6cm]{./Figures/Paper_pTdis}
+\caption{Yield for $p_T$ distribution at ALICE and CMS data. We do not include ATLAS data, because they don't supply the results for $p_T$ bins.}
+\label{figure:pTdis}
+\end{figure}
+
+In Fig. \ref{figure:phicorr} and \ref{figure:pTdis}, we draw Momentum-Kick model results and LHC data together.
+The solid line is the Momentum-Kick model results, and the circles are the experimental data.
+Red color is ALICE data and Momentum-Kick model results, black is for CMS, and blue is for ATLAS.
+In the Fig. \ref{figure:phicorr}, the ATLAS collaboration's data is significantly higher than others.
+This is because, they didn't normalize as $p_T$ bin, so I also do not normalize either.
+Experimental data is well described via Momentum-Kick model for all $p_T$ ranges.
+In Fig. \ref{figure:pTdis}, since partons are kicked as $\textbf{q}$ by jet particles, the theoretical ridge yield must show a peak at $q$.
+% However, since $f_R \langle N_k \rangle $ is proportional to ${p_T}^2$, the position of the peak is moved to an area where the $p_T$ is larger. 
+As can be seen in Fig.\ref{figure:pTdis}, the peak is made around $p_T=1.2$GeV.
+Overall, the Momentum-Kick model can describe well for the $\Delta\phi$ correlation and $p_T$ distribution yield, too.
 
 
-We compare physical parameters in the ridge component of Momentum-Kick model at STAR AuAu at 200GeV\cite{Wong_1}, CMS PbPb at 2.76TeV\cite{PbPb}, CMS pp 7TeV\cite{cms} and pp at 13TeV, in which ALICE, CMS and ATLAS data are used from reference\cite{alice, cms, atlas}.
+We are going to compare physical parameters in the ridge component of Momentum-Kick model at STAR AuAu at 200GeV\cite{Wong_1}, CMS PbPb at 2.76TeV\cite{PbPb}, CMS pp 7TeV\cite{cms} and pp at 13TeV, in which ALICE, CMS and ATLAS data are used from reference\cite{alice, cms, atlas}.
 Since the number of pp 13 TeV data is sufficient, all parameters of pp at 13 TeV set free parameters.
-We want to fix some of the pp at 7 TeV parameters.
+Due to the absence of proton-proton data at 7TeV, we intend to set some of the parameters for this energy range.
 Since temperature has $\langle p_T \rangle$ dependence, we can fix temperatrue of pp at 7TeV.
 We calculate the temperature of 7 TeV as a ratio of $\langle p_T \rangle$ and it is expressed as:
 
@@ -171,9 +206,11 @@ We calculate the temperature of 7 TeV as a ratio of $\langle p_T \rangle$ and it
 T_{7 \text{Tev}} = T_{13 \text{Tev}} \times \frac{\langle p_T \rangle_{7 \text{TeV}}}{\langle p_T \rangle_{13 \text{TeV}}}
 \end{equation}
 
-And we use $\langle p_T \rangle$ data in the ATLAS experiments\cite{}.
-We use $\langle p_T \rangle _{7 \text{TeV}} = 1.226$, which is $99.5 < N_{ch} <120.5$.
-We also set $\langle p_T \rangle _{13 \text{TeV}} = 1.245$, which is the average value of $100.5 < N_{ch} <150.5$.
+%여기 부분 고쳐야 함~~~~~%
+%----------------------------------------%
+Using the $\langle p_T \rangle$ data in the ATLAS experiments, which are \cite{ATLAS:2010jvh} and \cite{ATLAS:2016zkp}, we set $\langle p_T \rangle _{7 \text{TeV}} = 1.226$, which is $99.5 < N_{\text{ch}} <120.5$.
+We also set $\langle p_T \rangle _{13 \text{TeV}} = 1.245$, which is the average value of $100.5 < N_{\text{ch}} <150.5$.
+%----------------------------------------%
 
 \begin{equation} \label{equation:7TeVTemp}
 T_{7 \text{TeV}} = 1.18 \times \frac{1.226}{1.245} \approx 1.16
@@ -192,7 +229,7 @@ Parameters of ridge component are summarized in Table \ref{table:param}.
   $f_R \langle N_k \rangle$ & 4 & $20.2e^{-{1.395} / {\langle p_{T}^{\text{trig}} \rangle}-0.207{\langle p_{T}^{\text{trig}} \rangle}}$ & 0.93, 1.37 & 0.99 & 2.24\\[1.5ex]
    \hline
  \end{tabular}
- \caption{Previous results of the physical parameters in the ridge component of the momentum kick model.}
+ \caption{Previous results of the physical parameters in the ridge component of the Momentum-Kick model.}
  \label{table:param}
 \end{table}
 
@@ -251,47 +288,48 @@ In the case of AuAu collision at 200GeV, since it has low energy, $f_R \langle N
 The reference\cite{PbPb} decided  $f_R \langle N_k \rangle$, which has $\langle p_T^{trig} \rangle$ dependence. Since PbPb at 2.76 TeV has high energy and creates high medium density, $f_R$ has exponentially increase and $\langle N_k \rangle$ has exponentially decrease as $\langle p_T^{\text{trig}} \rangle$. This is because, the particles, which are the high-range of $p_T$, can survive easily, but the number of kicked medium partons gets lower.
 However, in pp collision, because of lower density, the high-range of $p_T$ can easily survive, but the number of kicked medium partons is maintained.
 
-We fit the Momentum-Kick model as a least square method to the ALICE and CMS proton-proton collision 13TeV at high-multiplicity\cite{alice, cms}, and we also draw the ATLAS high-multiplicity pp collision results\cite{atlas}.
-
-\begin{figure}[ht]
-\centering
-\includegraphics[width=18cm, height=3cm]{./Figures/Paper_phiCorr}
-\caption{Result for $\Delta \phi$ correlation. All curves are momentum kick model result, plots are experimental data.
-Red is the result from ALICE, black is from CMS and blue is from ATLAS.
-For ALICE and CMS data, we draw the case of $1<p_T<2, 2<p_T<3, 3<p_T<4$, and we also draw $0.1<p_T<1$ case for CMS data. And in ATLAS data, we draw for $0.5<p_T<5$.}
-\label{figure:phicorr}
-\end{figure}
-
-\begin{figure}[ht]
-\centering
-\includegraphics[width=12cm, height=6cm]{./Figures/Paper_pTdis}
-\caption{Yield for $p_T$ distribution at ALICE and CMS data. We do not include ATLAS data, because they don't supply the results for $p_T$ bins.}
-\label{figure:pTdis}
-\end{figure}
-
-In Fig. \ref{figure:phicorr} and \ref{figure:pTdis}, we draw Momentum-Kick model results and LHC data together.
-The solid line is the Momentum-Kick model results, and the circles are the experimental data.
-Red color is ALICE data and Momentum-Kick model results, black is for CMS, and blue is for ATLAS.
-In the Fig. \ref{figure:phicorr}, the ATLAS collaboration's data is significantly higher than others.
-This is because, they didn't normalize as $p_T$ bin, so I also do not normalize either.
-Experimental data is well described via Momentum-Kick model for all $p_T$ ranges.
-In Fig. \ref{figure:pTdis}, since partons are kicked as $\textbf{q}$ by jet particles, the theoretical ridge yield must show a peak at $q$.
-% However, since $f_R \langle N_k \rangle $ is proportional to ${p_T}^2$, the position of the peak is moved to an area where the $p_T$ is larger. 
-As can be seen in Fig.\ref{figure:pTdis}, the peak is made around $p_T=1.2$GeV.
-Overall, the Momentum-Kick model can describe well for the $\Delta\phi$ correlation and $p_T$ distribution yield, too.
 
 
-\section*{Various multiplicity}
-\label{sec:Various multiplicity}
+\subsection*{How about the other multiplicity results?}
+\label{subsec:How about the other multiplicity results?}
 
-We already know that near-side ridge structure appears in the high multiplicity proton-proton collisions.
+We already know that the near-side ridge structure appears in the high multiplicity proton-proton collisions, which is well described as the Momentum-Kick model.
 So, we have to check the other multiplicity, like the low multiplicity.
-The CMS and ATLAS collaboration provide $\Delta \phi$ correlation in the various multiplicity, and the multiplicity distribution.
-The reference \cite{Wong_5} and \cite{PbPb} introduced $\langle p_T \rangle$ ratio at the temperature.
-We also introduced $\langle p_T \rangle$ ratio at the $T$ in other multiplicity, .
-Based on the results of high multiplicity, we fixed temperature in the other multiplicity as the ratio of $\langle p_T \rangle$
+The CMS and ATLAS collaboration provide $\Delta \phi$ correlation in the various multiplicity, but the CMS collaboration data have very high fluctuation, I use only ATLAS data.
 
-Since the CMS multiplicity data have very high fluctuation, I use only ATLAS data.
+The reference \cite{Wong_5} and \cite{PbPb} introduced $\langle p_T \rangle$ ratio at the temperature.
+Since the $\langle p_T \rangle$ is getting higher at the higher multiplicity, the temperature has multiplicity dependence.
+Hence, we also introduced $\langle p_T \rangle$ ratio at the $T$ in other multiplicities, based on the temperature of high multiplicity, which is expressed as follows:
+
+% 아래 식은 무리수인가...?
+\begin{equation} \label{equation:variousmulti}
+  T_{\text{other multiplicities}} = T_{\text{high multiplicity}} \times \frac{\langle p_T \rangle_{\text{other multiplicities}}}{\langle p_T \rangle_{\text{high multiplicity}}}
+\end{equation}
+
+% 씁 이부분 어떻게 써야 하려나...
+And the parameter $\langle N_k \rangle$ 
+And the other parameters, which is $q$ and $f_R \langle N_k \rangle$, are free parameters.
+The following table is the results of parameters.
+
+\begin{table}[ht]
+  \renewcommand{\arraystretch}{1.5}
+  \begin{tabular}{C{3cm} | C{1.5cm} | C{1.5cm} | C{6cm}}
+  \hline
+  $N_{\text{ch}}^{\text{rec}}$         &  $q$   &   $T$   & $f_R\langle N_k \rangle$ \\ \hline\hline
+  $50<N_{\text{ch}}^{\text{rec}}<60$   &        & $1.096$ & $0.220(-35+0.65N_{\text{ch}}^{\text{rec}})\times10^{-3}$ \\ \cline{1-1} \cline{3-4} 
+  $60<N_{\text{ch}}^{\text{rec}}<70$   &        & $1.117$ & $0.292(-35+0.65N_{\text{ch}}^{\text{rec}})\times10^{-3}$ \\ \cline{1-1} \cline{3-4} 
+  $70<N_{\text{ch}}^{\text{rec}}<80$   &        & $1.138$ & $0.308(-35+0.65N_{\text{ch}}^{\text{rec}})\times10^{-3}$ \\ \cline{1-1} \cline{3-4} 
+  $80<N_{\text{ch}}^{\text{rec}}<90$   &        & $1.157$ & $0.357(-35+0.65N_{\text{ch}}^{\text{rec}})\times10^{-3}$ \\ \cline{1-1} \cline{3-4} 
+  $90<N_{\text{ch}}^{\text{rec}}<100$  & $1.00$ & $1.172$ & $0.422(-35+0.65N_{\text{ch}}^{\text{rec}})\times10^{-3}$ \\ \cline{1-1} \cline{3-4} 
+  $100<N_{\text{ch}}^{\text{rec}}<110$ &        & $1.188$ & $0.359(-35+0.65N_{\text{ch}}^{\text{rec}})\times10^{-3}$ \\ \cline{1-1} \cline{3-4} 
+  $110<N_{\text{ch}}^{\text{rec}}<120$ &        & $1.212$ & $0.429(-35+0.65N_{\text{ch}}^{\text{rec}})\times10^{-3}$ \\ \cline{1-1} \cline{3-4} 
+  $120<N_{\text{ch}}^{\text{rec}}<130$ &        & $1.229$ & $0.507(-35+0.65N_{\text{ch}}^{\text{rec}})\times10^{-3}$ \\ \cline{1-1} \cline{3-4} 
+  $130<N_{\text{ch}}^{\text{rec}}$     &        & $1.233$ & $0.443(-35+0.65N_{\text{ch}}^{\text{rec}})\times10^{-3}$ \\ \hline
+  \end{tabular}
+  \caption{The results of the physical parameters in the various multiplicities}
+  \label{table:variousmulti}
+\end{table}
+
 \begin{figure}[ht]
 \centering
 \includegraphics[width=15cm, height=15cm]{./Figures/rezero_atlas_Nk.png}

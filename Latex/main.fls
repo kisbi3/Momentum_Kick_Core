@@ -411,10 +411,6 @@ INPUT ./Figures/ptVSnone.png
 INPUT ./Figures/ptVSnone.png
 INPUT ./Figures/ptVSnone.png
 INPUT ./Figures/ptVSnone.png
-INPUT ./Figures/Paper_frnk.png
-INPUT ./Figures/Paper_frnk.png
-INPUT ./Figures/Paper_frnk.png
-INPUT ./Figures/Paper_frnk.png
 INPUT ./Figures/Paper_phiCorr.png
 INPUT ./Figures/Paper_phiCorr.png
 INPUT ./Figures/Paper_phiCorr.png
@@ -423,6 +419,10 @@ INPUT ./Figures/Paper_pTdis.png
 INPUT ./Figures/Paper_pTdis.png
 INPUT ./Figures/Paper_pTdis.png
 INPUT ./Figures/Paper_pTdis.png
+INPUT ./Figures/Paper_frnk.png
+INPUT ./Figures/Paper_frnk.png
+INPUT ./Figures/Paper_frnk.png
+INPUT ./Figures/Paper_frnk.png
 INPUT ./Figures/rezero_atlas_Nk.png
 INPUT ./Figures/rezero_atlas_Nk.png
 INPUT ./Figures/rezero_atlas_Nk.png
