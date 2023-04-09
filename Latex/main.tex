@@ -206,11 +206,10 @@ We calculate the temperature of 7 TeV as a ratio of $\langle p_T \rangle$ and it
 T_{7 \text{Tev}} = T_{13 \text{Tev}} \times \frac{\langle p_T \rangle_{7 \text{TeV}}}{\langle p_T \rangle_{13 \text{TeV}}}
 \end{equation}
 
-%여기 부분 고쳐야 함~~~~~%
-%----------------------------------------%
-Using the $\langle p_T \rangle$ data in the ATLAS experiments, which are \cite{ATLAS:2010jvh} and \cite{ATLAS:2016zkp}, we set $\langle p_T \rangle _{7 \text{TeV}} = 1.226$, which is $99.5 < N_{\text{ch}} <120.5$.
-We also set $\langle p_T \rangle _{13 \text{TeV}} = 1.245$, which is the average value of $100.5 < N_{\text{ch}} <150.5$.
-%----------------------------------------%
+%마음에 안들지만 일단 패스
+% ATLAS:2010jvh -> 7 TeV     ATLAS:2016zkp -> 13 TeV
+We use the $\langle p_T \rangle$ data in the ATLAS experiments\cite{ATLAS:2010jvh, ATLAS:2016zkp}.
+We set $\langle p_T \rangle _{7 \text{TeV}} = 1.226$, which is $99.5 < N_{\text{ch}} <120.5$, and $\langle p_T \rangle _{13 \text{TeV}} = 1.245$, which is the average value of $100.5 < N_{\text{ch}} <150.5$.
 
 \begin{equation} \label{equation:7TeVTemp}
 T_{7 \text{TeV}} = 1.18 \times \frac{1.226}{1.245} \approx 1.16
@@ -221,7 +220,7 @@ Parameters of ridge component are summarized in Table \ref{table:param}.
 
 \begin{table}[ht]
   \centering
-  \begin{tabular}{C{2cm} | C{2.5cm}  C{3.5cm}  C{2.5cm}  C{2.5cm}  C{2.5cm}}
+  \begin{tabular}{C{2cm} | C{2.5cm}  C{4cm}  C{2.5cm}  C{2.5cm}  C{2.5cm}}
    \hline \\[-1 ex]
     & AuAu 200 GeV & PbPb 2.76 TeV & pp 13 TeV\cite{Hanul} & pp 7 TeV & pp 13 TeV\\ [1 ex] \hline\hline \\[-1.5 ex]
    T (GeV) & 0.5 & 0.6 & 1.54 & 1.16 & 1.18\\[1ex]
@@ -234,43 +233,21 @@ Parameters of ridge component are summarized in Table \ref{table:param}.
 \end{table}
 
 
-% 이 부분은 '이 논문에서 이렇게 해석했었다' 라는 형태로 변경하는중.
-% 현재, 각 파라미터에 대해서 비교하는중 -> 실험결과별로 변경하는중
-% ex) PbPb 2.76 TeV 는 AuAu 200 GeV에 비해서 T는 어떻게...q는 어떻게...
-% 생각해보니... 굳이 다 비교하는게 아니라, 결과와 비교만 하면 될거 같은데?
-
 Since the temperature has center of mass energy dependence, the temperature of proton-proton at 13 TeV is the highest of all the other experiments, which is $+97\%$ higher than PbPb at 2.76 TeV and $+136\%$ higher than AuAu at 200 GeV.
 But, it is lower than previous result of ref \cite{Hanul}.
 Because they set temperature as ratio of $\langle p_T \rangle$ compare with temperature of AuAu at 200GeV.
 However, the number of proton-proton collisions at 13 TeV data has enough to set temperature as a free parameter, and the least-square method find the lower temperature than previous result.
 
 The average of momentum transfer per kick in proton-proton collisions at 13 TeV is about $43\%$ higher than PbPb at 2.76 TeV, but $25\%$ lower than pp at 7 TeV.
-In the PbPb case, a higher center of mass energy effect is dominant to $q$.
-So, $q$ of pp at 13 TeV is higher than PbPb at 2.76 TeV.
+because of the higher center of mass energy, $q$ of pp at 13 TeV is higher than PbPb at 2.76 TeV.
 However, pp at 13 TeV creates more medium than pp at 7 TeV.
 Because of the jet kicking more mediums in the pp at 13 TeV, the average momentum transfer per kick goes lower.
 Hence, the pp at 13TeV of $q$ is lower than pp at 7 TeV.
 
-The last parameter, $f_R \langle N_k \rangle$, is lower in the pp collisions than hevay-ion collisions.
+The last parameter, $f_R \langle N_k \rangle$, is lower in the pp collisions than heavy-ion collisions.
 Because the pp collisions make the small system, and the heavy-ion collisions are not.
 Also, the $f_R \langle N_k \rangle$ of 13 TeV is larger than the 7 TeV, because the higher center of mass energy creates more medium.
 Fig.\ref{figure:frnk} is a graph compared with references\cite{Wong_1, PbPb, Hanul}.
-
-
-% Since $T$ increases as the center of mass energy gets bigger, $T$ becomes higher from 0.5 GeV at AuAu to 0.6 GeV at PbPb. 
-% For the same reason, $T$ is 1.08 GeV at pp collision at 13 TeV, which is 54.29\% higher than PbPb at 2.76TeV.
-% Since the 7 TeV has low center of mass energy than 13 TeV, $T$ at the pp collision at 7 TeV is -53.7\% lower than the pp at 13 TeV.
-
-% Since the medium density from PbPb is expected to be denser than that from AuAu, the number of kicks between medium partons is higher.
-% Therefore, the average of momentum transfer per kick in PbPb is lower than in AuAu, as can be seen, $1.0 \rightarrow 0.7$ GeV in Table \ref{table:param}.
-% However, the medium from pp at 13TeV is expected less dense than that from PbPb, even though the center of mass energy is higher,
-% $q$ becomes higher from 0.7 GeV at PbPb collision to 0.799 GeV at pp collision. 
-
-% Since the initial parton momentum distribution is normalized, $f_R \langle N_k \rangle$ describe the number of particles, which survives and is detected at the detector. We set $f_R \langle N_k \rangle = Ae^{-{B} / {p_{T}} - Cp_T}$ form (A, B, and C are positive real number),
-% which is the same $f_R \langle N_k \rangle$ form in PbPb at 2.76TeV result\cite{PbPb}.
-% However, the least square method via the Levenberg-Marquardt algorithm eliminates $e^{-Cp_T}$ term .
-% Since the pp collision create low density, the number of collisions of particles independent on their momentum, only survival ratio has momentum dependence.
-% Fig.\ref{figure:frnk} is a graph compared with references\cite{Wong_1, PbPb, Hanul}.
 
 
 \begin{figure}[ht]
@@ -283,15 +260,13 @@ Solid line of blue color is result of least square fitting with same form in the
 
 The PbPb at 2.76 TeV and pp at 13TeV show the results in several bins for $p_T^{\text{trig}}$, and the range of $p_T^{\text{assoc}}$ is only split equal to $p_T^{\text{trig}}$ in the pp at 13TeV. However, we can see the trend.
 
-
 In the case of AuAu collision at 200GeV, since it has low energy, $f_R \langle N_k \rangle$ doesn't have $p_T$ dependence.
 The reference\cite{PbPb} decided  $f_R \langle N_k \rangle$, which has $\langle p_T^{trig} \rangle$ dependence. Since PbPb at 2.76 TeV has high energy and creates high medium density, $f_R$ has exponentially increase and $\langle N_k \rangle$ has exponentially decrease as $\langle p_T^{\text{trig}} \rangle$. This is because, the particles, which are the high-range of $p_T$, can survive easily, but the number of kicked medium partons gets lower.
 However, in pp collision, because of lower density, the high-range of $p_T$ can easily survive, but the number of kicked medium partons is maintained.
 
 
-
 \subsection*{How about the other multiplicity results?}
-\label{subsec:How about the other multiplicity results?}
+\label{subsec: How about the other multiplicity results?}
 
 We already know that the near-side ridge structure appears in the high multiplicity proton-proton collisions, which is well described as the Momentum-Kick model.
 So, we have to check the other multiplicity, like the low multiplicity.

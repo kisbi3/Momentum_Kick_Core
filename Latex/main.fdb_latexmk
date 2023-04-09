@@ -1,13 +1,13 @@
 # Fdb version 3
-["bibtex main"] 1680957168 "main.aux" "main.bbl" "main" 1680957201
+["bibtex main"] 1681039744 "main.aux" "main.bbl" "main" 1681056060
   "Bibliography.bib" 1680950034 333013 931acae49b2eb06ba5c79b5457712df2 ""
   "c:/texlive/2021/texmf-dist/bibtex/bst/revtex4/apsrev.bst" 1627888245 43844 78e58abfb2d07832103f1e2f30cf6375 ""
-  "main.aux" 1680957197 8541 b98b83bdb859155b3520bc8066c5d842 "pdflatex"
+  "main.aux" 1681051525 8531 1432b190828c089f36e602b8cfd027be "pdflatex"
   (generated)
-  "main.bbl"
   "main.blg"
-["pdflatex"] 1680957172 "d:/내 드라이브/Github/Momentum_Kick_Core/Latex/main.tex" "main.pdf" "main" 1680957201
-  "Figures/Paper_frnk.png" 1673505547 258272 c82805803da3453bbfb099b615d2c7c1 ""
+  "main.bbl"
+["pdflatex"] 1681051511 "d:/내 드라이브/Github/Momentum_Kick_Core/Latex/main.tex" "main.pdf" "main" 1681056060
+  "Figures/Paper_frnk.png" 1672928079 200384 13dbc95a53d3738cee38cc1b7d85a3ee ""
   "Figures/Paper_pTdis.png" 1673505547 291444 ed8618ef2f63a92c604732ca62e1ad31 ""
   "Figures/Paper_phiCorr.png" 1673505547 1138993 f5d7a11dcb43afd263e0dd9ca390e1b1 ""
   "Figures/ptVSnone.png" 1673505547 59181 c5559202bc90b7cee63eaace34c8c35f ""
@@ -123,11 +123,11 @@
   "c:/texlive/2021/texmf-var/fonts/map/pdftex/updmap/pdftex.map" 1627890084 5227287 e151fc6fd8e09c44e5f41e1c855f0ff4 ""
   "c:/texlive/2021/texmf-var/web2c/pdftex/pdflatex.fmt" 1627890346 2801563 7913a890ec830d13e92b100d556b976a ""
   "c:/texlive/2021/texmf.cnf" 1627890001 713 e69b156964470283e0530f5060668171 ""
-  "d:/내 드라이브/Github/Momentum_Kick_Core/Latex/main.tex" 1680957060 26066 0ee57f347784b4bd30a0ed12357cb7c2 ""
+  "d:/내 드라이브/Github/Momentum_Kick_Core/Latex/main.tex" 1681056051 23990 68cea119f31ce5144a6cf82d57dfafcf ""
   "jkps.rtx" 1673505574 8499 3244f40ac105fbfca95729ffc3d8f7ef ""
-  "main.aux" 1680957197 8541 b98b83bdb859155b3520bc8066c5d842 "pdflatex"
-  "main.bbl" 1680957171 24934 a723f61e64fddcd2fb2acb39174622b1 "bibtex main"
+  "main.aux" 1681051525 8531 1432b190828c089f36e602b8cfd027be "pdflatex"
+  "main.bbl" 1681039746 24934 a723f61e64fddcd2fb2acb39174622b1 "bibtex main"
   (generated)
-  "main.aux"
-  "main.pdf"
   "main.log"
+  "main.pdf"
+  "main.aux"
