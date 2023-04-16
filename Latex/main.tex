@@ -112,10 +112,10 @@ where $y_b$ is the rapidity of the beam defined as $y_b=\cosh^{-1}{\sqrt{s_\text
 \label{subsec:Experimental environment}
 
 We verify our model in ALICE, CMS and ATLAS experiments\cite{alice,cms,atlas} via least square method.
-The conditions of data analyzed in these experiments are summarized in Table \ref{table:range}.
+The conditions of the data analyzed in these experiments are summarized in Table \ref{table:range}.
 In the case of $\Delta\eta$ range, ALICE experiment is narrower than CMS and ATLAS.
-Also, ALICE experiment defines the high multiplicity as the top $0\sim0.1\%$ multiplicity, which is distinct from other experiments in that they define the range of multiplicity.
-And, ALICE and CMS experiments split their data as $p_T$ range.
+Moreover, ALICE experiment defines the high multiplicity as the top $0\sim0.1\%$ multiplicity, which is distinct from other experiments in that they define the range of multiplicity.
+And, the ALICE and CMS experiments split their data as $p_T$ range.
 
 \begin{table}[ht]
   \centering
@@ -127,16 +127,15 @@ And, ALICE and CMS experiments split their data as $p_T$ range.
   $p_T$ range & $1<p_T<4$ & $0.1<p_T<4$ & $0.5<p_T<5$ \\[1 ex]
   \hline
  \end{tabular}
- \caption{The ranges of data in ALICE, CMS, and ATLAS experiments\cite{alice, cms, atlas}}
+ \caption{The experimental environment in ALICE, CMS, and ATLAS data \cite{alice, cms, atlas}}
  \label{table:range}
 \end{table}
 
-Moreover, all three results used different analyzing methods.
-In ALICE and CMS analysis, they used Zero Yield At Minimum (ZYAM) method, a traditional experimental analysis method.
+All three results used different analyzing methods, the ALICE and CMS analysis used Zero Yield At Minimum (ZYAM) method, a traditional experimental analysis method.
 In this method, the minimum value is set to zero by subtracting.
 However, ATLAS used the peripheral subtraction method.
 It takes the ridge component from the experiment data by subtracting the peripheral component, which is low multiplicity pp collisions, to check the flow effect.
-Therefore, we apply ZYAM method when we use ATLAS experiment data for consistency.
+The Momentum-Kick model has applied the ZYAM method's results, we apply ZYAM method when we use ATLAS experiment data for consistency.
 
 \subsection{Does $f_R\langle N_k \rangle$ have $p_T$ dependence?}
 \label{subsec: pT depnedence}
@@ -164,29 +163,28 @@ Hence, we assume that $f_R\langle N_k \rangle$ is a constant in this paper.
 
 \subsection{pp collisions at 13 and 7 TeV Fitting results}
 \label{subsec: pp collisions Fitting results}
-%순서 자체를 바꿔야 함. fitting result들을 먼저 보여주고, 이전 결과들과 비교해야 함.
 
 We fit the Momentum-Kick model as a least square method to the ALICE and CMS proton-proton collision 13TeV at high-multiplicity\cite{alice, cms}, and we also draw the ATLAS high-multiplicity pp collision results\cite{atlas}.
 
 \begin{figure}[ht]
 \centering
 \includegraphics[width=18cm, height=3cm]{./Figures/Paper_phiCorr}
-\caption{Result for $\Delta \phi$ correlation. All curves are the Momentum-Kick model result, plots are experimental data.
-Red is the result from ALICE, black is from CMS and blue is from ATLAS.
-For ALICE and CMS data, we draw the case of $1<p_T<2, 2<p_T<3, 3<p_T<4$, and we also draw $0.1<p_T<1$ case for CMS data. And in ATLAS data, we draw for $0.5<p_T<5$.}
+\caption{Results for $\Delta \phi$ correlation. All curves are the Momentum-Kick model result, plots are experimental data.
+The red color is the result from ALICE, the black is from CMS and the blue is from ATLAS.
+For the ALICE and CMS data, we draw the case of $1<p_T<2, 2<p_T<3, 3<p_T<4$, and we also draw $0.1<p_T<1$ case for CMS data. And in ATLAS data, we draw for $0.5<p_T<5$.}
 \label{figure:phicorr}
 \end{figure}
 
 \begin{figure}[ht]
 \centering
 \includegraphics[width=12cm, height=6cm]{./Figures/Paper_pTdis}
-\caption{Yield for $p_T$ distribution at ALICE and CMS data. We do not include ATLAS data, because they don't supply the results for $p_T$ bins.}
+\caption{Yield for $p_T$ distribution at ALICE and CMS data. We do not include ATLAS collaboration data, because they don't provide the results for $p_T$ bins.}
 \label{figure:pTdis}
 \end{figure}
 
 In Fig. \ref{figure:phicorr} and \ref{figure:pTdis}, we draw Momentum-Kick model results and LHC data together.
 The solid line is the Momentum-Kick model results, and the circles are the experimental data.
-Red color is ALICE data and Momentum-Kick model results, black is for CMS, and blue is for ATLAS.
+Red color is ALICE data and the Momentum-Kick model results, black is for CMS, and blue is for ATLAS.
 In the Fig. \ref{figure:phicorr}, the ATLAS collaboration's data is significantly higher than others.
 This is because, they didn't normalize as $p_T$ bin, so I also do not normalize either.
 Experimental data is well described via Momentum-Kick model for all $p_T$ ranges.
@@ -198,7 +196,8 @@ Overall, the Momentum-Kick model can describe well for the $\Delta\phi$ correlat
 
 We are going to compare physical parameters in the ridge component of Momentum-Kick model at STAR AuAu at 200GeV\cite{Wong_1}, CMS PbPb at 2.76TeV\cite{PbPb}, CMS pp 7TeV\cite{cms} and pp at 13TeV, in which ALICE, CMS and ATLAS data are used from reference\cite{alice, cms, atlas}.
 Since the number of pp 13 TeV data is sufficient, all parameters of pp at 13 TeV set free parameters.
-Due to the absence of proton-proton data at 7TeV, we intend to set some of the parameters for this energy range.
+Due to the insufficient proton-proton data at 7 TeV, we have to find some parameters as physically at 7 TeV.
+The reference \cite{Wong_5} and \cite{PbPb} introduced $\langle p_T \rangle$ ratio at the temperature.
 Since temperature has $\langle p_T \rangle$ dependence, we can fix temperatrue of pp at 7TeV.
 We calculate the temperature of 7 TeV as a ratio of $\langle p_T \rangle$ and it is expressed as:
 
@@ -242,7 +241,7 @@ The average of momentum transfer per kick in proton-proton collisions at 13 TeV 
 because of the higher center of mass energy, $q$ of pp at 13 TeV is higher than PbPb at 2.76 TeV.
 However, pp at 13 TeV creates more medium than pp at 7 TeV.
 Because of the jet kicking more mediums in the pp at 13 TeV, the average momentum transfer per kick goes lower.
-Hence, the pp at 13TeV of $q$ is lower than pp at 7 TeV.
+Hence, the pp at 13 TeV of $q$ is lower than pp at 7 TeV.
 
 The last parameter, $f_R \langle N_k \rangle$, is lower in the pp collisions than heavy-ion collisions.
 Because the pp collisions make the small system, and the heavy-ion collisions are not.
@@ -253,27 +252,35 @@ Fig.\ref{figure:frnk} is a graph compared with references\cite{Wong_1, PbPb, Han
 \begin{figure}[ht]
 \centering
 \includegraphics[width=12cm, height=6cm]{./Figures/Paper_frnk}
-\caption{The shape of $f_R \left\langle N_k \right\rangle$ in AuAu at 200GeV, PbPb at 2.76TeV and pp at 13TeV for $p_{T}^{trig}$.
-Solid line of blue color is result of least square fitting with same form in the reference\cite{PbPb} result and green plots are the results in the reference\cite{Hanul}.}
+\caption{The shape of $f_R \left\langle N_k \right\rangle$ in AuAu at 200GeV, PbPb at 2.76TeV and pp at 13TeV for $p_{T}^{\text{trig}}$.
+The dotted lines are the Momentum-Kick model $f_R \left\langle N_k \right\rangle$ results of heavy-ion collisions, the red color is AuAu at 200 GeV and the black color is PbPb at 2.76 TeV.
+And the solid lines and green plots are the proton-proton collisions.
+The blue color is previous the Momentum-Kick model of pp at 7 TeV result\cite{Wong_5}, and the green plots are the results in the reference\cite{Hanul}.
+And the others, the purple and grey colors, are this paper's results for each of the pp at 13 TeV and 7 TeV.
+}
 \label{figure:frnk}
 \end{figure}
 
-The PbPb at 2.76 TeV and pp at 13TeV show the results in several bins for $p_T^{\text{trig}}$, and the range of $p_T^{\text{assoc}}$ is only split equal to $p_T^{\text{trig}}$ in the pp at 13TeV. However, we can see the trend.
+The PbPb at 2.76 TeV and pp at 13 TeV show the results in several bins for $p_T^{\text{trig}}$, and the range of $p_T^{\text{assoc}}$ is only split equal to $p_T^{\text{trig}}$ in the pp at 13TeV.
+However, we can compare the trend.
 
-In the case of AuAu collision at 200GeV, since it has low energy, $f_R \langle N_k \rangle$ doesn't have $p_T$ dependence.
-The reference\cite{PbPb} decided  $f_R \langle N_k \rangle$, which has $\langle p_T^{trig} \rangle$ dependence. Since PbPb at 2.76 TeV has high energy and creates high medium density, $f_R$ has exponentially increase and $\langle N_k \rangle$ has exponentially decrease as $\langle p_T^{\text{trig}} \rangle$. This is because, the particles, which are the high-range of $p_T$, can survive easily, but the number of kicked medium partons gets lower.
-However, in pp collision, because of lower density, the high-range of $p_T$ can easily survive, but the number of kicked medium partons is maintained.
+In the case of AuAu collision at 200GeV, since it has low energy, $f_R \langle N_k \rangle$ does not have $p_T$ dependence.
+PbPb at 2.76 TeV has high energy and creates high medium density, $f_R$ has exponentially increase and $\langle N_k \rangle$ has exponentially decrease as $\langle p_T^{\text{trig}} \rangle$.
+This is because, the particles, which are the high-range of $p_T$, can survive easily, but the number of kicked medium partons gets lower.
+Hence, the reference\cite{PbPb} decided $f_R \langle N_k \rangle$, which has $\langle p_T^{\text{trig}} \rangle$ dependence.
+However, because of lower density in pp collision, we set $f_R \langle N_k \rangle$ as constant due to mention earlier\ref{subsec: pT depnedence}.
 
-
-\subsection*{How about the other multiplicity results?}
+\subsection{How about the other multiplicity results?}
 \label{subsec: How about the other multiplicity results?}
 
 We already know that the near-side ridge structure appears in the high multiplicity proton-proton collisions, which is well described as the Momentum-Kick model.
 So, we have to check the other multiplicity, like the low multiplicity.
+Firstly, $q$ is same as pp at 13 TeV in the high multiplicity.
 The CMS and ATLAS collaboration provide $\Delta \phi$ correlation in the various multiplicity, but the CMS collaboration data have very high fluctuation, I use only ATLAS data.
 
-The reference \cite{Wong_5} and \cite{PbPb} introduced $\langle p_T \rangle$ ratio at the temperature.
-Since the $\langle p_T \rangle$ is getting higher at the higher multiplicity, the temperature has multiplicity dependence.
+% The reference \cite{Wong_5} and \cite{PbPb} introduced $\langle p_T \rangle$ ratio at the temperature.
+As previously stated, we set the temperature in the pp collisions at 7 TeV as $\langle p_T \rangle$ ratio.
+Since the $\langle p_T \rangle$ is getting higher at the higher multiplicity\cite{ATLAS:2016zkp}, the temperature has multiplicity dependence.
 Hence, we also introduced $\langle p_T \rangle$ ratio at the $T$ in other multiplicities, based on the temperature of high multiplicity, which is expressed as follows:
 
 % 아래 식은 무리수인가...?
@@ -281,9 +288,23 @@ Hence, we also introduced $\langle p_T \rangle$ ratio at the $T$ in other multip
   T_{\text{other multiplicities}} = T_{\text{high multiplicity}} \times \frac{\langle p_T \rangle_{\text{other multiplicities}}}{\langle p_T \rangle_{\text{high multiplicity}}}
 \end{equation}
 
+%흠 이부분 어쩌지%
+Also, following figure \ref{figure:frnk_multi} is integrated near-side yields, which is the graph of ridge yield dependence of multiplicity.
+Since we already know that $f_R \langle N_k \rangle$ describes the number of particles, $f_R \langle N_k \rangle$ should explain integrated near-side yields.
+Hence, we introduce multiplicity dependence in the $f_R \langle N_k \rangle$ as linearly and we fit the $f_R \langle N_k \rangle$ in the near-side yields.
+
+\begin{figure}[ht]
+  \centering
+  \includegraphics[width=12cm, height=6cm]{./Figures/Yield_Fitting.png}
+  \caption{Integrated long-range near-side yield vs multiplicity in proton-proton collisions at 13 TeV.
+  The ATLAS experimental results are shown in blue plots \cite{atlas}, and a linearly fitted line for these blue plots, which is used as $f_R \langle N_k \rangle$, is represented by the red line.
+  }
+  \label{figure:frnk_multi}
+\end{figure}
+
 % 씁 이부분 어떻게 써야 하려나...
-And the parameter $\langle N_k \rangle$ 
-And the other parameters, which is $q$ and $f_R \langle N_k \rangle$, are free parameters.
+Since linear function can describe the ridge yields well in the $50\leq N_{\text{ch}}^{\text{rec}}$, we set $f_R \langle N_k \rangle$ as $A(B+C N_{\text{ch}}^{\text{rec}})$, which is $A$ is normalization constant, $B$ and $C$ is fitted value as we mentioned earliear.
+Also, we set $q$ same as high multiplicity result.
 The following table is the results of parameters.
 
 \begin{table}[ht]
@@ -291,27 +312,29 @@ The following table is the results of parameters.
   \begin{tabular}{C{3cm} | C{1.5cm} | C{1.5cm} | C{6cm}}
   \hline
   $N_{\text{ch}}^{\text{rec}}$         &  $q$   &   $T$   & $f_R\langle N_k \rangle$ \\ \hline\hline
-  $50<N_{\text{ch}}^{\text{rec}}<60$   &        & $1.096$ & $0.220(-35+0.65N_{\text{ch}}^{\text{rec}})\times10^{-3}$ \\ \cline{1-1} \cline{3-4} 
-  $60<N_{\text{ch}}^{\text{rec}}<70$   &        & $1.117$ & $0.292(-35+0.65N_{\text{ch}}^{\text{rec}})\times10^{-3}$ \\ \cline{1-1} \cline{3-4} 
-  $70<N_{\text{ch}}^{\text{rec}}<80$   &        & $1.138$ & $0.308(-35+0.65N_{\text{ch}}^{\text{rec}})\times10^{-3}$ \\ \cline{1-1} \cline{3-4} 
-  $80<N_{\text{ch}}^{\text{rec}}<90$   &        & $1.157$ & $0.357(-35+0.65N_{\text{ch}}^{\text{rec}})\times10^{-3}$ \\ \cline{1-1} \cline{3-4} 
-  $90<N_{\text{ch}}^{\text{rec}}<100$  & $1.00$ & $1.172$ & $0.422(-35+0.65N_{\text{ch}}^{\text{rec}})\times10^{-3}$ \\ \cline{1-1} \cline{3-4} 
-  $100<N_{\text{ch}}^{\text{rec}}<110$ &        & $1.188$ & $0.359(-35+0.65N_{\text{ch}}^{\text{rec}})\times10^{-3}$ \\ \cline{1-1} \cline{3-4} 
-  $110<N_{\text{ch}}^{\text{rec}}<120$ &        & $1.212$ & $0.429(-35+0.65N_{\text{ch}}^{\text{rec}})\times10^{-3}$ \\ \cline{1-1} \cline{3-4} 
-  $120<N_{\text{ch}}^{\text{rec}}<130$ &        & $1.229$ & $0.507(-35+0.65N_{\text{ch}}^{\text{rec}})\times10^{-3}$ \\ \cline{1-1} \cline{3-4} 
-  $130<N_{\text{ch}}^{\text{rec}}$     &        & $1.233$ & $0.443(-35+0.65N_{\text{ch}}^{\text{rec}})\times10^{-3}$ \\ \hline
+  $50\leq N_{\text{ch}}^{\text{rec}}<60$   &        & $1.096$ & $0.220(-35+0.65N_{\text{ch}}^{\text{rec}})\times10^{-3}$ \\ \cline{1-1} \cline{3-4} 
+  $60\leq N_{\text{ch}}^{\text{rec}}<70$   &        & $1.117$ & $0.292(-35+0.65N_{\text{ch}}^{\text{rec}})\times10^{-3}$ \\ \cline{1-1} \cline{3-4} 
+  $70\leq N_{\text{ch}}^{\text{rec}}<80$   &        & $1.138$ & $0.308(-35+0.65N_{\text{ch}}^{\text{rec}})\times10^{-3}$ \\ \cline{1-1} \cline{3-4} 
+  $80\leq N_{\text{ch}}^{\text{rec}}<90$   &        & $1.157$ & $0.357(-35+0.65N_{\text{ch}}^{\text{rec}})\times10^{-3}$ \\ \cline{1-1} \cline{3-4} 
+  $90\leq N_{\text{ch}}^{\text{rec}}<100$  & $1.00$ & $1.172$ & $0.422(-35+0.65N_{\text{ch}}^{\text{rec}})\times10^{-3}$ \\ \cline{1-1} \cline{3-4} 
+  $100\leq N_{\text{ch}}^{\text{rec}}<110$ &        & $1.188$ & $0.359(-35+0.65N_{\text{ch}}^{\text{rec}})\times10^{-3}$ \\ \cline{1-1} \cline{3-4} 
+  $110\leq N_{\text{ch}}^{\text{rec}}<120$ &        & $1.212$ & $0.429(-35+0.65N_{\text{ch}}^{\text{rec}})\times10^{-3}$ \\ \cline{1-1} \cline{3-4} 
+  $120\leq N_{\text{ch}}^{\text{rec}}<130$ &        & $1.229$ & $0.507(-35+0.65N_{\text{ch}}^{\text{rec}})\times10^{-3}$ \\ \cline{1-1} \cline{3-4} 
+  $130\leq N_{\text{ch}}^{\text{rec}}$     &        & $1.233$ & $0.443(-35+0.65N_{\text{ch}}^{\text{rec}})\times10^{-3}$ \\ \hline
   \end{tabular}
   \caption{The results of the physical parameters in the various multiplicities}
   \label{table:variousmulti}
 \end{table}
 
+The following figure is $\Delta \phi$ correlation results
+
 \begin{figure}[ht]
 \centering
 \includegraphics[width=15cm, height=15cm]{./Figures/rezero_atlas_Nk.png}
-\caption{$\Delta \phi$ correlation with multiplicity dependence data.}
+\caption{$\Delta \phi$ correlation results in various multiplicity.}
 \label{figure:multiplicity}
 \end{figure}
-    
+
 
 
 

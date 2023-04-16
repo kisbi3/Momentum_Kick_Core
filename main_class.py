@@ -509,9 +509,9 @@ def fit_cmenerg():
     print(ptdep_error_cm)
 
 
-# fit_13tev()
-# fit_7tev()
-fit_multipl()
+fit_13tev()
+fit_7tev()
+# fit_multipl()
 # fit_cmenerg()
 
 
@@ -679,8 +679,8 @@ def drawgraph_ptdep_frnk():
     Hanul_FrNk_error = [[0.5, 0.5], [0.5, 0.5]]
     ptf = np.arange(0.01,10,0.01)
 
-    plt.plot(ptf, FrNk_func(ptf, *AuAu_200GeV), color = 'red', linewidth=7, label=r'$AuAu, \, 200\mathrm{GeV}$')
-    plt.plot(ptf, FrNk_func(ptf, *PbPb_276TeV), color = 'black', linewidth=7, label=r'$PbPb, \, 2.76\mathrm{TeV}$')
+    plt.plot(ptf, FrNk_func(ptf, *AuAu_200GeV), color = 'red', linestyle = '--', linewidth=7, label=r'$AuAu, \, 200\mathrm{GeV}$')
+    plt.plot(ptf, FrNk_func(ptf, *PbPb_276TeV), color = 'black', linestyle = '--', linewidth=7, label=r'$PbPb, \, 2.76\mathrm{TeV}$')
     plt.plot(ptf, FrNk_func(ptf, *pp_07TeV_Wong), color = 'blue', linewidth=7, label=r'$pp, \, 7\mathrm{TeV}, Wong$')
     plt.plot(ptf, FrNk_func(ptf, *pp_13TeV), color = 'purple', linewidth=7, label=r'$pp, \, 13\mathrm{TeV}$')
     plt.plot(ptf, FrNk_func(ptf, *pp_07TeV), color = 'grey', linewidth=7, label=r'$pp, \, 07\mathrm{TeV}$')
@@ -913,7 +913,7 @@ print(f"Graph, Phi correlation end : {time_phicorr-time_calculate:.3f} sec")
 # drawgraph_ptdep_Yridge()
 time_yridge = time.time()
 print(f"Graph, Yridge end : {time_yridge-time_phicorr:.3f} sec")
-# drawgraph_ptdep_frnk()
+drawgraph_ptdep_frnk()
 time_frnk = time.time()
 print(f"FrNk end : {time_frnk-time_yridge:.3f} sec")
 # drawgraph_cmdep_phicorr()

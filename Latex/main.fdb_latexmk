@@ -1,15 +1,16 @@
 # Fdb version 3
-["bibtex main"] 1681039744 "main.aux" "main.bbl" "main" 1681056060
+["bibtex main"] 1681639176 "main.aux" "main.bbl" "main" 1681639204
   "Bibliography.bib" 1680950034 333013 931acae49b2eb06ba5c79b5457712df2 ""
   "c:/texlive/2021/texmf-dist/bibtex/bst/revtex4/apsrev.bst" 1627888245 43844 78e58abfb2d07832103f1e2f30cf6375 ""
-  "main.aux" 1681051525 8531 1432b190828c089f36e602b8cfd027be "pdflatex"
+  "main.aux" 1681639198 9412 9a4470b2d0c00964caf5a5c13069c2ce "pdflatex"
   (generated)
-  "main.blg"
   "main.bbl"
-["pdflatex"] 1681051511 "d:/내 드라이브/Github/Momentum_Kick_Core/Latex/main.tex" "main.pdf" "main" 1681056060
-  "Figures/Paper_frnk.png" 1672928079 200384 13dbc95a53d3738cee38cc1b7d85a3ee ""
+  "main.blg"
+["pdflatex"] 1681639179 "d:/내 드라이브/Github/Momentum_Kick_Core/Latex/main.tex" "main.pdf" "main" 1681639204
+  "Figures/Paper_frnk.png" 1681566397 198887 0198be7894ca8262b67066bb2cf4bd8f ""
   "Figures/Paper_pTdis.png" 1673505547 291444 ed8618ef2f63a92c604732ca62e1ad31 ""
   "Figures/Paper_phiCorr.png" 1673505547 1138993 f5d7a11dcb43afd263e0dd9ca390e1b1 ""
+  "Figures/Yield_Fitting.png" 1681568121 108215 0947ec0f5caa17f674c323e025aba00c ""
   "Figures/ptVSnone.png" 1673505547 59181 c5559202bc90b7cee63eaace34c8c35f ""
   "Figures/rezero_atlas_Nk.png" 1673505547 1785267 44478038d8c7650362047c01e54f9905 ""
   "c:/texlive/2021/texmf-dist/fonts/map/fontname/texfonts.map" 1627885002 3524 cb3e574dea2d1052e39280babc910dc8 ""
@@ -123,11 +124,11 @@
   "c:/texlive/2021/texmf-var/fonts/map/pdftex/updmap/pdftex.map" 1627890084 5227287 e151fc6fd8e09c44e5f41e1c855f0ff4 ""
   "c:/texlive/2021/texmf-var/web2c/pdftex/pdflatex.fmt" 1627890346 2801563 7913a890ec830d13e92b100d556b976a ""
   "c:/texlive/2021/texmf.cnf" 1627890001 713 e69b156964470283e0530f5060668171 ""
-  "d:/내 드라이브/Github/Momentum_Kick_Core/Latex/main.tex" 1681056051 23990 68cea119f31ce5144a6cf82d57dfafcf ""
+  "d:/내 드라이브/Github/Momentum_Kick_Core/Latex/main.tex" 1681639144 25836 23c240790d29d39c5ac6ef52d898c259 ""
   "jkps.rtx" 1673505574 8499 3244f40ac105fbfca95729ffc3d8f7ef ""
-  "main.aux" 1681051525 8531 1432b190828c089f36e602b8cfd027be "pdflatex"
-  "main.bbl" 1681039746 24934 a723f61e64fddcd2fb2acb39174622b1 "bibtex main"
+  "main.aux" 1681639198 9412 9a4470b2d0c00964caf5a5c13069c2ce "pdflatex"
+  "main.bbl" 1681639178 24934 a723f61e64fddcd2fb2acb39174622b1 "bibtex main"
   (generated)
+  "main.aux"
   "main.log"
   "main.pdf"
-  "main.aux"

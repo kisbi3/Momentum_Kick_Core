@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.23 (TeX Live 2021/W32TeX) (preloaded format=pdflatex 2021.8.2)  9 APR 2023 23:45
+This is pdfTeX, Version 3.141592653-2.6-1.40.23 (TeX Live 2021/W32TeX) (preloaded format=pdflatex 2021.8.2)  16 APR 2023 18:59
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -334,31 +334,36 @@ File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 <./Figures/ptVSnone.png, id=28, 2521.42pt x 1187.43625pt>
 File: ./Figures/ptVSnone.png Graphic file (type png)
 <use ./Figures/ptVSnone.png>
-Package pdftex.def Info: ./Figures/ptVSnone.png  used on input line 153.
+Package pdftex.def Info: ./Figures/ptVSnone.png  used on input line 152.
 (pdftex.def)             Requested size: 341.4158pt x 170.71529pt.
 <./Figures/Paper_phiCorr.png, id=30, 9033.75pt x 1445.4pt>
 File: ./Figures/Paper_phiCorr.png Graphic file (type png)
 <use ./Figures/Paper_phiCorr.png>
-Package pdftex.def Info: ./Figures/Paper_phiCorr.png  used on input line 173.
+Package pdftex.def Info: ./Figures/Paper_phiCorr.png  used on input line 171.
 (pdftex.def)             Requested size: 512.08952pt x 85.35284pt.
 <./Figures/Paper_pTdis.png, id=31, 2890.8pt x 1445.4pt>
 File: ./Figures/Paper_pTdis.png Graphic file (type png)
 <use ./Figures/Paper_pTdis.png>
-Package pdftex.def Info: ./Figures/Paper_pTdis.png  used on input line 182.
+Package pdftex.def Info: ./Figures/Paper_pTdis.png  used on input line 180.
 (pdftex.def)             Requested size: 341.41139pt x 170.70569pt.
  [3 <./Figures/ptVSnone.png>] [4 <./Figures/Paper_phiCorr.png> <./Figures/Paper_pTdis.png>]
 <./Figures/Paper_frnk.png, id=45, 2529.45pt x 1194.6231pt>
 File: ./Figures/Paper_frnk.png Graphic file (type png)
 <use ./Figures/Paper_frnk.png>
-Package pdftex.def Info: ./Figures/Paper_frnk.png  used on input line 255.
+Package pdftex.def Info: ./Figures/Paper_frnk.png  used on input line 254.
 (pdftex.def)             Requested size: 341.42242pt x 170.7095pt.
  [5 <./Figures/Paper_frnk.png>]
-<./Figures/rezero_atlas_Nk.png, id=50, 6504.3pt x 6504.3pt>
+<./Figures/Yield_Fitting.png, id=50, 2521.42pt x 1187.43625pt>
+File: ./Figures/Yield_Fitting.png Graphic file (type png)
+<use ./Figures/Yield_Fitting.png>
+Package pdftex.def Info: ./Figures/Yield_Fitting.png  used on input line 298.
+(pdftex.def)             Requested size: 341.4158pt x 170.71529pt.
+<./Figures/rezero_atlas_Nk.png, id=51, 6504.3pt x 6504.3pt>
 File: ./Figures/rezero_atlas_Nk.png Graphic file (type png)
 <use ./Figures/rezero_atlas_Nk.png>
-Package pdftex.def Info: ./Figures/rezero_atlas_Nk.png  used on input line 310.
+Package pdftex.def Info: ./Figures/rezero_atlas_Nk.png  used on input line 333.
 (pdftex.def)             Requested size: 426.76425pt x 426.76425pt.
- (./main.bbl
+ [6 <./Figures/Yield_Fitting.png>] (./main.bbl [7 <./Figures/rezero_atlas_Nk.png>]
 Underfull \hbox (badness 2671) in paragraph at lines 18--32
 []\OT1/cmr/m/n/9 J. Adams, C. Adler, M. M. Ag-gar-wal, Z. Ahammed, J. Amon-ett, B. D. An-der-son, D. Arkhip-kin, G. S.
  []
@@ -373,7 +378,7 @@ Underfull \hbox (badness 1642) in paragraph at lines 36--50
 \OT1/cmr/m/n/9 G. S. Averichev, Y. Bai, J. Balewski, et al. (STAR Col-lab-o-ra-tion), Phys. Rev. C \OT1/cmr/bx/n/9 73\OT1/cmr/m/n/9 , 064907 (2006), URL
  []
 
-[6]
+
 Underfull \hbox (badness 2799) in paragraph at lines 121--135
 []\OT1/cmr/m/n/9 A. Adare, S. Afanasiev, C. Aidala, N. N. Aji-tanand, Y. Ak-iba, R. Aki-moto, H. Al-Bataineh, J. Alexan-
  []
@@ -418,7 +423,7 @@ Underfull \hbox (badness 5119) in paragraph at lines 210--224
 \OT1/cmr/m/n/9 vic, J. Er^^?o, C. Fab-jan, M. Friedl, et al., Physics Let-ters B \OT1/cmr/bx/n/9 724\OT1/cmr/m/n/9 , 213 (2013), ISSN 0370-2693, URL
  []
 
-[7 <./Figures/rezero_atlas_Nk.png>]
+
 Underfull \hbox (badness 3977) in paragraph at lines 228--242
 []\OT1/cmr/m/n/9 S. Cha-trchyan, V. Khacha-tryan, A. M. Sirun-yan, A. Tu-masyan, W. Adam, T. Bergauer, M. Drag-ice-vic,
  []
@@ -473,7 +478,7 @@ Underfull \hbox (badness 10000) in paragraph at lines 336--350
 \OT1/cmr/m/n/9 S. Ahn, I. Aimo, S. Aiola, et al., Physics Let-ters B \OT1/cmr/bx/n/9 753\OT1/cmr/m/n/9 , 126 (2016), ISSN 0370-2693, URL
  []
 
-
+[8]
 Underfull \hbox (badness 5064) in paragraph at lines 423--437
 []\OT1/cmr/m/n/9 G. Aad, B. Ab-bott, J. Ab-dal-lah, O. Ab-di-nov, R. Aben, M. Abolins, O. S. AbouZeid, H. Abramow-
  []
@@ -483,20 +488,20 @@ Underfull \hbox (badness 6412) in paragraph at lines 423--437
 \OT1/cmr/m/n/9 icz, H. Abreu, R. Abreu, et al. (AT-LAS Col-lab-o-ra-tion), Phys. Rev. Lett. \OT1/cmr/bx/n/9 116\OT1/cmr/m/n/9 , 172301 (2016), URL
  []
 
-) [8] (./main.aux) ) 
+) [9] (./main.aux) ) 
 Here is how much of TeX's memory you used:
- 5335 strings out of 478542
- 70662 string characters out of 5854403
- 420564 words of memory out of 5000000
- 23170 multiletter control sequences out of 15000+600000
+ 5341 strings out of 478542
+ 70872 string characters out of 5854403
+ 420680 words of memory out of 5000000
+ 23175 multiletter control sequences out of 15000+600000
  416846 words of font info for 76 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 57i,16n,66p,531b,335s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 57i,16n,66p,826b,362s stack positions out of 5000i,500n,10000p,200000b,80000s
 <c:/texlive/2021/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb><c:/texlive/2021/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx7.pfb><c:/texlive/2021/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx9.pfb><c:/texlive/2021/texmf-dist/fonts/type1/public/amsfonts/cm/cmcsc10.pfb><c:/texlive/2021/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb><c:/texlive/2021/texmf-dist/fonts/type1/public/amsfonts/cmextra/cmex7.pfb><c:/texlive/2021/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb><c:/texlive/2021/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi5.pfb><c:/texlive/2021/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi6.pfb><c:/texlive/2021/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi7.pfb><c:/texlive/2021/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi9.pfb><c:/texlive/2021/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb><c:/texlive/2021/texmf-dist/fonts/type1/public/amsfonts/cm/cmr5.pfb><c:/texlive/2021/texmf-dist/fonts/type1/public/amsfonts/cm/cmr6.pfb><c:/texlive/2021/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb><c:/texlive/2021/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb><c:/texlive/2021/texmf-dist/fonts/type1/public/amsfonts/cm/cmr9.pfb><c:/texlive/2021/texmf-dist/fonts/type1/public/amsfonts/cm/cmssbx10.pfb><c:/texlive/2021/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb><c:/texlive/2021/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy5.pfb><c:/texlive/2021/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy6.pfb><c:/texlive/2021/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb><c:/texlive/2021/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy9.pfb><c:/texlive/2021/texmf-dist/fonts/type1/public/amsfonts/cm/cmti9.pfb>
-Output written on main.pdf (8 pages, 3046322 bytes).
+Output written on main.pdf (9 pages, 3130411 bytes).
 PDF statistics:
- 162 PDF objects out of 1000 (max. 8388607)
- 93 compressed objects within 1 object stream
+ 167 PDF objects out of 1000 (max. 8388607)
+ 95 compressed objects within 1 object stream
  0 named destinations out of 1000 (max. 500000)
- 26 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 31 words of extra memory for PDF output out of 10000 (max. 10000000)
 
