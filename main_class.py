@@ -679,12 +679,12 @@ def drawgraph_ptdep_frnk():
     Hanul_FrNk_error = [[0.5, 0.5], [0.5, 0.5]]
     ptf = np.arange(0.01,10,0.01)
 
-    plt.plot(ptf, FrNk_func(ptf, *AuAu_200GeV), color = 'red', linestyle = '--', linewidth=7, label=r'$AuAu, \, 200\mathrm{GeV}$')
-    plt.plot(ptf, FrNk_func(ptf, *PbPb_276TeV), color = 'black', linestyle = '--', linewidth=7, label=r'$PbPb, \, 2.76\mathrm{TeV}$')
-    plt.plot(ptf, FrNk_func(ptf, *pp_07TeV_Wong), color = 'blue', linewidth=7, label=r'$pp, \, 7\mathrm{TeV}, Wong$')
+    plt.plot(ptf, FrNk_func(ptf, *AuAu_200GeV), color = 'red', linestyle = '--', linewidth=7, label=r'$AuAu, \, 200\mathrm{GeV}$ [32]')
+    plt.plot(ptf, FrNk_func(ptf, *PbPb_276TeV), color = 'black', linestyle = '--', linewidth=7, label=r'$PbPb, \, 2.76\mathrm{TeV}$ [33]')
+    plt.plot(ptf, FrNk_func(ptf, *pp_07TeV_Wong), color = 'blue', linewidth=7, label=r'$pp, \, 7\mathrm{TeV}$ [31]')
     plt.plot(ptf, FrNk_func(ptf, *pp_13TeV), color = 'purple', linewidth=7, label=r'$pp, \, 13\mathrm{TeV}$')
     plt.plot(ptf, FrNk_func(ptf, *pp_07TeV), color = 'grey', linewidth=7, label=r'$pp, \, 07\mathrm{TeV}$')
-    plt.scatter(Hanul_FrNk[0], Hanul_FrNk[1], edgecolor = 'green', facecolors='none', s=900, marker='o', linewidths=5, zorder=2, label=r'$pp, \, 13\mathrm{TeV}$')
+    plt.scatter(Hanul_FrNk[0], Hanul_FrNk[1], edgecolor = 'green', facecolors='none', s=900, marker='o', linewidths=5, zorder=2, label=r'$pp, \, 13\mathrm{TeV}$ [34]')
     plt.scatter(Hanul_FrNk[0], Hanul_FrNk[1], facecolors='green', s=900, marker='+', linewidths=5, zorder=2)
     plt.errorbar(Hanul_FrNk[0], Hanul_FrNk[1], xerr=Hanul_FrNk_error, color="green", linestyle=' ', linewidth=7, capthick=3, capsize=15)
 
@@ -698,7 +698,7 @@ def drawgraph_ptdep_frnk():
     plt.tick_params(axis='both',which='minor',direction='in',width=2,length=15,labelsize=45, top='true')
 
     plt.grid(color='silver',linestyle=':',linewidth=5, zorder=0)
-    plt.legend(fontsize=45, loc='upper left')
+    plt.legend(fontsize=45, loc='upper right')
 
     plt.tight_layout()
 
@@ -919,7 +919,7 @@ print(f"FrNk end : {time_frnk-time_yridge:.3f} sec")
 # drawgraph_cmdep_phicorr()
 time_multi = time.time()
 print(f"Graph, Multiplicity end : {time_multi-time_frnk:.3f} sec")
-drawgraph_multi_phicorr()
+# drawgraph_multi_phicorr()
 time_ptdist = time.time()
 print(f"Graph, pT distribution end : {time_ptdist-time_multi:.3f} sec")
 

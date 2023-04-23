@@ -1,13 +1,13 @@
 # Fdb version 3
-["bibtex main"] 1681639176 "main.aux" "main.bbl" "main" 1681639204
+["bibtex main"] 1682234285 "main.aux" "main.bbl" "main" 1682234305
   "Bibliography.bib" 1680950034 333013 931acae49b2eb06ba5c79b5457712df2 ""
   "c:/texlive/2021/texmf-dist/bibtex/bst/revtex4/apsrev.bst" 1627888245 43844 78e58abfb2d07832103f1e2f30cf6375 ""
-  "main.aux" 1681639198 9412 9a4470b2d0c00964caf5a5c13069c2ce "pdflatex"
+  "main.aux" 1682234301 9903 dcba31cdeb1f3f2d8c2be0e12a492b52 "pdflatex"
   (generated)
-  "main.bbl"
   "main.blg"
-["pdflatex"] 1681639179 "d:/내 드라이브/Github/Momentum_Kick_Core/Latex/main.tex" "main.pdf" "main" 1681639204
-  "Figures/Paper_frnk.png" 1681566397 198887 0198be7894ca8262b67066bb2cf4bd8f ""
+  "main.bbl"
+["pdflatex"] 1682234287 "d:/내 드라이브/Github/Momentum_Kick_Core/Latex/main.tex" "main.pdf" "main" 1682234305
+  "Figures/Paper_frnk.png" 1682154300 200749 650c04324db1e9f1cc46e02a40259fb8 ""
   "Figures/Paper_pTdis.png" 1673505547 291444 ed8618ef2f63a92c604732ca62e1ad31 ""
   "Figures/Paper_phiCorr.png" 1673505547 1138993 f5d7a11dcb43afd263e0dd9ca390e1b1 ""
   "Figures/Yield_Fitting.png" 1681568121 108215 0947ec0f5caa17f674c323e025aba00c ""
@@ -73,7 +73,6 @@
   "c:/texlive/2021/texmf-dist/fonts/type1/public/amsfonts/cm/cmr9.pfb" 1627882866 33993 9b89b85fd2d9df0482bd47194d1d3bf3 ""
   "c:/texlive/2021/texmf-dist/fonts/type1/public/amsfonts/cm/cmssbx10.pfb" 1627882866 28902 2f5c04fd2884d1878057baa5aad22765 ""
   "c:/texlive/2021/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb" 1627882866 32569 5e5ddc8df908dea60932f3c484a54c0d ""
-  "c:/texlive/2021/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy5.pfb" 1627882866 32915 7bf7720c61a5b3a7ff25b0964421c9b6 ""
   "c:/texlive/2021/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy6.pfb" 1627882866 32587 65067f817f408bc71a7312f3d9828a9b ""
   "c:/texlive/2021/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb" 1627882866 32716 08e384dc442464e7285e891af9f45947 ""
   "c:/texlive/2021/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy9.pfb" 1627882866 32442 c975af247b6702f7ca0c299af3616b80 ""
@@ -124,11 +123,11 @@
   "c:/texlive/2021/texmf-var/fonts/map/pdftex/updmap/pdftex.map" 1627890084 5227287 e151fc6fd8e09c44e5f41e1c855f0ff4 ""
   "c:/texlive/2021/texmf-var/web2c/pdftex/pdflatex.fmt" 1627890346 2801563 7913a890ec830d13e92b100d556b976a ""
   "c:/texlive/2021/texmf.cnf" 1627890001 713 e69b156964470283e0530f5060668171 ""
-  "d:/내 드라이브/Github/Momentum_Kick_Core/Latex/main.tex" 1681639144 25836 23c240790d29d39c5ac6ef52d898c259 ""
+  "d:/내 드라이브/Github/Momentum_Kick_Core/Latex/main.tex" 1682234267 27692 07f32103b5f38ad24b1bd5c2736b0b9b ""
   "jkps.rtx" 1673505574 8499 3244f40ac105fbfca95729ffc3d8f7ef ""
-  "main.aux" 1681639198 9412 9a4470b2d0c00964caf5a5c13069c2ce "pdflatex"
-  "main.bbl" 1681639178 24934 a723f61e64fddcd2fb2acb39174622b1 "bibtex main"
+  "main.aux" 1682234301 9903 dcba31cdeb1f3f2d8c2be0e12a492b52 "pdflatex"
+  "main.bbl" 1682234287 24934 a723f61e64fddcd2fb2acb39174622b1 "bibtex main"
   (generated)
   "main.aux"
-  "main.log"
   "main.pdf"
+  "main.log"
