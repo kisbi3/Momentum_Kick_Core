@@ -1,12 +1,12 @@
 # Fdb version 3
-["bibtex main"] 1682234285 "main.aux" "main.bbl" "main" 1682234305
+["bibtex main"] 1682234285 "main.aux" "main.bbl" "main" 1682257078
   "Bibliography.bib" 1680950034 333013 931acae49b2eb06ba5c79b5457712df2 ""
   "c:/texlive/2021/texmf-dist/bibtex/bst/revtex4/apsrev.bst" 1627888245 43844 78e58abfb2d07832103f1e2f30cf6375 ""
   "main.aux" 1682234301 9903 dcba31cdeb1f3f2d8c2be0e12a492b52 "pdflatex"
   (generated)
-  "main.blg"
   "main.bbl"
-["pdflatex"] 1682234287 "d:/내 드라이브/Github/Momentum_Kick_Core/Latex/main.tex" "main.pdf" "main" 1682234305
+  "main.blg"
+["pdflatex"] 1682234287 "d:/내 드라이브/Github/Momentum_Kick_Core/Latex/main.tex" "main.pdf" "main" 1682257078
   "Figures/Paper_frnk.png" 1682154300 200749 650c04324db1e9f1cc46e02a40259fb8 ""
   "Figures/Paper_pTdis.png" 1673505547 291444 ed8618ef2f63a92c604732ca62e1ad31 ""
   "Figures/Paper_phiCorr.png" 1673505547 1138993 f5d7a11dcb43afd263e0dd9ca390e1b1 ""
@@ -129,5 +129,5 @@
   "main.bbl" 1682234287 24934 a723f61e64fddcd2fb2acb39174622b1 "bibtex main"
   (generated)
   "main.aux"
-  "main.pdf"
   "main.log"
+  "main.pdf"
