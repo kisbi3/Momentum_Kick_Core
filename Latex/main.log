@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.23 (TeX Live 2021/W32TeX) (preloaded format=pdflatex 2021.8.2)  23 APR 2023 16:18
+This is pdfTeX, Version 3.141592653-2.6-1.40.23 (TeX Live 2021/W32TeX) (preloaded format=pdflatex 2021.8.2)  30 APR 2023 17:53
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -323,47 +323,47 @@ Package epstopdf-base Info: Redefining graphics rule for `.eps' on input line 48
  (c:/texlive/2021/texmf-dist/tex/latex/latexconfig/epstopdf-sys.cfg
 File: epstopdf-sys.cfg 2010/07/13 v1.3 Configuration of (r)epstopdf for TeX Live
 ))
-LaTeX Font Info:    Trying to load font information for U+msa on input line 44.
+LaTeX Font Info:    Trying to load font information for U+msa on input line 43.
  (c:/texlive/2021/texmf-dist/tex/latex/amsfonts/umsa.fd
 File: umsa.fd 2013/01/14 v3.01 AMS symbols A
 )
-LaTeX Font Info:    Trying to load font information for U+msb on input line 44.
+LaTeX Font Info:    Trying to load font information for U+msb on input line 43.
  (c:/texlive/2021/texmf-dist/tex/latex/amsfonts/umsb.fd
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 ) [1{c:/texlive/2021/texmf-var/fonts/map/pdftex/updmap/pdftex.map}] [2]
 <./Figures/ptVSnone.png, id=28, 2521.42pt x 1187.43625pt>
 File: ./Figures/ptVSnone.png Graphic file (type png)
 <use ./Figures/ptVSnone.png>
-Package pdftex.def Info: ./Figures/ptVSnone.png  used on input line 152.
+Package pdftex.def Info: ./Figures/ptVSnone.png  used on input line 151.
 (pdftex.def)             Requested size: 341.4158pt x 170.71529pt.
 <./Figures/Paper_phiCorr.png, id=30, 9033.75pt x 1445.4pt>
 File: ./Figures/Paper_phiCorr.png Graphic file (type png)
 <use ./Figures/Paper_phiCorr.png>
-Package pdftex.def Info: ./Figures/Paper_phiCorr.png  used on input line 171.
+Package pdftex.def Info: ./Figures/Paper_phiCorr.png  used on input line 170.
 (pdftex.def)             Requested size: 512.08952pt x 85.35284pt.
 <./Figures/Paper_pTdis.png, id=31, 2890.8pt x 1445.4pt>
 File: ./Figures/Paper_pTdis.png Graphic file (type png)
 <use ./Figures/Paper_pTdis.png>
-Package pdftex.def Info: ./Figures/Paper_pTdis.png  used on input line 180.
+Package pdftex.def Info: ./Figures/Paper_pTdis.png  used on input line 179.
 (pdftex.def)             Requested size: 341.41139pt x 170.70569pt.
  [3 <./Figures/ptVSnone.png>] [4 <./Figures/Paper_phiCorr.png> <./Figures/Paper_pTdis.png>]
 <./Figures/Paper_frnk.png, id=45, 2529.45pt x 1194.6231pt>
 File: ./Figures/Paper_frnk.png Graphic file (type png)
 <use ./Figures/Paper_frnk.png>
-Package pdftex.def Info: ./Figures/Paper_frnk.png  used on input line 255.
+Package pdftex.def Info: ./Figures/Paper_frnk.png  used on input line 254.
 (pdftex.def)             Requested size: 341.42242pt x 170.7095pt.
  [5 <./Figures/Paper_frnk.png>]
 <./Figures/Yield_Fitting.png, id=50, 2521.42pt x 1187.43625pt>
 File: ./Figures/Yield_Fitting.png Graphic file (type png)
 <use ./Figures/Yield_Fitting.png>
-Package pdftex.def Info: ./Figures/Yield_Fitting.png  used on input line 299.
+Package pdftex.def Info: ./Figures/Yield_Fitting.png  used on input line 298.
 (pdftex.def)             Requested size: 341.4158pt x 170.71529pt.
 <./Figures/rezero_atlas_Nk.png, id=51, 6504.3pt x 6504.3pt>
 File: ./Figures/rezero_atlas_Nk.png Graphic file (type png)
 <use ./Figures/rezero_atlas_Nk.png>
-Package pdftex.def Info: ./Figures/rezero_atlas_Nk.png  used on input line 337.
+Package pdftex.def Info: ./Figures/rezero_atlas_Nk.png  used on input line 336.
 (pdftex.def)             Requested size: 426.76425pt x 426.76425pt.
- [6 <./Figures/Yield_Fitting.png>] [7 <./Figures/rezero_atlas_Nk.png>] (./main.bbl
+ [6 <./Figures/Yield_Fitting.png>] (./main.bbl [7 <./Figures/rezero_atlas_Nk.png>]
 Underfull \hbox (badness 2671) in paragraph at lines 18--32
 []\OT1/cmr/m/n/9 J. Adams, C. Adler, M. M. Ag-gar-wal, Z. Ahammed, J. Amon-ett, B. D. An-der-son, D. Arkhip-kin, G. S.
  []
@@ -490,15 +490,15 @@ Underfull \hbox (badness 6412) in paragraph at lines 423--437
 
 ) [9] (./main.aux) ) 
 Here is how much of TeX's memory you used:
- 5342 strings out of 478542
- 70882 string characters out of 5854403
- 418217 words of memory out of 5000000
- 23176 multiletter control sequences out of 15000+600000
+ 5341 strings out of 478542
+ 70872 string characters out of 5854403
+ 420660 words of memory out of 5000000
+ 23175 multiletter control sequences out of 15000+600000
  416846 words of font info for 76 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 57i,16n,66p,820b,350s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 57i,16n,66p,820b,362s stack positions out of 5000i,500n,10000p,200000b,80000s
 <c:/texlive/2021/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb><c:/texlive/2021/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx7.pfb><c:/texlive/2021/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx9.pfb><c:/texlive/2021/texmf-dist/fonts/type1/public/amsfonts/cm/cmcsc10.pfb><c:/texlive/2021/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb><c:/texlive/2021/texmf-dist/fonts/type1/public/amsfonts/cmextra/cmex7.pfb><c:/texlive/2021/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb><c:/texlive/2021/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi5.pfb><c:/texlive/2021/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi6.pfb><c:/texlive/2021/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi7.pfb><c:/texlive/2021/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi9.pfb><c:/texlive/2021/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb><c:/texlive/2021/texmf-dist/fonts/type1/public/amsfonts/cm/cmr5.pfb><c:/texlive/2021/texmf-dist/fonts/type1/public/amsfonts/cm/cmr6.pfb><c:/texlive/2021/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb><c:/texlive/2021/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb><c:/texlive/2021/texmf-dist/fonts/type1/public/amsfonts/cm/cmr9.pfb><c:/texlive/2021/texmf-dist/fonts/type1/public/amsfonts/cm/cmssbx10.pfb><c:/texlive/2021/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb><c:/texlive/2021/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy6.pfb><c:/texlive/2021/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb><c:/texlive/2021/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy9.pfb><c:/texlive/2021/texmf-dist/fonts/type1/public/amsfonts/cm/cmti9.pfb>
-Output written on main.pdf (9 pages, 3123883 bytes).
+Output written on main.pdf (9 pages, 3123731 bytes).
 PDF statistics:
  162 PDF objects out of 1000 (max. 8388607)
  92 compressed objects within 1 object stream
