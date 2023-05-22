@@ -304,25 +304,33 @@ Hence, we introduce multiplicity dependence in the $f_R \langle N_k \rangle$ as 
 \end{figure}
 
 % 씁 이부분 어떻게 써야 하려나...
-Since linear function can describe the ridge yields well in the $50\leq N_{\text{ch}}^{\text{rec}}$, we set $f_R \langle N_k \rangle$ as $A(B+C N_{\text{ch}}^{\text{rec}})$, $A$ is normalization constant, $B$ and $C$ is fitted value as we mentioned earliear.
+Since linear function can describe the ridge yields well in the $50\leq N_{\text{ch}}^{\text{rec}}$, we set $f_R \langle N_k \rangle$ as $A(B+C N_{\text{ch}}^{\text{rec}})$, $A$ is an overall constant, $B$ and $C$ is fitted values as we mentioned earliear.
 Also, we think that the jets get the same energy within the same center-of-mass energy systems, so we set $q$ the same as the high multiplicity result.
-Therefore, the parameter '$A$', which is in the $f_R \langle N_k \rangle$, is the only free parameter.
-The table\ref{table:variousmulti} and the figure\ref{figure:variousmulti} are the fitting results of proton-proton collisions at 13 TeV in the various multiplicities.
+Therefore, the parameter `$A$', which is in the $f_R \langle N_k \rangle$, is the only free parameter.
+The Table \ref{table:variousmulti} and the Fig. \ref{figure:variousmulti} are the fitting results via the Levenberg-Marquardt algorithm, of proton-proton collisions at 13 TeV in the various multiplicities.
+
+
+
+
+
+
+
+
 
 \begin{table}[ht]
   \renewcommand{\arraystretch}{1.5}
-  \begin{tabular}{C{3cm} | C{1.5cm} | C{1.5cm} | C{6cm}}
+  \begin{tabular}{C{3cm} | C{1.5cm} | C{1.5cm} | C{5.5cm}}
   \hline
   $N_{\text{ch}}^{\text{rec}}$         &  $q$   &   $T$   & $f_R\langle N_k \rangle$ \\ \hline\hline
-  $50\leq N_{\text{ch}}^{\text{rec}}<60$   &        & $1.096$ & $0.220(-35+0.65\langle N_{\text{ch}}^{\text{rec}}\rangle)\times10^{-3}$ \\ \cline{1-1} \cline{3-4} 
-  $60\leq N_{\text{ch}}^{\text{rec}}<70$   &        & $1.117$ & $0.292(-35+0.65\langle N_{\text{ch}}^{\text{rec}}\rangle)\times10^{-3}$ \\ \cline{1-1} \cline{3-4} 
-  $70\leq N_{\text{ch}}^{\text{rec}}<80$   &        & $1.138$ & $0.308(-35+0.65\langle N_{\text{ch}}^{\text{rec}}\rangle)\times10^{-3}$ \\ \cline{1-1} \cline{3-4} 
-  $80\leq N_{\text{ch}}^{\text{rec}}<90$   &        & $1.157$ & $0.357(-35+0.65\langle N_{\text{ch}}^{\text{rec}}\rangle)\times10^{-3}$ \\ \cline{1-1} \cline{3-4} 
-  $90\leq N_{\text{ch}}^{\text{rec}}<100$  & $1.00$ & $1.172$ & $0.422(-35+0.65\langle N_{\text{ch}}^{\text{rec}}\rangle)\times10^{-3}$ \\ \cline{1-1} \cline{3-4} 
-  $100\leq N_{\text{ch}}^{\text{rec}}<110$ &        & $1.188$ & $0.359(-35+0.65\langle N_{\text{ch}}^{\text{rec}}\rangle)\times10^{-3}$ \\ \cline{1-1} \cline{3-4} 
-  $110\leq N_{\text{ch}}^{\text{rec}}<120$ &        & $1.212$ & $0.429(-35+0.65\langle N_{\text{ch}}^{\text{rec}}\rangle)\times10^{-3}$ \\ \cline{1-1} \cline{3-4} 
-  $120\leq N_{\text{ch}}^{\text{rec}}<130$ &        & $1.229$ & $0.507(-35+0.65\langle N_{\text{ch}}^{\text{rec}}\rangle)\times10^{-3}$ \\ \cline{1-1} \cline{3-4} 
-  $130\leq N_{\text{ch}}^{\text{rec}}$     &        & $1.233$ & $0.443(-35+0.65\langle N_{\text{ch}}^{\text{rec}}\rangle)\times10^{-3}$ \\ \hline
+  $50\leq N_{\text{ch}}^{\text{rec}}<60$   &        & $1.096$ & $0.496(-35+0.65\langle N_{\text{ch}}^{\text{rec}}\rangle) = 0.426$ \\ \cline{1-1} \cline{3-4} 
+  $60\leq N_{\text{ch}}^{\text{rec}}<70$   &        & $1.117$ & $0.107(-35+0.65\langle N_{\text{ch}}^{\text{rec}}\rangle) = 0.792$ \\ \cline{1-1} \cline{3-4} 
+  $70\leq N_{\text{ch}}^{\text{rec}}<80$   &        & $1.138$ & $0.080(-35+0.65\langle N_{\text{ch}}^{\text{rec}}\rangle) = 1.117$ \\ \cline{1-1} \cline{3-4} 
+  $80\leq N_{\text{ch}}^{\text{rec}}<90$   &        & $1.157$ & $0.082(-35+0.65\langle N_{\text{ch}}^{\text{rec}}\rangle) = 1.665$ \\ \cline{1-1} \cline{3-4} 
+  $90\leq N_{\text{ch}}^{\text{rec}}<100$  & $1.00$ & $1.172$ & $0.092(-35+0.65\langle N_{\text{ch}}^{\text{rec}}\rangle) = 2.462$ \\ \cline{1-1} \cline{3-4} 
+  $100\leq N_{\text{ch}}^{\text{rec}}<110$ &        & $1.188$ & $0.077(-35+0.65\langle N_{\text{ch}}^{\text{rec}}\rangle) = 2.565$ \\ \cline{1-1} \cline{3-4} 
+  $110\leq N_{\text{ch}}^{\text{rec}}<120$ &        & $1.212$ & $0.092(-35+0.65\langle N_{\text{ch}}^{\text{rec}}\rangle) = 3.681$ \\ \cline{1-1} \cline{3-4} 
+  $120\leq N_{\text{ch}}^{\text{rec}}<130$ &        & $1.229$ & $0.111(-35+0.65\langle N_{\text{ch}}^{\text{rec}}\rangle) = 5.140$ \\ \cline{1-1} \cline{3-4} 
+  $130\leq N_{\text{ch}}^{\text{rec}}$     &        & $1.233$ & $0.099(-35+0.65\langle N_{\text{ch}}^{\text{rec}}\rangle) = 5.237$ \\ \hline
   \end{tabular}
   \caption{The results of the physical parameters in the various multiplicities.
   $\langle N_{\text{ch}}^{\text{rec}}\rangle$ means the average of $N_{\text{ch}}^{\text{rec}}$.
@@ -331,16 +339,44 @@ The table\ref{table:variousmulti} and the figure\ref{figure:variousmulti} are th
   \label{table:variousmulti}
 \end{table}
 
+The constant `$A$' seems to increase as the multiplicity gets higher, but it also decreases in some parts, which are $100\leq N_{\text{ch}}^{\text{rec}}<110$ and $130\leq N_{\text{ch}}^{\text{rec}}$.
+These parts of yield data are relatively quite lower than the fitted line, which can be seen in Fig. \ref{figure:frnk_multi}, it is due to the fluctuation of $C_{\text{ZYAM}}$.
+Hence, since the constant `A' explains the total yield of each multiplicity, it has a few fluctuations. 
+
 \begin{figure}[ht]
 \centering
 \includegraphics[width=15cm, height=15cm]{./Figures/rezero_atlas_Nk.png}
-\caption{$\Delta \phi$ correlation results in various multiplicity.
-The plots are experimental data, and the solid lines are the Momentum-Kick model results.
+\caption{$\Delta \phi$ correlation results in various multiplicities.
+The plots show experimental data and the solid line is the result of the Momentum-Kick model.
 }
 \label{figure:variousmulti}
 \end{figure}
 
-%여기다 무엇을 써야 할까나...?%
+Overall, the Momentum-Kick model can describe the $\Delta\eta - \Delta\phi$ correlation for various multiplicities.
+Although the model cannot provide a precise explanation for the region where $120\leq N_{\text{ch}}^{\text{rec}}$, we can observe that the data in this region has a high level of uncertainty.
+% Because of the high level of uncertainty for the region where $120\leq N_{\text{ch}}^{\text{rec}}$, the model cannot only provide a precise explanation for the region, but also it is hard to compare the model results and the data.
+Due to the high level of uncertainty, it is difficult to compare the model with the data of the region, as the fitting algorithm does not work well.
+Therefore, since the LHC Run3 has higher luminosity than Run2, we hope that the uncertainty in the $120\leq N_{\text{ch}}^{\text{rec}}$ region will be reduced.
+
+
+% Also, the data of $110\leq N_{\text{ch}}^{\text{rec}}<120$ has a little bit weird in the $-1.0<\Delta\phi<-0.5$ and $0.5<\Delta\phi<1.0$.
+
+\section*{Prediction}
+\label{sec:Prediction}
+
+In the LHC Run 3, they are conducting about proton-proton collisions at 14 TeV.
+Although the center-of-mass energy is similar to Run 2, we need to predict about the data.
+q=0.945, T = 1.183 $\langle p_T \rangle=1.248$, $f_R \langle N_k \rangle = A(-35+0.65\langle N_{\text{ch}}^{\text{rec}}\rangle)\times10^{-3}$, which A is free parameter.
+
+\begin{figure}[ht]
+  \centering
+  \includegraphics[width=18cm, height=3cm]{./Figures/Prediction_pp14TeV.png}
+  \caption{$\Delta \phi$ correlation results in various multiplicities.
+  The plots show experimental data and the solid line is the result of the Momentum-Kick model.
+  }
+  \label{figure:pp14prediction}
+\end{figure}
+
 
 
 \section*{CONCLUSIONS}
@@ -353,17 +389,20 @@ We have analyzed the long-range near-side proton-proton collisions at $\sqrt{s_\
 Firstly, the Momentum-Kick model can describe well the high multiplicity proton-proton collisions.
 Since the small systems have less flow effect than heavy-ion collision, we expect that the Momentum-Kick model is applicable in this case.
 We apply the Momentum-Kick model in the high multiplicity pp collision at 13 TeV data from all 3 collaborations and 7 TeV data from the CMS collaboration. 
-As a result, we obtain $T=1.18$ GeV, $q=1.00$ GeV, $f_R\left\langle N_k\right\rangle = 2.24$ in 13 TeV, and $T=1.16$ GeV, $q=1.33$ GeV, $f_R\left\langle N_k\right\rangle = 0.99$ in 7 TeV.
+As a result, we obtain $T=1.18$ GeV, $q=1.00$ GeV, $f_R\left\langle N_k \right\rangle = 2.24$ in 13 TeV, and $T=1.16$ GeV, $q=1.33$ GeV, $f_R\left\langle N_k \right\rangle = 0.99$ in 7 TeV.
 Because of higher energy, the medium temperature of 13 TeV is 97\% higher, and the temperature of 7 TeV is 93\% higher than PbPb collision at 2.76TeV.
 Also, because the medium from pp collision has less density than heavy-ion collisions, the jet particles kick the number of medium partons less than PbPb collision.
 Therefore, the average momentum transfer per kicked medium partons is 43\% higher in 13 TeV and 90\% higher in 7 TeV than PbPb collision at 2.76TeV.
-Furthermore, the $f_R\left\langle N_k\right\rangle$ results of both center-of-mass energy systems of proton-proton collisions are less than PbPb collisions at 2.76TeV.
-Moreover, the $f_R\left\langle N_k\right\rangle$ at 7 TeV is lower than at 13 TeV, which is shown that lower center-of-mass energy creates less mediums.
+Furthermore, the $f_R\left\langle N_k \right\rangle$ results of both center-of-mass energy systems of proton-proton collisions are less than PbPb collisions at 2.76TeV.
+Moreover, the $f_R\left\langle N_k \right\rangle$ at 7 TeV is lower than at 13 TeV, which is shown that lower center-of-mass energy creates less mediums.
 
 
 %various multiplicity 결과%
 Secondly, the Momentum-Kick model with introduced multiplicity dependence in $f_R\left\langle N_k\right\rangle$ can also apply well in the various multiplicities.
-
+We set the Momentum-Kick model parameters as the fixed $q=1.00$ GeV, the temperature $1.096\leq T \leq 1.233$ with $\langle p_T \rangle$ dependence, and the $f_R\left\langle N_k \right\rangle$ with multiplicity dependence.
+We obtain the $f_R\left\langle N_k \right\rangle$ parameters in the integrated yield data, and we obtain $f_R\left\langle N_k \right\rangle = A(-35+0.65\langle N_{\text{ch}}^{\text{rec}}\rangle)\times10^{-3}$.
+And the constant `$A$' is the only free parameter, which determines overall yield, when the Momentum-Kick model explains $\Delta\eta-\Delta\phi$ correlation in the various multiplicities.
+However, the LHC Run2 data has high uncertainty in the high multiplicities, particularly $120\leq N_{\text{ch}}^{\text{rec}}$, we think the uncertainty will be resolved in Run3.
 
 
 
@@ -374,8 +413,12 @@ Secondly, the Momentum-Kick model with introduced multiplicity dependence in $f_
 % The particles that the high range of $p_T$ can survive easily in the proton-proton collision, it has the same as PbPb collisions.
 % However, since pp collision at 13TeV makes lower density than PbPb collisions, the number of kicked medium partons is irrelevant to $p_T$.
 
-Furthermore, we expect the Momentum-Kick model can well describe other diverse data.
-Therefore, we will try to explain other data, like various multiplicity and center of mass energy, via the Momentum-Kick model.
+
+% 이 부분 어떻게 쓸까요~~~~ %
+Furthermore, we expect the Momentum-Kick model can well describe other diverse data, which are higher center-of-mass energy, higher multiplicities, and so on.
+Therefore, we will try to explain other data via the Momentum-Kick model.
+
+
 \bibliography{Bibliography}
 
 \end{document}

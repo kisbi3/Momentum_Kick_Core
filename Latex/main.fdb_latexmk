@@ -1,18 +1,19 @@
 # Fdb version 3
-["bibtex main"] 1682842318 "main.aux" "main.bbl" "main" 1682864321
+["bibtex main"] 1684771011 "main.aux" "main.bbl" "main" 1684771034
   "Bibliography.bib" 1680950034 333013 931acae49b2eb06ba5c79b5457712df2 ""
   "c:/texlive/2021/texmf-dist/bibtex/bst/revtex4/apsrev.bst" 1627888245 43844 78e58abfb2d07832103f1e2f30cf6375 ""
-  "main.aux" 1682844821 9903 813c981e47fcdf047710571783face36 "pdflatex"
+  "main.aux" 1684771029 10310 d4a6942b0ecf20cfb8b2a34dbd95d446 "pdflatex"
   (generated)
   "main.blg"
   "main.bbl"
-["pdflatex"] 1682844809 "d:/내 드라이브/Github/Momentum_Kick_Core/Latex/main.tex" "main.pdf" "main" 1682864321
+["pdflatex"] 1684771012 "d:/내 드라이브/Github/Momentum_Kick_Core/Latex/main.tex" "main.pdf" "main" 1684771034
   "Figures/Paper_frnk.png" 1682154300 200749 650c04324db1e9f1cc46e02a40259fb8 ""
   "Figures/Paper_pTdis.png" 1673505547 291444 ed8618ef2f63a92c604732ca62e1ad31 ""
   "Figures/Paper_phiCorr.png" 1673505547 1138993 f5d7a11dcb43afd263e0dd9ca390e1b1 ""
+  "Figures/Prediction_pp14TeV.png" 1684770248 1570296 790e595bb6627be62993fb012c7cf4b9 ""
   "Figures/Yield_Fitting.png" 1681568121 108215 0947ec0f5caa17f674c323e025aba00c ""
   "Figures/ptVSnone.png" 1673505547 59181 c5559202bc90b7cee63eaace34c8c35f ""
-  "Figures/rezero_atlas_Nk.png" 1673505547 1785267 44478038d8c7650362047c01e54f9905 ""
+  "Figures/rezero_atlas_Nk.png" 1684765704 1784145 b9534df2f0157e90932b133b9a677d06 ""
   "c:/texlive/2021/texmf-dist/fonts/map/fontname/texfonts.map" 1627885002 3524 cb3e574dea2d1052e39280babc910dc8 ""
   "c:/texlive/2021/texmf-dist/fonts/tfm/public/amsfonts/cmextra/cmbsy5.tfm" 1627882866 1120 1e8878807317373affa7f7bba4cf2f6a ""
   "c:/texlive/2021/texmf-dist/fonts/tfm/public/amsfonts/cmextra/cmbsy6.tfm" 1627882866 1124 14ccf5552bc7f77ca02a8a402bea8bfb ""
@@ -123,10 +124,10 @@
   "c:/texlive/2021/texmf-var/fonts/map/pdftex/updmap/pdftex.map" 1627890084 5227287 e151fc6fd8e09c44e5f41e1c855f0ff4 ""
   "c:/texlive/2021/texmf-var/web2c/pdftex/pdflatex.fmt" 1627890346 2801563 7913a890ec830d13e92b100d556b976a ""
   "c:/texlive/2021/texmf.cnf" 1627890001 713 e69b156964470283e0530f5060668171 ""
-  "d:/내 드라이브/Github/Momentum_Kick_Core/Latex/main.tex" 1682864308 27642 0b2d8cc8dc61296ee4fd76bb0eb54111 ""
+  "d:/내 드라이브/Github/Momentum_Kick_Core/Latex/main.tex" 1684770987 30662 6d1d21888c141108a8ebb2a8faa040e4 ""
   "jkps.rtx" 1673505574 8499 3244f40ac105fbfca95729ffc3d8f7ef ""
-  "main.aux" 1682844821 9903 813c981e47fcdf047710571783face36 "pdflatex"
-  "main.bbl" 1682842319 24934 a723f61e64fddcd2fb2acb39174622b1 "bibtex main"
+  "main.aux" 1684771029 10310 d4a6942b0ecf20cfb8b2a34dbd95d446 "pdflatex"
+  "main.bbl" 1684771012 24934 a723f61e64fddcd2fb2acb39174622b1 "bibtex main"
   (generated)
   "main.pdf"
   "main.log"
