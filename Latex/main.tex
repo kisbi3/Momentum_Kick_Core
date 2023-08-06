@@ -364,8 +364,24 @@ Therefore, since the LHC Run3 has higher luminosity than Run2, we hope that the 
 \section*{Prediction}
 \label{sec:Prediction}
 
-In the LHC Run 3, they are conducting about proton-proton collisions at 14 TeV.
-Although the center-of-mass energy is similar to Run 2, we need to predict about the data.
+In the LHC Run 3, they are conducting about proton-proton collisions at 14 TeV, which is a little bit higher than Run 2.
+We already know that the Momentum-Kick model can describe the proton-proton collisions at high multiplicity in 7 TeV and 13 TeV.
+Hence, the Momentum-Kick model can explain other center-of-mass energies, and following table shows the parameters $q$ and $T$ of the 7 TeV, 13 TeV and 14 TeV.
+
+\begin{table}[ht]
+  \centering
+  \begin{tabular}{C{2cm} | C{3cm}  C{4cm}  C{2.5cm} }
+   \hline \\[-1 ex]
+    & 7 Tev & 13 TeV & 14 TeV \\ [1 ex] \hline\hline \\[-1.5 ex]
+   T (GeV) & 1.16 & 1.18 & 1.183 \\[1ex]
+   q (GeV) & 1.33 & 1.00 & 0.945 \\ [1ex]
+   \hline
+ \end{tabular}
+ \caption{The parameters of 7 TeV and 13 TeV are fitting results, and the 14 TeV are prediction via linearly extrapolate.}
+ \label{table:predict}
+\end{table}
+
+
 q=0.945, T = 1.183 $\langle p_T \rangle=1.248$, $f_R \langle N_k \rangle = A(-35+0.65\langle N_{\text{ch}}^{\text{rec}}\rangle)\times10^{-3}$, which A is free parameter.
 
 \begin{figure}[ht]
@@ -416,7 +432,10 @@ However, the LHC Run2 data has high uncertainty in the high multiplicities, part
 
 % 이 부분 어떻게 쓸까요~~~~ %
 Furthermore, we expect the Momentum-Kick model can well describe other diverse data, which are higher center-of-mass energy, higher multiplicities, and so on.
-Therefore, we will try to explain other data via the Momentum-Kick model.
+And we need to focus on $f_R\left\langle N_k \right\rangle$ term.
+In the heavy-ion collisions, $Ae^{-{B} / p_T -C p_{T}}$ form can explain ridge structure well, especially in PbPb collisions at 2.76 TeV.
+However, the fitting result of $Ae^{-{B} / p_T -C p_{T}}$ form at the proton-proton collisions is very similar to constant result.
+Therefore, we need to check the form of $f_R\left\langle N_k \right\rangle$ in the heavy-ion collisions whether the form can also describe well in the PbPb collisions at 5.02 TeV.
 
 
 \bibliography{Bibliography}

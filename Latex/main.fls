@@ -1,8 +1,8 @@
-PWD d:/³» µå¶óÀÌºê/Github/Momentum_Kick_Core/Latex
+PWD f:/³» µå¶óÀÌºê/Github/Momentum_Kick_Core/Latex
 INPUT c:/texlive/2021/texmf.cnf
 INPUT c:/texlive/2021/texmf-dist/web2c/texmf.cnf
 INPUT c:/texlive/2021/texmf-var/web2c/pdftex/pdflatex.fmt
-INPUT d:/ë‚´ ë“œë¼ì´ë¸Œ/Github/Momentum_Kick_Core/Latex/main.tex
+INPUT f:/ë‚´ ë“œë¼ì´ë¸Œ/Github/Momentum_Kick_Core/Latex/main.tex
 OUTPUT main.log
 INPUT c:/texlive/2021/texmf-dist/tex/latex/revtex4/revtex4.cls
 INPUT c:/texlive/2021/texmf-dist/tex/latex/revtex4/revtex4.cls

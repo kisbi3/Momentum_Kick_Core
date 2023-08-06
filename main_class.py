@@ -259,8 +259,9 @@ for i in range(3):
 '''[:] 는 deep copy를 위해 필요함'''
 phi_13TeV_ptdep_fitting = phi_13TeV_ptdep[:]          # fitting에 사용하는 데이터에서 Yridge를 포함하려는 경우
 dat_13TeV_ptdep_fitting = dat_13TeV_ptdep[:]          # fitting에 사용하는 데이터에서 Yridge를 포함하려는 경우
-del phi_13TeV_ptdep_fitting[7]                        # delete ATLAS phi
-del dat_13TeV_ptdep_fitting[7]                        # delete ATLAS data
+# del phi_13TeV_ptdep_fitting[7]                        # delete ATLAS phi
+# del dat_13TeV_ptdep_fitting[7]                        # delete ATLAS data
+dat_13TeV_ptdep_fitting[7] = dat_13TeV_ptdep_fitting[7] - min(dat_13TeV_ptdep_fitting[7])       # ATLAS 포함하려면 이거 활성화 해야함 아니면 제거
 del phi_13TeV_ptdep_fitting[3]                        # delete 0.1<pT<1 phi
 del dat_13TeV_ptdep_fitting[3]                        # delete 0.1<pT<1 data
 
@@ -297,9 +298,9 @@ def datacut():
             phi_07TeV_ptdep_fitting[i] = phi_07TeV_ptdep_fitting[i][len(phi_07TeV_ptdep_fitting[i])-argmin-1:argmin+1]
 datacut()
 
-ptdep_result = [0.9959725081178606, 1.1806651359004734, 2.243448959076882, 1e-10, 1e-10]
+# ptdep_result = [0.9959725081178606, 1.1806651359004734, 2.243448959076882, 1e-10, 1e-10]
+ptdep_result = []
 ptdep_result_07 = [1.3275252294326796, 1.1626369531267884, 0.9941263378234529, 1e-10, 1e-10]
-# ptdep_result = []
 # ptdep_result_07 = []
 
 
@@ -309,13 +310,13 @@ multi_atlas_result = []
 multi_cms_result = []
 ptdep_Rsq = []
 
-total_boundary = ((0.5, 0.8, 0, 0, 0),(5, 4., 10, 10, 10))
-total_initial = (1.,  1., 2., 0, 0)
+total_boundary = ((0.5, 0.5, 0, 0, 0),(5, 4., 10, 10, 10))
+total_initial = (2.,  1.5, .5, 0, 0)
 # total_initial = (0.955, 1.09, 2.74)
 '''Fitting 13TeV data'''
 def fit_13tev():
-    ptf = [(1, 2), (2, 3), (3, 4), (1, 2), (2, 3), (3, 4)]
-    etaf = [(1.6, 1.8), (1.6, 1.8), (1.6, 1.8), (2, 4), (2, 4), (2, 4)]
+    ptf = [(1, 2), (2, 3), (3, 4), (1, 2), (2, 3), (3, 4), (0.5, 5)]
+    etaf = [(1.6, 1.8), (1.6, 1.8), (1.6, 1.8), (2, 4), (2, 4), (2, 4), (2, 5)]
     '''boundary conditions'''
     # boundary = ((0., 0., -20, -10, -10),(5, 3., 20, 10, 10))
     boundary = total_boundary
@@ -324,10 +325,11 @@ def fit_13tev():
 
 
     initial = total_initial
-    del phi_13TeV_ptdep_fitting[-1]
-    del dat_13TeV_ptdep_fitting[-1]
+    del phi_13TeV_ptdep_fitting[-1]     # CMS Yridge 데이터 제거
+    del dat_13TeV_ptdep_fitting[-1]     # CMS Yridge 데이터 제거
     del ptloww[-1]
     del pthigh[-1]
+    print("mode : xx")
     ptdep = classes.Fitting_gpu(13000, phi_13TeV_ptdep_fitting, dat_13TeV_ptdep_fitting, (ptloww, pthigh), None, ptf, etaf, boundary, initial, "pTdependence")
     result, ptdep_error = ptdep.fitting(None, None)                  # error를 고려하지 않으려는 경우
     print("pp 13TeV Fitting result : ", result)
@@ -516,9 +518,9 @@ def fit_cmenerg():
     print(ptdep_error_cm)
 
 
-# fit_13tev()
+fit_13tev()
 # fit_7tev()
-fit_multipl()
+# fit_multipl()
 # fit_cmenerg()
 
 
@@ -558,6 +560,7 @@ dat_13TeV_ptdep = dat_13TeV_ptdep[0:-2]
 # atlas = classes.Drawing_Graphs(13000, (2, 5), *ptdep_result, None, None)
 
 '''pT dependence phi correlation graph'''
+# ptdep_result = [0.826, 1.248, 3.392, 9.1e-6, 1e-10]
 def drawgraph_ptdep_phicorr():
     fig1, axes1 = plt.subplots(nrows=1, ncols=5,figsize=(125,20))
     print("13TeV : ", ptdep_result)
@@ -918,10 +921,10 @@ def drawgraph_multi_phicorr():
         fig1.savefig('./Results/parameters_multiplicity_dep_ATLAS.png')
 
 
-# drawgraph_ptdep_phicorr()
+drawgraph_ptdep_phicorr()
 time_phicorr = time.time()
 print(f"Graph, Phi correlation end : {time_phicorr-time_calculate:.3f} sec")
-# drawgraph_ptdep_Yridge()
+drawgraph_ptdep_Yridge()
 time_yridge = time.time()
 print(f"Graph, Yridge end : {time_yridge-time_phicorr:.3f} sec")
 # drawgraph_ptdep_frnk()
@@ -930,7 +933,7 @@ print(f"FrNk end : {time_frnk-time_yridge:.3f} sec")
 # drawgraph_cmdep_phicorr()
 time_multi = time.time()
 print(f"Graph, Multiplicity end : {time_multi-time_frnk:.3f} sec")
-drawgraph_multi_phicorr()
+# drawgraph_multi_phicorr()
 time_ptdist = time.time()
 print(f"Graph, pT distribution end : {time_ptdist-time_multi:.3f} sec")
 
@@ -958,54 +961,55 @@ def drawgraph_ptdep_phicorr_predict():
             cms_result_avg = cms_avg.result_plot("pTdependence", None, ptf, (min(phi_13TeV_ptdep[i+3]), max(phi_13TeV_ptdep[i+3])))
             cms_result_hih = cms_hih.result_plot("pTdependence", None, ptf, (min(phi_13TeV_ptdep[i+3]), max(phi_13TeV_ptdep[i+3])))
             cms_result_low = cms_low.result_plot("pTdependence", None, ptf, (min(phi_13TeV_ptdep[i+3]), max(phi_13TeV_ptdep[i+3])))
-            axes1[i].plot(cms_result_hih[0], cms_result_hih[1], color = "gray", linewidth=7, linestyle='-')
-            axes1[i].plot(cms_result_low[0], cms_result_low[1], color = "gray", linewidth=7, linestyle='-')
-            axes1[i].fill_between(cms_result_hih[0], cms_result_hih[1], cms_result_low[1], where=(cms_result_hih[1] > cms_result_low[1]), color='gray', alpha=0.5)
+            axes1[i].plot(cms_result_hih[0], cms_result_hih[1], color = "black", linewidth=7, linestyle='dashed')
+            axes1[i].plot(cms_result_low[0], cms_result_low[1], color = "black", linewidth=7, linestyle='dashed')
+            axes1[i].fill_between(cms_result_hih[0], cms_result_hih[1], cms_result_low[1], where=(cms_result_hih[1] > cms_result_low[1]), color='black', alpha=0.5)
 
             axes1[i].plot(cms_result_avg[0], cms_result_avg[1], color = "black", linewidth=7, linestyle='-')
-            axes1[i].errorbar(phi_13TeV_ptdep[i+3], dat_13TeV_ptdep[i+3], yerr=(abs(err_13TeV_ptdep[2*(i+3)+1]),err_13TeV_ptdep[2*(i+3)]), color="black", linestyle=' ', linewidth=7, capthick=3, capsize=15)
-            axes1[i].scatter(phi_13TeV_ptdep[i+3], dat_13TeV_ptdep[i+3], edgecolors="black", s=800, marker='o', facecolors='none', linewidths=7)
-            axes1[i].scatter(phi_13TeV_ptdep[i+3], dat_13TeV_ptdep[i+3], s=800, marker='+', facecolors='black', linewidths=7)
+            axes1[i].set_title(r'$0.1<p_{T, \, \mathrm{trig(assoc)}}<1$', size = 70, pad=30)
+            # axes1[i].errorbar(phi_13TeV_ptdep[i+3], dat_13TeV_ptdep[i+3], yerr=(abs(err_13TeV_ptdep[2*(i+3)+1]),err_13TeV_ptdep[2*(i+3)]), color="black", linestyle=' ', linewidth=7, capthick=3, capsize=15)
+            # axes1[i].scatter(phi_13TeV_ptdep[i+3], dat_13TeV_ptdep[i+3], edgecolors="black", s=800, marker='o', facecolors='none', linewidths=7)
+            # axes1[i].scatter(phi_13TeV_ptdep[i+3], dat_13TeV_ptdep[i+3], s=800, marker='+', facecolors='black', linewidths=7)
         elif i==4:
             atlas_result_hih = atlas_hih.result_plot("pTdependence", None, (0.5, 5), (min(phi_13TeV_ptdep[-1]), max(phi_13TeV_ptdep[-1])))
             atlas_result_low = atlas_low.result_plot("pTdependence", None, (0.5, 5), (min(phi_13TeV_ptdep[-1]), max(phi_13TeV_ptdep[-1])))
-            axes1[i].plot(atlas_result_hih[0], atlas_result_hih[1], color = "skyblue", linewidth=7, linestyle='-')
-            axes1[i].plot(atlas_result_low[0], atlas_result_low[1], color = "skyblue", linewidth=7, linestyle='-')
-            axes1[i].fill_between(atlas_result_hih[0], atlas_result_hih[1], atlas_result_low[1], where=(atlas_result_hih[1] > atlas_result_low[1]), color='skyblue', alpha=0.5)
+            axes1[i].plot(atlas_result_hih[0], atlas_result_hih[1], color = "blue", linewidth=7, linestyle='dashed')
+            axes1[i].plot(atlas_result_low[0], atlas_result_low[1], color = "blue", linewidth=7, linestyle='dashed')
+            axes1[i].fill_between(atlas_result_hih[0], atlas_result_hih[1], atlas_result_low[1], where=(atlas_result_hih[1] > atlas_result_low[1]), color='blue', alpha=0.5)
 
             atlas_result_avg = atlas_avg.result_plot("pTdependence", None, (0.5, 5), (min(phi_13TeV_ptdep[-1]), max(phi_13TeV_ptdep[-1])))
             axes1[i].plot(atlas_result_avg[0], atlas_result_avg[1], color = "blue", linewidth=7, linestyle='-')
-            axes1[i].scatter(phi_13TeV_ptdep[-1], dat_13TeV_ptdep[-1]-min(dat_13TeV_ptdep[-1]), facecolors='blue', edgecolors="blue", s=600, marker='o', linewidths=7)
+            # axes1[i].scatter(phi_13TeV_ptdep[-1], dat_13TeV_ptdep[-1]-min(dat_13TeV_ptdep[-1]), facecolors='blue', edgecolors="blue", s=600, marker='o', linewidths=7)
             axes1[i].set_title(r'0.5$<p_{T, \, \mathrm{trig(assoc)}}<$5', size = 70, pad=30)
         else:
             ptf = (i, i+1)
             cms_result_avg = cms_avg.result_plot("pTdependence", None, ptf, (min(phi_13TeV_ptdep[i+3]), max(phi_13TeV_ptdep[i+3])))
             cms_result_hih = cms_hih.result_plot("pTdependence", None, ptf, (min(phi_13TeV_ptdep[i+3]), max(phi_13TeV_ptdep[i+3])))
             cms_result_low = cms_low.result_plot("pTdependence", None, ptf, (min(phi_13TeV_ptdep[i+3]), max(phi_13TeV_ptdep[i+3])))
-            axes1[i].plot(cms_result_hih[0], cms_result_hih[1], color = "gray", linewidth=7, linestyle='-')
-            axes1[i].plot(cms_result_low[0], cms_result_low[1], color = "gray", linewidth=7, linestyle='-')
-            axes1[i].fill_between(cms_result_hih[0], cms_result_hih[1], cms_result_low[1], where=(cms_result_hih[1] > cms_result_low[1]), color='gray', alpha=0.5)
+            axes1[i].plot(cms_result_hih[0], cms_result_hih[1], color = "black", linewidth=7, linestyle='dashed')
+            axes1[i].plot(cms_result_low[0], cms_result_low[1], color = "black", linewidth=7, linestyle='dashed')
+            axes1[i].fill_between(cms_result_hih[0], cms_result_hih[1], cms_result_low[1], where=(cms_result_hih[1] > cms_result_low[1]), color='black', alpha=0.5)
 
             alice_result_avg = alice_avg.result_plot("pTdependence", None, ptf, (min(phi_13TeV_ptdep[i+3]), max(phi_13TeV_ptdep[i+3])))
             alice_result_hih = alice_hih.result_plot("pTdependence", None, ptf, (min(phi_13TeV_ptdep[i+3]), max(phi_13TeV_ptdep[i+3])))
             alice_result_low = alice_low.result_plot("pTdependence", None, ptf, (min(phi_13TeV_ptdep[i+3]), max(phi_13TeV_ptdep[i+3])))
-            axes1[i].plot(alice_result_hih[0], alice_result_hih[1], color = "orange", linewidth=7, linestyle='-')
-            axes1[i].plot(alice_result_low[0], alice_result_low[1], color = "orange", linewidth=7, linestyle='-')
-            axes1[i].fill_between(alice_result_hih[0], alice_result_hih[1], alice_result_low[1], where=(alice_result_hih[1] > alice_result_low[1]), color='orange', alpha=0.5)
+            axes1[i].plot(alice_result_hih[0], alice_result_hih[1], color = "red", linewidth=7, linestyle='dashed')
+            axes1[i].plot(alice_result_low[0], alice_result_low[1], color = "red", linewidth=7, linestyle='dashed')
+            axes1[i].fill_between(alice_result_hih[0], alice_result_hih[1], alice_result_low[1], where=(alice_result_hih[1] > alice_result_low[1]), color='red', alpha=0.5)
 
 
             alice_result_avg = alice_avg.result_plot("pTdependence", None, ptf, (min(phi_13TeV_ptdep[i-1]), max(phi_13TeV_ptdep[i-1])))
             cms_result_avg = cms_avg.result_plot("pTdependence", None, ptf, (min(phi_13TeV_ptdep[i+3]), max(phi_13TeV_ptdep[i+3])))
             axes1[i].plot(alice_result_avg[0], alice_result_avg[1], color = "red", linewidth=7, linestyle='-')
             axes1[i].plot(cms_result_avg[0], cms_result_avg[1], color = "black", linewidth=7, linestyle='-')
-            '''alice plot'''
-            axes1[i].errorbar(phi_13TeV_ptdep[i-1], dat_13TeV_ptdep[i-1], yerr=(abs(err_13TeV_ptdep[2*i-1]),err_13TeV_ptdep[2*i-2]), color="red", linestyle=' ', linewidth=7, capthick=3, capsize=15)
-            axes1[i].scatter(phi_13TeV_ptdep[i-1], dat_13TeV_ptdep[i-1], edgecolors="red", s=800, marker='o', facecolors='none', linewidths=7)
-            axes1[i].scatter(phi_13TeV_ptdep[i-1], dat_13TeV_ptdep[i-1], s=800, marker='+', facecolors='red', linewidths=7)
-            '''cms plot 13TeV'''
-            axes1[i].errorbar(phi_13TeV_ptdep[i+3], dat_13TeV_ptdep[i+3], yerr=(abs(err_13TeV_ptdep[2*(i+3)+1]),err_13TeV_ptdep[2*(i+3)]), color="black", linestyle=' ', linewidth=7, capthick=3, capsize=15)
-            axes1[i].scatter(phi_13TeV_ptdep[i+3], dat_13TeV_ptdep[i+3], edgecolors="black", s=800, marker='o', facecolors='none', linewidths=7)
-            axes1[i].scatter(phi_13TeV_ptdep[i+3], dat_13TeV_ptdep[i+3], s=800, marker='+', facecolors='black', linewidths=7)
+            # '''alice plot'''
+            # axes1[i].errorbar(phi_13TeV_ptdep[i-1], dat_13TeV_ptdep[i-1], yerr=(abs(err_13TeV_ptdep[2*i-1]),err_13TeV_ptdep[2*i-2]), color="red", linestyle=' ', linewidth=7, capthick=3, capsize=15)
+            # axes1[i].scatter(phi_13TeV_ptdep[i-1], dat_13TeV_ptdep[i-1], edgecolors="red", s=800, marker='o', facecolors='none', linewidths=7)
+            # axes1[i].scatter(phi_13TeV_ptdep[i-1], dat_13TeV_ptdep[i-1], s=800, marker='+', facecolors='red', linewidths=7)
+            # '''cms plot 13TeV'''
+            # axes1[i].errorbar(phi_13TeV_ptdep[i+3], dat_13TeV_ptdep[i+3], yerr=(abs(err_13TeV_ptdep[2*(i+3)+1]),err_13TeV_ptdep[2*(i+3)]), color="black", linestyle=' ', linewidth=7, capthick=3, capsize=15)
+            # axes1[i].scatter(phi_13TeV_ptdep[i+3], dat_13TeV_ptdep[i+3], edgecolors="black", s=800, marker='o', facecolors='none', linewidths=7)
+            # axes1[i].scatter(phi_13TeV_ptdep[i+3], dat_13TeV_ptdep[i+3], s=800, marker='+', facecolors='black', linewidths=7)
             st = i
             en = i+1
             axes1[i].set_title(str(st)+r'$<p_{T, \, \mathrm{trig(assoc)}}<$'+str(en), size = 70, pad=30)

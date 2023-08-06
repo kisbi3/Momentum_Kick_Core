@@ -427,7 +427,6 @@ class Fitting_gpu:
                 end = start + self.array_length[i]
                 phi_array.append(given_array[start : end])
                 start += self.array_length[i]
-
         Aridge_bin = 1000
         pti, yi = np.meshgrid(np.linspace(self.__pti[0], self.__pti[1], Aridge_bin), np.linspace(self.__yi[0], self.__yi[1], Aridge_bin))
         dpti = (self.__pti[1] - self.__pti[0])/Aridge_bin
@@ -436,7 +435,8 @@ class Fitting_gpu:
 
         if self.ptdis_number is None and self.array_length == 1:
             ''' CM energy dependence'''            
-            deltapt = self.ptf[0][1] - self.ptf[0][0]
+            # deltapt = self.ptf[0][1] - self.ptf[0][0]
+            deltapt = 1
             yy = zz = 0
             result_dist = deltapt*self.__ptdep(phi_array, self.etaf[0], self.ptf[0], Aridge, kick, Tem, xx, yy, zz)
             result = result_dist - min(result_dist)
@@ -466,7 +466,8 @@ class Fitting_gpu:
         delta_Deltaeta = 2*(etaf[1]-etaf[0])
         ptf, etaf, phif = cp.meshgrid(cp.linspace(ptf_dist[0], ptf_dist[1], bin), cp.linspace(etaf[0], etaf[1], bin), cp.asarray(phi_array))
         dptf = (ptf_dist[1]-ptf_dist[0])/bin
-        deltapt = 1/(ptf_dist[1] - ptf_dist[0])       #pt normalize
+        # deltapt = 1/(ptf_dist[1] - ptf_dist[0])       #pt normalize
+        deltapt = 1
         dist = deltapt*cp.sum(self.__FrNk(xx, yy, zz, ptf)*ptf*gpu.Ridge_dist(Aridge, ptf, etaf, phif, kick, Tem, self.sqrSnn, self.__mp, self.__m, self.__mb, self.__md, self.__a), axis=0)*dptf*detaf/delta_Deltaeta
         return (4/3)*cp.asnumpy(cp.sum(dist, axis=(0)))
 
@@ -636,16 +637,25 @@ class Drawing_Graphs:
         bin = 300
         delta_Deltaeta = 2*(self.etaf[1]-self.etaf[0])
         dptf = (ptf_range[1]-ptf_range[0])/bin
-        deltapt = 1/(ptf_range[1] - ptf_range[0])       #pt normalize
+        # deltapt = 1/(ptf_range[1] - ptf_range[0])       #pt normalize
+        deltapt = 1
         ptf, etaf, phif = cp.meshgrid(cp.linspace(ptf_range[0], ptf_range[1], bin), cp.linspace(self.etaf[0], self.etaf[1], bin), cp.linspace(phif_range[0], phif_range[1], bin))
         detaf = (self.etaf[1]-self.etaf[0])/bin
         dist = deltapt*(4/3)*cp.sum(self.__FrNk(xx, yy, zz, ptf)*ptf*gpu.Ridge_dist(Aridge, ptf, etaf, phif, kick, Tem, self.sqrSnn, self.__mp, self.__m, self.__mb, self.__md, self.__a), axis = 1)*dptf*detaf/delta_Deltaeta
         # Ridge_phi = cp.asnumpy(cp.sum(dist, axis=0))
+        
+        '''아래 경우는 pt에 대해서 normalization한 경우임. pt range에 따라서 나누어져 있기에 normalize 하면 안됨'
         if self.type == 'ATLAS':
             Ridge_phi = cp.asnumpy(cp.sum(dist, axis=0))*(ptf_range[1]-ptf_range[0])
+            # Ridge_phi = cp.asnumpy(cp.sum(dist, axis=0))*(5-0.5)
         else:
             Ridge_phi = cp.asnumpy(cp.sum(dist, axis=0))
+        '''
+        Ridge_phi = cp.asnumpy(cp.sum(dist, axis=0))
+        
         return cp.asnumpy(phif[0][0]), Ridge_phi-min(Ridge_phi)
+        '''아래 경우는 CZYAM을 제거하여 제대로 pt range가 나눠져 있는 결과와 합쳐져 있는 결과의 적분값이 동일한지 확인하기 위함. 정상적으로 그리려면 위에 있는 코드 사용.'''
+        # return cp.asnumpy(phif[0][0]), Ridge_phi
     
 
     # Yridge를 데이터와 동일하게 '점'으로 표현할 경우
@@ -814,6 +824,7 @@ class Drawing_Graphs:
 
 '''여러 에러들 계산 ex) R-squared'''
 '''각 데이터를 따로 입력해야 함!'''
+''' 보류 '''
 class Error:
     __yi = (-10,10)
     __pti = (0,10)
