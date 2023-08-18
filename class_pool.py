@@ -95,11 +95,11 @@ class Fitting_gpu:
     def __FrNk(self, xx, yy, zz, pt):
         # return xx+yy*pt*pt
         # return xx*cp.exp(yy*pt)
-        # return xx*cp.exp(-yy/pt-zz*pt)
+        return xx*cp.exp(-yy/pt-zz*pt)
         # ''' 13 TeV에서 zz항이 의미 없어진 것을 확인 -> 7 TeV에서도 zz항을 없애버림 '''
         # return xx*cp.exp(-yy/pt)
         ''' frnk 상수로 두면 어떻게 되려나?'''
-        return xx
+        # return xx
         # return 1.415411195083602
     def __Fr(self, xx, yy, pt):
         return xx+yy*pt*pt
@@ -549,11 +549,11 @@ class Drawing_Graphs:
     def __FrNk(self, xx, yy, zz, pt):
         # return xx+yy*pt*pt
         # return xx*cp.exp(yy*pt)
-        # return xx*cp.exp(-yy/pt-zz*pt)
+        return xx*cp.exp(-yy/pt-zz*pt)
         # return xx*cp.exp(-yy/pt)
         # return 1.415411195083602
         ''' frnk 상수로 두면 어떻게 되려나?'''
-        return xx
+        # return xx
     def __Fr(self, xx, yy, pt):
         return xx+yy*pt*pt
     def __Nk(self, A, B, multi):

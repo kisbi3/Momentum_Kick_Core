@@ -311,7 +311,7 @@ multi_cms_result = []
 ptdep_Rsq = []
 
 total_boundary = ((0.5, 0.5, 0, 0, 0),(5, 4., 10, 10, 10))
-total_initial = (2.,  1.5, .5, 0, 0)
+total_initial = (2.,  1.5, .5, 1, 1)
 # total_initial = (0.955, 1.09, 2.74)
 '''Fitting 13TeV data'''
 def fit_13tev():
