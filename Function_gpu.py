@@ -15,7 +15,7 @@ def lightcone(pti, yi, sqrSnn, mp, m):  #P_T Initial, Rapidity Initial, sqr(Snn)
     squareroot=cp.sqrt(m*m+pti*pti)
     yiabs = cp.abs(yi)
     try:
-        return (squareroot/m)*cp.exp(yiabs-yb)
+        return (squareroot/mp)*cp.exp(yiabs-yb)
     except:
         print("Error in Function_gpu, lightcone")
         exit(0)

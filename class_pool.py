@@ -26,6 +26,7 @@ class Fitting_gpu:
     __Yridge_phif_start = -1.18
     __Yridge_phif_end = 1.18
     __error_temp = []
+    Error_Graph = []
     Mode = "Nothing"
     def multiplicity_fitting_mode(self, mode):
         self.Mode = mode
@@ -114,7 +115,7 @@ class Fitting_gpu:
         if error is None:
             if self.mode == "pTdependence":
                 popt, pcov = scipy.optimize.curve_fit(self.fitting_func, xdata = self.phi_array, ydata = self.data, bounds=self.boundary, p0 = self.initial)
-                return popt, self.chisq_error
+                return popt, self.Error_Graph
             elif self.mode == "Multiplicity":
 
                 print(f'Mode : {self.Mode}')
@@ -228,6 +229,7 @@ class Fitting_gpu:
                 quit()
 
         # '''error가 있는 경우지만, 지금은 사용하지 않음(만들다 말았음)'''
+        # elif error == "Error":
         else:
             error_array = np.array([])
             for i in range(len(error)):
@@ -236,7 +238,11 @@ class Fitting_gpu:
                 else:
                     error_array = np.concatenate((error_array, error[i]))
             if self.mode == "pTdependence":
-                popt, pcov = scipy.optimize.curve_fit(self.fitting_func, xdata = self.phi_array, ydata = self.data, bounds=self.boundary, p0 = self.initial, sigma = error_array, absolute_sigma = True)
+                print(error_array)
+                print(type(error_array))
+                print(len(self.data), len(error_array))
+                popt, pcov = scipy.optimize.curve_fit(self.fitting_func, xdata = self.phi_array, ydata = self.data, bounds=self.boundary, p0 = self.initial, sigma = error_array)
+                return popt, self.Error_Graph
             elif self.mode == "Multiplicity":
                 # self.Fixed_Temperature = Fixed_Temperature
                 self.Fixed_Temperature = Fixed_parameters[0]
@@ -252,7 +258,8 @@ class Fitting_gpu:
             else:
                 print("Typo!")
                 quit()
-        return popt, np.sqrt(np.diag(pcov))
+        # return popt, np.sqrt(np.diag(pcov))
+        return popt, self.Error_Graph
 
     # Free1(Free2+Free3*multiplicity)
     # def fitting_func_multi_final_ATLAS(self, phi_array, Free1, Free2, Free3):
@@ -313,7 +320,8 @@ class Fitting_gpu:
 
     def fitting_func_multi(self, phi_array, Free):
         multi_data = [55, 65, 75, 85, 95, 105, 115, 125, 135]
-        AAA = -0.03495215; BBB = 0.00065111
+        # AAA = -0.03495215
+        BBB = 0.00065111
         self.__md = 1.
         # xx = 5.3; yy = 8.5*10**(-35); zz = 0.22
         if (self.Mode == "Nothing"):
@@ -336,7 +344,8 @@ class Fitting_gpu:
         elif(self.Mode == "Final"):
             xx = Free
             yy = self.Fixed_yy; zz = self.Fixed_zz
-            kick = self.Fixed_kick
+            # kick = self.Fixed_kick
+            kick = self.Fixed_kick[self.separate_number]
             Tem = self.Fixed_Temperature[self.separate_number]
         Aridge_bin = 1000
         pti, yi = np.meshgrid(np.linspace(self.__pti[0], self.__pti[1], Aridge_bin), np.linspace(self.__yi[0], self.__yi[1], Aridge_bin))
@@ -346,19 +355,25 @@ class Fitting_gpu:
         # Aridge = cp.asarray(1/np.sum(cpu.Aridge(pti, yi, Tem[number], self.__m, self.__md, self.__a, self.sqrSnn, self.__mp)*dyi*dpti*2*np.pi))
         # result = self.__multiplicity(phi_array, self.etaf, Aridge, kick, Tem[number], xx, yy, zz)
         Aridge = cp.asarray(1/np.sum(cpu.Aridge(pti, yi, Tem, self.__m, self.__md, self.__a, self.sqrSnn, self.__mp)*dyi*dpti*2*np.pi))
-        result = self.__MultiNk(1, AAA, BBB, multi_data[self.separate_number]) * self.__multiplicity(phi_array, self.etaf, Aridge, kick, Tem, xx, yy, zz)
+        # result = self.__MultiNk(1, AAA, BBB, multi_data[self.separate_number]) * self.__multiplicity(phi_array, self.etaf, Aridge, kick, Tem, xx, yy, zz)
+        result = self.__MultiNk(1, xx, BBB, multi_data[self.separate_number]) * self.__multiplicity(phi_array, self.etaf, Aridge, kick, Tem, 1, yy, zz)
         result = result - np.min(result)
         self.__count = self.__count + 1
+
+        Error = (np.sqrt(np.mean((result-self.data_sep[number])**2))) / np.sum(self.data_sep[number])
+
         if self.__count == 1:
             print("Multiplicity : ", multi_data[self.separate_number])
             print("Count \t Kick \t\t Tem \t\t xx \t\t yy \t zz \t\t Free2, \t\t Free3\t\t Error")
-            print(f"{self.__count}회", kick, Tem, xx, yy, zz, AAA, BBB, np.sum((result-self.data_sep[number])**2))
-            self.__error_temp.append(np.sum((result-self.data_sep[number])**2))
+            # print(f"{self.__count}회", kick, Tem, xx, yy, zz, AAA, BBB, np.sum((result-self.data_sep[number])**2))
+            print(f"{self.__count}회", kick, Tem, xx, yy, zz, BBB, 'Error : ', Error)
+            self.__error_temp.append(Error)
         elif self.__count%5==0:
-            print(f"{self.__count}회", kick, Tem, xx, yy, zz, AAA, BBB, np.sum((result-self.data_sep[number])**2))
+            # print(f"{self.__count}회", kick, Tem, xx, yy, zz, AAA, BBB, np.sum((result-self.data_sep[number])**2))
+            print(f"{self.__count}회", kick, Tem, xx, yy, zz, BBB, 'Error : ', Error)
             print(result)
             print(self.data_sep[number])
-        self.__error_temp[number] = np.sum((result-self.data_sep[number])**2)
+        self.__error_temp[number] = Error
         return result
 
     def fitting_func_multi_double(self, phi_array, Free1, Free2):       
@@ -414,7 +429,13 @@ class Fitting_gpu:
         # self.__md = kick
         self.__md = 1.
         if self.ptdis_number is None:
-            phi_array = given_array
+            phi_array = []
+            start = 0
+            for i in range(self.Number_of_Array):       # fitting에 사용하는 데이터가 Yridge가 포함되어 있는 경우 활성화
+                end = start + self.array_length[i]
+                phi_array.append(given_array[start : end])
+                start += self.array_length[i]
+
         else:
             ''' delete Yridge array'''
             numberof_ptdis = 0
@@ -427,6 +448,7 @@ class Fitting_gpu:
                 end = start + self.array_length[i]
                 phi_array.append(given_array[start : end])
                 start += self.array_length[i]
+
         Aridge_bin = 1000
         pti, yi = np.meshgrid(np.linspace(self.__pti[0], self.__pti[1], Aridge_bin), np.linspace(self.__yi[0], self.__yi[1], Aridge_bin))
         dpti = (self.__pti[1] - self.__pti[0])/Aridge_bin
@@ -453,11 +475,20 @@ class Fitting_gpu:
                     result = result_dist[i]
                 else:
                     result = np.concatenate((result, result_dist[i]))
-            result = np.concatenate((result, self.Yridge(Aridge, kick, Tem, xx, yy, zz)))       # fitting에 사용하는 데이터가 Yridge가 포함되어 있는 경우 활성화
+            if self.ptdis_number is None:
+                pass
+            else:
+                result = np.concatenate((result, self.Yridge(Aridge, kick, Tem, xx, yy, zz)))       # fitting에 사용하는 데이터가 Yridge가 포함되어 있는 경우 활성화
             self.__count = self.__count + 1
+
+
+        Error = (np.sqrt(np.mean((result-self.data)**2))) / np.sum(self.data)
+
         if self.__count == 1 or self.__count%10==0:
-            print(f"{self.__count}회", kick, Tem, xx, yy, zz, np.sum((result-self.data)**2))
-        self.chisq_error = np.sum((result-self.data)**2)
+            print(f"{self.__count}회", kick, Tem, xx, yy, zz, "Error : " , Error)
+
+        self.chisq_error = Error
+        self.Error_Graph.append(Error)
         return result
     
     def __ptdep(self, phi_array, etaf, ptf_dist, Aridge, kick, Tem, xx, yy, zz):
@@ -618,10 +649,13 @@ class Drawing_Graphs:
         ptf, etaf, phif = cp.meshgrid(cp.linspace(ptf_range[0], ptf_range[1], bin), cp.linspace(etaf_range[0], etaf_range[1], bin), cp.linspace(phif_range[0], phif_range[1], bin))
         detaf = (etaf_range[1]-etaf_range[0])/bin
         ridge_integrate = ptf*gpu.Ridge_dist(Aridge, ptf, etaf, phif, kick, Tem, self.sqrSnn, self.__mp, self.__m, self.__mb, self.__md, self.__a)
-        ridge_integrate = ridge_integrate*self.__FrNk(xx, yy, zz, ptf) * self.__MultiNk_func(1, -0.03495215, 0.00065111, multi)
+        # ridge_integrate = ridge_integrate*self.__FrNk(xx, yy, zz, ptf) * self.__MultiNk_func(1, -0.03495215, 0.00065111, multi)
+        ridge_integrate = ridge_integrate*self.__FrNk(1, yy, zz, ptf) * self.__MultiNk_func(1, xx, 0.00065111, multi)
+
         # dist_integrate = cp.sum(ridge_integrate, axis = 1)*(4/3)*dptf*detaf/delta_Deltaeta
         if self.type == 'ATLAS':
             dist_integrate = cp.sum(ridge_integrate, axis = 1)*(4/3)*dptf*detaf/delta_Deltaeta
+            print(self.__MultiNk_func(1, xx, 0.00065111, multi), cp.sum(dist_integrate-min(dist_integrate)))
         else:
             dist_integrate = cp.sum(ridge_integrate, axis = 1)*(4/3)*dptf*detaf/(delta_Deltaeta*(ptf_range[1]-ptf_range[0]))
         Ridge_phi = cp.asnumpy(cp.sum(dist_integrate, axis = 0))

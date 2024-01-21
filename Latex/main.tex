@@ -141,29 +141,32 @@ The Momentum-Kick model has applied the ZYAM method's results, we apply ZYAM met
 
 Since the initial parton momentum distribution is normalized, $f_R\langle N_k \rangle$ describes the number of particles, which $f_R$ means the survival ratio of initial partons and $\langle N_k \rangle$ is the number of kicked medium partons.
 Therefore, we can assume that $f_R\langle N_k \rangle$ has $p_T$ dependence.
-This assumption was already introduced in paper\cite{PbPb}, and the paper successfully explained the PbPb at 2.76 TeV results.
-Hence, we need to check whether this assumption applies to proton-proton collisions.
-Following figure is the fitting results of $f_R\langle N_k \rangle$.
-We can find the difference between $Ae^{-{B} / p_T -C p_{T}}$ and constant.
+The assumption was already introduced in paper\cite{PbPb}, and the paper successfully explained the PbPb at 2.76 TeV results.
+Hence, we need to check whether this assumption can also describe to proton-proton collisions.
+% Following figure is the fitting results of $f_R\langle N_k \rangle$.
+% We can find the difference between $Ae^{-{B} / p_T -C p_{T}}$ and constant.
+However, when we fit the data via python package 'scipy', $p_T$ dependence terms go to zero.
+Therefore, we think that proton-proton collisions do not have $p_T$ dpenedence at $f_R\langle N_k \rangle$, beacause they create small system.
 
-\begin{figure}[ht]
-\centering
-\includegraphics[width=12cm, height=6cm]{./Figures/ptVSnone}
-\caption{The $f_R\langle N_k \rangle$ fitting results of $Ae^{-{B} / p_T -C p_{T}}$ form and constant. The purple line is the fitting results of $f_R\langle N_k \rangle = Ae^{-{B} / p_T -C p_{T}}$, and the red line is the fitting result of $f_R\langle N_k \rangle$ as constant. }
-\label{figure:ptVSnone}
-\end{figure}
+% \begin{figure}[ht]
+% \centering
+% \includegraphics[width=12cm, height=6cm]{./Figures/ptVSnone}
+% \caption{The $f_R\langle N_k \rangle$ fitting results of $Ae^{-{B} / p_T -C p_{T}}$ form and constant. The purple line is the fitting results of $f_R\langle N_k \rangle = Ae^{-{B} / p_T -C p_{T}}$, and the red line is the fitting result of $f_R\langle N_k \rangle$ as constant. }
+% \label{figure:ptVSnone}
+% \end{figure}
 
-According to Fig.\ref{figure:ptVSnone}, two $f_R \langle N_k \rangle$ results only different in the $0.1<p_T<1$GeV range.
-This is because, the least square method via the Levenberg-Marquardt algorithm eliminates $e^{-Cp_T}$ term, and the $e^{-B/p_T}$ term only affects the $0.1<p_T<1$GeV range.
-However, $0.1<p_T<1$GeV range is not covered in the ALICE data, and the CMS and ATLAS data in the range have high statistical errors.
-Consequently, we cannot determine whether there is a $p_T$ dependence of $f_R\langle N_k \rangle$ in the $0.1<p_T<1$GeV range.
-Hence, we assume that $f_R\langle N_k \rangle$ is a constant in this paper.
+% According to Fig.\ref{figure:ptVSnone}, two $f_R \langle N_k \rangle$ results only different in the $0.1<p_T<1$GeV range.
+% This is because, the least square method via the Levenberg-Marquardt algorithm eliminates $e^{-Cp_T}$ term, and the $e^{-B/p_T}$ term only affects the $0.1<p_T<1$GeV range.
+% However, $0.1<p_T<1$GeV range is not covered in the ALICE data, and the CMS and ATLAS data in the range have high statistical errors.
+% Consequently, we cannot determine whether there is a $p_T$ dependence of $f_R\langle N_k \rangle$ in the $0.1<p_T<1$GeV range.
+% Hence, we assume that $f_R\langle N_k \rangle$ is a constant in this paper.
 
 
 \subsection{pp collisions at 13 and 7 TeV Fitting results}
 \label{subsec: pp collisions Fitting results}
 
-We fit the Momentum-Kick model as a least square method to the ALICE and CMS proton-proton collision 13TeV at high-multiplicity\cite{alice, cms}, and we also draw the ATLAS high-multiplicity pp collision results\cite{atlas}.
+% We fit the Momentum-Kick model as a least square method to the ALICE, CMS and ATLAS proton-proton collision 13TeV at high-multiplicity\cite{alice, cms, atlas}.
+We fit the Momentum-Kick model as a least square method to the results of three major experimental colliders in the LHC proton-proton collisions 13TeV at high-multiplicity\cite{alice, cms, atlas}.
 
 \begin{figure}[ht]
 \centering
@@ -184,18 +187,22 @@ For the ALICE and CMS data, we draw the case of $1<p_T<2, 2<p_T<3, 3<p_T<4$, and
 In Fig. \ref{figure:phicorr} and \ref{figure:pTdis}, we draw Momentum-Kick model results and LHC data together.
 The solid line is the Momentum-Kick model results, and the circles are the experimental data.
 Red color is ALICE data and the Momentum-Kick model results, black is for CMS, and blue is for ATLAS.
-In the Fig. \ref{figure:phicorr}, the ATLAS collaboration's data is significantly higher than others.
-This is because, they didn't normalize as $p_T$ bin, so I also do not normalize either.
-Experimental data is well described via Momentum-Kick model for all $p_T$ ranges.
-In Fig. \ref{figure:pTdis}, since partons are kicked as $\textbf{q}$ by jet particles, the theoretical ridge yield must show a peak at $q$.
+% In the Fig. \ref{figure:phicorr}, the ATLAS collaboration's data is significantly higher than others.
+% This is because, they didn't normalize as $p_T$ bin, so I also do not normalize either.
+Experimental data is well described via the Momentum-Kick model for all $p_T$ ranges, except the CMS 13TeV $p_T$ distribution yield data.
+% In Fig. \ref{figure:pTdis}, since partons are kicked as $\textbf{q}$ by jet particles, the theoretical ridge yield must show a peak at $q$.
 % However, since $f_R \langle N_k \rangle $ is proportional to ${p_T}^2$, the position of the peak is moved to an area where the $p_T$ is larger. 
-As can be seen in Fig.\ref{figure:pTdis}, the peak is made around $p_T=1.2$GeV.
-Overall, the Momentum-Kick model can describe well for the $\Delta\phi$ correlation and $p_T$ distribution yield, too.
+% As can be seen in Fig.\ref{figure:pTdis}, the peak is made around $p_T=1.2$GeV.
+% Overall, the Momentum-Kick model can describe well for the $\Delta\phi$ correlation and $p_T$ distribution yield, too.
+We respectfully suggest that there may be inaccuracies in this data.
+This is because the $\Delta \phi$ correlation results from the same center of mass energy are highly similar.
+However, in the case of $p_T$ distribution, the data of different center of mass energy is similar.
+Hence, we think that the CMS 13TeV $p_T$ distribution data is inaccurate.
 
 
 We are going to compare physical parameters in the ridge component of Momentum-Kick model at STAR AuAu at 200GeV\cite{Wong_1}, CMS PbPb at 2.76TeV\cite{PbPb}, CMS pp 7TeV\cite{cms} and pp at 13TeV, in which ALICE, CMS and ATLAS data are used from reference\cite{alice, cms, atlas}.
 Since the number of pp 13 TeV data is sufficient, all parameters of pp at 13 TeV set free parameters.
-Due to the insufficient proton-proton data at 7 TeV, we have to find some parameters as physically at 7 TeV.
+However, due to the insufficient proton-proton data at 7 TeV, we have to find some parameters as physically at 7 TeV.
 The reference \cite{Wong_5} and \cite{PbPb} introduced $\langle p_T \rangle$ ratio at the temperature.
 Since temperature has $\langle p_T \rangle$ dependence, we can fix temperatrue of pp at 7TeV.
 We calculate the temperature of 7 TeV as a ratio of $\langle p_T \rangle$ and it is expressed as:
@@ -207,11 +214,11 @@ T_{7 \text{Tev}} = T_{13 \text{Tev}} \times \frac{\langle p_T \rangle_{7 \text{T
 %마음에 안들지만 일단 패스
 % ATLAS:2010jvh -> 7 TeV     ATLAS:2016zkp -> 13 TeV
 We get the $\langle p_T \rangle$ data in the ATLAS experiments\cite{ATLAS:2010jvh, ATLAS:2016zkp}.
-We set the average $p_T$ as $\langle p_T \rangle _{7 \text{TeV}} = 1.226$ and $\langle p_T \rangle _{13 \text{TeV}} = 1.245$.
 Since we aim to study proton-proton collisions at high multiplicity, we utilize the $\langle p_T \rangle$ data within $99.5 < N_{\text{ch}} < 120.5$ and $100.5 < N_{\text{ch}} < 150.5$ for 7 TeV and 13 TeV, respectively.
+We set the average $p_T$ as $\langle p_T \rangle _{7 \text{TeV}} = 1.226$ and $\langle p_T \rangle _{13 \text{TeV}} = 1.245$.
 
 \begin{equation} \label{equation:7TeVTemp}
-T_{7 \text{TeV}} = 1.18 \times \frac{1.226}{1.245} \approx 1.16
+T_{7 \text{TeV}} = 1.25 \times \frac{1.226}{1.245} \approx 1.23
 \end{equation}
 
 We find free parameters as least square method.
@@ -222,9 +229,9 @@ Parameters of ridge component are summarized in Table \ref{table:param}.
   \begin{tabular}{C{2cm} | C{3cm}  C{4cm}  C{2.5cm}  C{2.5cm}  C{2.5cm}}
    \hline \\[-1 ex]
     & AuAu 200 GeV\cite{Wong_1} & PbPb 2.76 TeV\cite{PbPb} & pp 13 TeV\cite{Hanul} & pp 7 TeV & pp 13 TeV\\ [1 ex] \hline\hline \\[-1.5 ex]
-   T (GeV) & 0.5 & 0.6 & 1.54 & 1.16 & 1.18\\[1ex]
-   q (GeV) & 1.0 & 0.7 & 2 & 1.33 & 1.00\\ [1ex]
-  $f_R \langle N_k \rangle$ & 4 & $20.2e^{-{1.395} / {\langle p_{T}^{\text{trig}} \rangle}-0.207{\langle p_{T}^{\text{trig}} \rangle}}$ & 0.93, 1.37 & 0.99 & 2.24\\[1.5ex]
+   T (GeV) & 0.5 & 0.6 & 1.54 & 1.23 & 1.25\\[1ex]
+   q (GeV) & 1.0 & 0.7 & 2 & 1.31 & 1.00\\ [1ex]
+  $f_R \langle N_k \rangle$ & 4 & $20.2e^{-{1.395} / {\langle p_{T}^{\text{trig}} \rangle}-0.207{\langle p_{T}^{\text{trig}} \rangle}}$ & 0.93, 1.37 & 1.06 & 2.59\\[1.5ex]
    \hline
  \end{tabular}
  \caption{All results of the physical parameters in the ridge component of the Momentum-Kick model.}
@@ -232,12 +239,12 @@ Parameters of ridge component are summarized in Table \ref{table:param}.
 \end{table}
 
 
-Since the temperature has center of mass energy dependence, the temperature of proton-proton at 13 TeV is the highest of all the other experiments, which is $+97\%$ higher than PbPb at 2.76 TeV and $+136\%$ higher than AuAu at 200 GeV.
+Since the temperature has center of mass energy dependence, the temperature of proton-proton at 13 TeV is the highest of all the other experiments, which is $+108\%$ higher than PbPb at 2.76 TeV and $+150\%$ higher than AuAu at 200 GeV.
 But, it is lower than previous result of ref \cite{Hanul}.
 Because they set temperature as ratio of $\langle p_T \rangle$ compare with temperature of AuAu at 200GeV.
 However, the number of proton-proton collisions at 13 TeV data has enough to set temperature as a free parameter, and the least-square method find the lower temperature than previous result.
 
-The average of momentum transfer per kick in proton-proton collisions at 13 TeV is about $43\%$ higher than PbPb at 2.76 TeV, but $25\%$ lower than pp at 7 TeV.
+The average of momentum transfer per kick in proton-proton collisions at 13 TeV is about $43\%$ higher than PbPb at 2.76 TeV, but $24\%$ lower than pp at 7 TeV.
 because of the higher center of mass energy, $q$ of pp at 13 TeV is higher than PbPb at 2.76 TeV.
 However, pp at 13 TeV creates more medium than pp at 7 TeV.
 Because of the jet kicking more mediums in the pp at 13 TeV, the average momentum transfer per kick goes lower.
