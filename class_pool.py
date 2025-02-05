@@ -6,6 +6,7 @@ import scipy
 import pprint as pp
 import multiprocessing
 import time
+import csv
 
 import Function_cpu as cpu
 import Function_gpu as gpu
@@ -45,15 +46,20 @@ class Fitting_gpu:
             total_length = 0
             dist_phi_array = np.array([])
             dist_dat_array = np.array([])
-            for i in range(len(phi_array)):
-                array_length.append(len(phi_array[i]))
-                total_length += len(phi_array[i])
-                if i==0:
-                    dist_phi_array = phi_array[i]
-                    dist_dat_array = data[i]
-                else:
-                    dist_phi_array = np.concatenate((dist_phi_array, phi_array[i]))
-                    dist_dat_array = np.concatenate((dist_dat_array, data[i]))
+            if len(phi_array) == 1:
+              array_length = 1
+              dist_phi_array = phi_array[0]
+              dist_dat_array = data[0]
+            else:
+              for i in range(len(phi_array)):
+                  array_length.append(len(phi_array[i]))
+                  total_length += len(phi_array[i])
+                  if i==0:
+                      dist_phi_array = phi_array[i]
+                      dist_dat_array = data[i]
+                  else:
+                      dist_phi_array = np.concatenate((dist_phi_array, phi_array[i]))
+                      dist_dat_array = np.concatenate((dist_dat_array, data[i]))
             self.array_length = array_length
             self.phi_array = dist_phi_array
             self.data = dist_dat_array
@@ -93,6 +99,15 @@ class Fitting_gpu:
                 print("phi array and data array have to be same length")
                 quit()
     
+
+    def validation(self, phi, data, ptf, etaf):
+        self.validation_phi = phi
+        self.validation_dat = data
+        self.validation_ptf = ptf
+        self.validation_etaf = etaf
+
+
+
     def __FrNk(self, xx, yy, zz, pt):
         # return xx+yy*pt*pt
         # return xx*cp.exp(yy*pt)
@@ -107,15 +122,50 @@ class Fitting_gpu:
     def __Nk(self, A, B, multi):
         return A*cp.exp(-B/multi)
     def __MultiNk(self, Free1, Free2, Free3, multi):
-        return Free1*(Free2+Free3*multi)
+        # return Free1*Free2*(multi-Free3)*(multi-Free3)
+        # return Free1*(Free2+Free3*multi+multi*multi)
+        return Free1*Free2*np.exp(Free3*multi)
+        # return Free1*(Free2+Free3*multi)
         # return Free1*(Free2+Free3*multi*multi)
         # return Free1 + Free2*np.exp(-Free3/multi)
 
     def fitting(self, error, Fixed_parameters):
         if error is None:
+            print("Error is None")
             if self.mode == "pTdependence":
-                popt, pcov = scipy.optimize.curve_fit(self.fitting_func, xdata = self.phi_array, ydata = self.data, bounds=self.boundary, p0 = self.initial)
-                return popt, self.Error_Graph
+                # # 13 TeV Fitting할 때에만 사용
+                # EarlyStop = open('./Results/EarlyStopping.csv', 'w', encoding='utf-8', newline='')
+                # global Early
+                # Early = csv.writer(EarlyStop)
+                # Early.writerow(['Number', 'ALICE+CMS Error', 'ATLAS Error', 'q', 'T', 'xx', 'yy', 'zz'])
+
+                # ValCheck_csv = open('./Results/Validation_Check.csv', 'w', encoding='utf-8')
+                # global ValCheck
+                # ValCheck = csv.writer(ValCheck_csv)
+                # # ValCheck.writerow('result')
+
+                # print(self.phi_array)
+                # print(len(self.phi_array))
+                print(self.data)
+                # print(len(self.data))
+                # popt, pcov = scipy.optimize.curve_fit(self.fitting_func, xdata = self.phi_array, ydata = self.data, bounds=self.boundary, p0 = self.initial)
+                constraints = ({
+                    'type': 'eq',
+                    'fun' : self.integral_constraint
+                })
+                result = scipy.optimize.minimize(self.objective, x0 = self.initial, bounds=self.boundary, constraints=constraints, method='SLSQP')
+                print(result)
+                # EarlyStop.close()
+                # ValCheck.writerow(['ATLAS Data'])
+                # ValCheck.writerow(self.validation_dat  - min(self.validation_dat))
+                # ValCheck_csv.close()
+                # return popt, self.Error_Graph
+                return result.x
+            
+            elif self.mode == "ATLASonly":
+                popt, pcov = scipy.optimize.curve_fit(self.fitting_atlas, xdata = self.phi_array, ydata = self.data, bounds=self.boundary, p0 = self.initial)
+                return popt, pcov
+                
             elif self.mode == "Multiplicity":
 
                 print(f'Mode : {self.Mode}')
@@ -231,18 +281,45 @@ class Fitting_gpu:
         # '''error가 있는 경우지만, 지금은 사용하지 않음(만들다 말았음)'''
         # elif error == "Error":
         else:
-            error_array = np.array([])
+            print("Error Data Available")
+            ErrorPlus_array = np.array([])
+            ErrorMinus_array = np.array([])
+            print(error)
             for i in range(len(error)):
-                if i==0:
-                    error_array = error[i]
-                else:
-                    error_array = np.concatenate((error_array, error[i]))
+                for j in range(len(error[0])):
+                  if i==0:
+                      if j==0:
+                        ErrorPlus_array = error[i][j]
+                      else:
+                        ErrorPlus_array = np.concatenate((ErrorPlus_array, error[i][j]))
+
+                  elif i==1:
+                      if j==0:
+                        ErrorMinus_array = error[i][j]
+                      else:
+                        ErrorMinus_array = np.concatenate((ErrorMinus_array, error[i][j]))
+                      
             if self.mode == "pTdependence":
-                print(error_array)
-                print(type(error_array))
-                print(len(self.data), len(error_array))
-                popt, pcov = scipy.optimize.curve_fit(self.fitting_func, xdata = self.phi_array, ydata = self.data, bounds=self.boundary, p0 = self.initial, sigma = error_array)
+                print(ErrorPlus_array)
+                print(ErrorMinus_array)
+
+                print((ErrorPlus_array, ErrorMinus_array))
+                print(len(self.phi_array))
+                print(len(ErrorPlus_array))
+
+                
+                EarlyStop = open('./Results/EarlyStopping.csv', 'w', encoding='utf-8', newline='')
+                
+                Early = csv.writer(EarlyStop)
+                # global Early
+                Early.writerow(['Number', 'ALICE+CMS Error', 'ATLAS Error', 'q', 'T', 'xx', 'yy', 'zz'])
+
+                popt, pcov = scipy.optimize.curve_fit(self.fitting_func, xdata = self.phi_array, ydata = self.data, bounds=self.boundary, p0 = self.initial, sigma = ErrorPlus_array, absolute_sigma=True)
+
+                EarlyStop.close()
+
                 return popt, self.Error_Graph
+            
             elif self.mode == "Multiplicity":
                 # self.Fixed_Temperature = Fixed_Temperature
                 self.Fixed_Temperature = Fixed_parameters[0]
@@ -319,9 +396,13 @@ class Fitting_gpu:
         return totalresult
 
     def fitting_func_multi(self, phi_array, Free):
-        multi_data = [55, 65, 75, 85, 95, 105, 115, 125, 135]
+        # multi_data = [55, 65, 75, 85, 95, 105, 115, 125, 135]
+        multi_data = [54.5, 63.58, 73.48, 83.47, 93.38, 104.8 ,114.8, 124.7, 137.4]
         # AAA = -0.03495215
-        BBB = 0.00065111
+        AAA = 1
+        # BBB = 0.00072
+        BBB = 0.02663
+        print(AAA, BBB)
         self.__md = 1.
         # xx = 5.3; yy = 8.5*10**(-35); zz = 0.22
         if (self.Mode == "Nothing"):
@@ -356,7 +437,8 @@ class Fitting_gpu:
         # result = self.__multiplicity(phi_array, self.etaf, Aridge, kick, Tem[number], xx, yy, zz)
         Aridge = cp.asarray(1/np.sum(cpu.Aridge(pti, yi, Tem, self.__m, self.__md, self.__a, self.sqrSnn, self.__mp)*dyi*dpti*2*np.pi))
         # result = self.__MultiNk(1, AAA, BBB, multi_data[self.separate_number]) * self.__multiplicity(phi_array, self.etaf, Aridge, kick, Tem, xx, yy, zz)
-        result = self.__MultiNk(1, xx, BBB, multi_data[self.separate_number]) * self.__multiplicity(phi_array, self.etaf, Aridge, kick, Tem, 1, yy, zz)
+        print(xx)
+        result = self.__MultiNk(xx, AAA, BBB, multi_data[self.separate_number]) * self.__multiplicity(phi_array, self.etaf, Aridge, kick, Tem, 1, yy, zz)
         result = result - np.min(result)
         self.__count = self.__count + 1
 
@@ -423,6 +505,41 @@ class Fitting_gpu:
 
     ''' fitting parameters : kick, Tem, xx, yy, zz
         zz는 frnk에 추가적으로 들어갈 수 있는 parameter '''
+    
+    def integral_constraint(self, params):
+        kick = params[0]; Tem = params[1]; xx = params[2]; yy = params[3]; zz = params[4]
+        given_array = self.phi_array
+        func = self.fitting_func(given_array, kick, Tem, xx, yy, zz)
+        model_sum = np.sum(func)*100
+        data_sum = np.sum(self.data)*100
+
+        # equality case
+        return model_sum - data_sum
+    
+        # inequality case : 0.01 보다 작은 상태로 유지되어야 함
+        # return 0.01 - abs(model_integral - data_integral)
+
+
+    def objective(self, params): 
+        kick = params[0]; Tem = params[1]; xx = params[2]; yy = params[3]; zz = params[4]
+        given_array = self.phi_array
+        ydata = self.data
+        # print(ydata)
+        func = self.fitting_func(given_array, kick, Tem, xx, yy, zz)
+
+        # delete = [73, 63, 62, 50, 49, 37, 36, 26, 25, 13, 12, 0]    # 최솟값이 0이기 때문에 0인 값들 지우기 -> pT 3~4 있는 경우 : 13 TeV
+        # delete = [51, 39, 38, 26, 25, 13, 12, 0]    # 최솟값이 0이기 때문에 0인 값들 지우기 -> pT 3~4 없는 경우 : 13 TeV
+        delete = [34, 24, 23, 13, 12, 0]  # 7 TeV
+        result_err = np.delete(func, delete)
+        data_err = np.delete(self.data, delete)
+        Error = np.mean(np.abs(result_err-data_err) / data_err) * 100
+        
+        if self.__count == 1 or self.__count%10==0:
+            # print(f"{self.__count}회", kick, Tem, xx, yy, zz, "Error : " , Error)
+            print(Error)
+        return Error
+
+
 
     def fitting_func(self, given_array, kick, Tem, xx, yy, zz):
         '''md를 q로 한번 두고 fitting 해보자.'''
@@ -481,22 +598,87 @@ class Fitting_gpu:
                 result = np.concatenate((result, self.Yridge(Aridge, kick, Tem, xx, yy, zz)))       # fitting에 사용하는 데이터가 Yridge가 포함되어 있는 경우 활성화
             self.__count = self.__count + 1
 
+        # Error = (np.sqrt(np.mean((result-self.data)**2))) / np.mean(self.data)
+        # result_err = result.tolist()
+        # data_err = self.data.tolist()
+        # delete = [73, 63, 62, 50, 49, 37, 36, 26, 25, 13, 12, 0]    # 최솟값이 0이기 때문에 0인 값들 지우기 -> pT 3~4 있는 경우 : 13 TeV
+        # delete = [51, 39, 38, 26, 25, 13, 12, 0]    # 최솟값이 0이기 때문에 0인 값들 지우기 -> pT 3~4 없는 경우 : 13 TeV
 
-        Error = (np.sqrt(np.mean((result-self.data)**2))) / np.sum(self.data)
+        # for i in delete:
+        #     del result_err[i]
+        #     del data_err[i]
+        # result_err = np.array(result_err)
+        # data_err = np.array(data_err)
+        # result_err = np.delete(result, delete)
+        # data_err = np.delete(self.data, delete)
+        # Error = np.mean(np.abs(result_err-data_err) / data_err) * 100
+
+        ''' Error 파일로 출력 -> 13 TeV fitting 할 때만 사용'''
+        # wr.writerow(['Number', 'ALICE+CMS Error', 'ATLAS Error', 'q', 'T', 'fRNk'])
+        ''' Calculate ATLAS Error '''
+        # val_data = self.validation_dat  - min(self.validation_dat)
+        # # print(self. validation_phi, self.validation_dat, self.validation_etaf, self.validation_ptf) 
+        # val_resl = self.__ptdep(self.validation_phi, self.validation_etaf, self.validation_ptf, Aridge, kick, Tem, xx, yy, zz)
+        # val_resl = val_resl - min(val_resl)
+        # # ValCheck.writerow(val_resl)
+
+        # # FitCheck.writerow(result)
+
+        # # val_err = (np.sqrt(np.mean((val_resl-val_data)**2))) / np.mean(val_data)
+        # # del val_resl [0]
+        # # del val_resl [-1]
+        # # del val_data [0]
+        # # del val_data [-1]
+        # val_resl = np.delete(val_resl, (0, -1))
+        # val_data = np.delete(val_data, (0, -1))
+        # val_err = np.mean(np.abs(val_resl - val_data) / val_data) * 100
+        # # print(val_data)
+        # # print(data_err)
+        # # Early.writerow([self.__count, Error, val_err, kick, Tem, xx, yy, zz])
+        # # print("validation result : ", val_resl)
+        # # print("data : ", val_data)
+        # # print("result-data : ", val_resl-val_data)
+        # # print("error : ", np.abs(val_resl - val_data) / val_data)
+        # # print("average error : ", val_err)
+
 
         if self.__count == 1 or self.__count%10==0:
             print(f"{self.__count}회", kick, Tem, xx, yy, zz, "Error : " , Error)
 
         self.chisq_error = Error
         self.Error_Graph.append(Error)
+        # print(result)
+        return result
+
+    def fitting_atlas(self, given_array, kick, Tem, xx, yy, zz):
+        self.__md = 1.
+        phi_array = given_array
+        Aridge_bin = 1000
+        pti, yi = np.meshgrid(np.linspace(self.__pti[0], self.__pti[1], Aridge_bin), np.linspace(self.__yi[0], self.__yi[1], Aridge_bin))
+        dpti = (self.__pti[1] - self.__pti[0])/Aridge_bin
+        dyi = (self.__yi[1] - self.__yi[0])/Aridge_bin
+        Aridge = cp.asarray(1/np.sum(cpu.Aridge(pti, yi, Tem, self.__m, self.__md, self.__a, self.sqrSnn, self.__mp)*dyi*dpti*2*np.pi))
+        dist = self.__ptdep(phi_array, self.etaf, self.ptf, Aridge, kick, Tem, xx, yy, zz)
+        result = dist-min(dist)
+        self.__count = self.__count + 1
+        delete = [0, -1]
+        result_err = np.delete(result, delete)
+        data_err = np.delete(self.data, delete)
+        Error = np.mean(np.abs(result_err-data_err) / data_err) * 100
+        print(f"{self.__count}회", kick, Tem, xx, yy, zz, "Error : " , Error)
+
         return result
     
     def __ptdep(self, phi_array, etaf, ptf_dist, Aridge, kick, Tem, xx, yy, zz):
-        bin = 300
-        detaf = (etaf[1]-etaf[0])/bin
+        bin = 1000
+        bin_arange = 0.005
+        # detaf = (etaf[1]-etaf[0])/bin
+        detaf = bin_arange
         delta_Deltaeta = 2*(etaf[1]-etaf[0])
-        ptf, etaf, phif = cp.meshgrid(cp.linspace(ptf_dist[0], ptf_dist[1], bin), cp.linspace(etaf[0], etaf[1], bin), cp.asarray(phi_array))
-        dptf = (ptf_dist[1]-ptf_dist[0])/bin
+        # ptf, etaf, phif = cp.meshgrid(cp.linspace(ptf_dist[0], ptf_dist[1], bin), cp.linspace(etaf[0], etaf[1], bin), cp.asarray(phi_array))
+        ptf, etaf, phif = cp.meshgrid(cp.arange(ptf_dist[0], ptf_dist[1], bin_arange), cp.arange(etaf[0], etaf[1], bin_arange), cp.asarray(phi_array))
+        # dptf = (ptf_dist[1]-ptf_dist[0])/bin
+        dptf = bin_arange
         # deltapt = 1/(ptf_dist[1] - ptf_dist[0])       #pt normalize
         deltapt = 1
         dist = deltapt*cp.sum(self.__FrNk(xx, yy, zz, ptf)*ptf*gpu.Ridge_dist(Aridge, ptf, etaf, phif, kick, Tem, self.sqrSnn, self.__mp, self.__m, self.__mb, self.__md, self.__a), axis=0)*dptf*detaf/delta_Deltaeta
@@ -533,13 +715,27 @@ class Fitting_gpu:
         # return (meanpT/AuAu_meanpT)*AuAu_Temp
         return (meanpT/pp13_highmulti_meanpT)*pp13_highmulti_Temp
 
+    def Fixed_kick(multi, meanpT, pp13_highmulti_param):
+        """
+        mean pT 역수
+        """
+        # AuAu : 200GeV
+        # AuAu_meanpT = 0.39
+        # AuAu_Temp = 0.5
+        '''Associated Yield를 이용해 도출한 mean pT'''
+        # pp13_highmulti_meanpT = 1.186
+        ''' 단순히 multiplicity로 도출'''
+        pp13_highmulti_meanpT = 1.209
+        # return (meanpT/AuAu_meanpT)*AuAu_Temp
+        return (pp13_highmulti_meanpT/meanpT)*pp13_highmulti_param
+
 
 
 class Drawing_Graphs:
     '''Yridge를 포함하여 fitting하는 경우, class Drawing_Graphs가 제대로 작동하지 않는 문제가 있다. 어차피 fitting도 잘 안되기 때문에 Yridge를 fitting에서 제외할 것이다.'''
     __yi = (-10,10)
     __pti = (0,10)
-    __a = .5    #fall off parameter
+    __a = 0.5    #fall off parameter
     __m = 0.13957018  #m == mpi
     __mb = __m #mb==mpi, GeV
     # __md = 1.   #GeV
@@ -612,7 +808,10 @@ class Drawing_Graphs:
         self.Free3 = Free3
 
     def __MultiNk_func(self, Free1, Free2, Free3, multi):
-        return Free1*(Free2+Free3*multi)
+        # return Free1*Free2*(multi-Free3)*(multi-Free3)
+        # return Free1*(Free2+Free3*multi+multi*multi)
+        return Free1*Free2*np.exp(Free3*multi)
+        # return Free1*(Free2+Free3*multi)
         # return Free1*(Free2+Free3*multi*multi)
         # return Free1 + Free2*np.exp(-Free3/multi)
 
@@ -650,12 +849,14 @@ class Drawing_Graphs:
         detaf = (etaf_range[1]-etaf_range[0])/bin
         ridge_integrate = ptf*gpu.Ridge_dist(Aridge, ptf, etaf, phif, kick, Tem, self.sqrSnn, self.__mp, self.__m, self.__mb, self.__md, self.__a)
         # ridge_integrate = ridge_integrate*self.__FrNk(xx, yy, zz, ptf) * self.__MultiNk_func(1, -0.03495215, 0.00065111, multi)
-        ridge_integrate = ridge_integrate*self.__FrNk(1, yy, zz, ptf) * self.__MultiNk_func(1, xx, 0.00065111, multi)
+        # ridge_integrate = ridge_integrate*self.__FrNk(1, yy, zz, ptf) * self.__MultiNk_func(1, xx, 0.00065111, multi)
+        # ridge_integrate = ridge_integrate*self.__FrNk(1, yy, zz, ptf) * self.__MultiNk_func(xx, -0.03495215, 0.00072, multi)
+        ridge_integrate = ridge_integrate*self.__FrNk(1, yy, zz, ptf) * self.__MultiNk_func(xx, 1, 0.02663, multi)
 
         # dist_integrate = cp.sum(ridge_integrate, axis = 1)*(4/3)*dptf*detaf/delta_Deltaeta
         if self.type == 'ATLAS':
             dist_integrate = cp.sum(ridge_integrate, axis = 1)*(4/3)*dptf*detaf/delta_Deltaeta
-            print(self.__MultiNk_func(1, xx, 0.00065111, multi), cp.sum(dist_integrate-min(dist_integrate)))
+            # print(self.__MultiNk_func(1, xx, 0.00065111, multi), cp.sum(dist_integrate-min(dist_integrate)))
         else:
             dist_integrate = cp.sum(ridge_integrate, axis = 1)*(4/3)*dptf*detaf/(delta_Deltaeta*(ptf_range[1]-ptf_range[0]))
         Ridge_phi = cp.asnumpy(cp.sum(dist_integrate, axis = 0))
@@ -668,7 +869,7 @@ class Drawing_Graphs:
 
         kick = self.kick; Tem = self.Tem; xx = self.xx; yy = self.yy; zz = self.zz
         Aridge = self.__Aridge()
-        bin = 300
+        bin = 500
         delta_Deltaeta = 2*(self.etaf[1]-self.etaf[0])
         dptf = (ptf_range[1]-ptf_range[0])/bin
         # deltapt = 1/(ptf_range[1] - ptf_range[0])       #pt normalize
@@ -746,12 +947,13 @@ class Drawing_Graphs:
 
 
     # 앞선 함수와 다르게 Yridge를 실선으로 그리고자 할 경우
-    def Yridge_line(self, czyam):
+    def Yridge_line(self, czyam, md, a):
         # self.__md = self.kick
-        self.__md = 1.
+        self.__md = md
+        self.__a = a
         if czyam == "Subtract":      # ALICE
 
-            ptbin = 150
+            ptbin = 1000
             ptstart = 0.1
             ptend = 11.1
             pt_normal = (ptend-ptstart)/ptbin
