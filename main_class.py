@@ -1272,7 +1272,66 @@ def drawgraph_multi_phicorr():
     fig1.tight_layout(h_pad = -1, w_pad = -5)
     plt.show()
     fig1.savefig('./Results/rezero_atlas_Nk.png')
-  
+
+def drawgraph_initial_versus_final():
+    fig1, axes1 = plt.subplots(nrows=1, ncols=4,figsize=(100,20))
+    print("13TeV : ", ptdep_result)
+    alice_fin = classes.Drawing_Graphs(13000, (2, 5), *ptdep_result, None, None, 'ALICE')
+    alice_ini = classes.Drawing_Graphs(13000, (2, 5), *ptdep_result, None, None, 'ALICE')
+    for i in range(5):
+        if i==0:
+            ptf = (0.1, 4)
+            phi_range = (-1, 1)
+            '''initial parton'''
+            alice_ini_result = alice_ini.result_plot("inital_parton", None, ptf, phi_range, 'ptdist')
+            axes1[i].plot(alice_ini_result[0], alice_ini_result[1], color = "black", linewidth=7, linestyle='-')
+            '''final parton'''
+            alice_fin_result = alice_fin.result_plot("final_beforefRNk", None, ptf, phi_range, 'ptdist')
+            axes1[i].plot(alice_fin_result[0], alice_fin_result[1], color = "red", linewidth=7, linestyle='-')
+            axes1[i].set_title(r'$\abs{y} > 2, \abs{\phi} < 1$', size = 70, pad=30)
+            axes1[i].set_ylabel(r'$\frac{dF}{p_T dp_T}$', size=70)
+        elif i==1:
+            ptf = (0.1, 4)
+            phi_range = (-1, 1)
+            '''initial parton'''
+            alice_ini_result = alice_ini.result_plot("inital_parton", None, ptf, phi_range, 'phidist')
+            axes1[i].plot(alice_ini_result[0], alice_ini_result[1], color = "black", linewidth=7, linestyle='-')
+            '''final parton'''
+            alice_fin_result = alice_fin.result_plot("final_beforefRNk", None, ptf, phi_range, 'phidist')
+            axes1[i].plot(alice_fin_result[0], alice_fin_result[1], color = "red", linewidth=7, linestyle='-')
+            axes1[i].set_title(r'$0.1 < p_T < 4, \abs{y} > 2$', size = 70, pad=30)
+            axes1[i].set_ylabel(r'$\frac{dF}{d \phi}$', size=70)
+        else:
+            ptf = (0.1, 4)
+            phi_range = (-1, 1)
+            '''initial parton'''
+            alice_ini_result = alice_ini.result_plot("inital_parton", None, ptf, phi_range, 'etadist')
+            axes1[i].plot(alice_ini_result[0], alice_ini_result[1], color = "black", linewidth=7, linestyle='-')
+            '''final parton'''
+            alice_fin_result = alice_fin.result_plot("final_beforefRNk", None, ptf, phi_range, 'etadist')
+            axes1[i].plot(alice_fin_result[0], alice_fin_result[1], color = "red", linewidth=7, linestyle='-')
+            axes1[i].set_title(r'$0.1 < p_T < 4, \abs{\phi} < 1$', size = 70, pad=30)
+            axes1[i].set_ylabel(r'$\frac{dF}{d \eta}$', size=70)
+            st = i
+            en = i+1
+        # axes1[1].text(-1.18, 0.0165, fr"ALICE R-squared : {round(ptdep_Rsq[0], 3)}", size = 60)
+        # axes1[1].text(-1.18, 0.0155, fr" \ CMS \ R-squared : {round(ptdep_Rsq[3], 3)}", size = 60)
+        # axes1[2].text(-1.18, 0.0089, fr"ALICE R-squared : {round(ptdep_Rsq[1], 3)}", size = 60)
+        # axes1[2].text(-1.18, 0.0083, fr" \ CMS \ R-squared : {round(ptdep_Rsq[4], 3)}", size = 60)
+        # axes1[3].text(-1.18, 0.0042, fr"ALICE R-squared : {round(ptdep_Rsq[2], 3)}", size = 60)
+        # axes1[3].text(-1.18, 0.0039, fr"\ CMS \ R-squared : {round(ptdep_Rsq[5], 3)}", size = 60)
+
+        axes1[i].set_xlabel(r'$\Delta\phi$', size=70)
+        axes1[i].minorticks_on()
+        axes1[i].tick_params(axis='both',which='major',direction='in',width=2,length=30,labelsize=45, top = 'true', right='true')
+        axes1[i].tick_params(axis='both',which='minor',direction='in',width=2,length=15,labelsize=45, top = 'true', right='true')
+        axes1[i].grid(color='silver',linestyle=':',linewidth=3)
+
+    
+    fig1.tight_layout(h_pad=-1)
+
+    plt.show()
+    fig1.savefig('./Results/initial_versus_final.png')
 
 # drawgraph_ptdep_phicorr()
 time_phicorr = time.time()
