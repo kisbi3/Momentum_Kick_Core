@@ -806,7 +806,7 @@ def drawgraph_cmdep_phicorr():
     plt.tick_params(axis='both',which='minor',direction='in',width=2,length=15,labelsize=45, top='true')
 
     plt.grid(color='silver',linestyle=':',linewidth=5, zorder=0)
-    plt.legend(fontsize=45, loc='upper left')
+    axis2.plot(alice_Yridge_mpi[0], alice_Yridge_mpi[1] * (max(alice_Yridge[1]) / max(alice_Yridge_mpi[1])), color = "red", linewidth=7, linestyle='--', label=r'$m_d = m_{\pi}, \, 13\mathrm{TeV}$, ALICE')
 
     plt.tight_layout()
 
