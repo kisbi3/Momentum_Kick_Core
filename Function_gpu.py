@@ -58,6 +58,40 @@ def Ridge_dist(Aridge, ptf, etaf, phif, q, T, sqrSnn, mp, m, mb, md, a):  #Aridg
         print("Error in Function_gpu, Ridge_dist")
         exit(0)
 
+def Initial_parton_dist(Aridge, ptf, etaf, phif, q, T, sqrSnn, mp, m, mb, md, a):  #Aridge, P_T Final, Eta Final, Phi Final, q, Temperature, Pion mass, Beam mass(Pion)
+    # ptisq = ptf*ptf-2*ptf*q*cp.cos(phif)+q*q    #Eta_jet 생략
+    # pti = cp.sqrt(ptisq)
+    pti = ptf   # pti에 대한 그래프를 그리기 위해서 적용.
+    yi = etaf
+    phii = phif
+    
+    try:
+        result = (Aridge*Aridge_result(pti, yi, T, m, md, a, sqrSnn, mp))
+        # print(cp.sqrt(1.-((mb*mb)/((mb*mb+ptf*ptf)*cp.cosh(yf)*cp.cosh(yf))))*(Energy/Energy_i))
+        # print(Aridge_result(pti, yi, T, m, md, a, sqrSnn, mp))
+        return result   # E/Ei 임을 명심하자.
+    except:
+        print("Error in Function_gpu, Ridge_dist")
+        exit(0)
+
+def Final_BeforefRNk_dist(Aridge, ptf, etaf, phif, q, T, sqrSnn, mp, m, mb, md, a):  #Aridge, P_T Final, Eta Final, Phi Final, q, Temperature, Pion mass, Beam mass(Pion)
+    ptisq = ptf*ptf-2*ptf*q*cp.cos(phif)+q*q    #Eta_jet 생략
+    pti = cp.sqrt(ptisq)
+    Energy = cp.sqrt(ptf*ptf*cp.cosh(etaf)*cp.cosh(etaf)+m*m)
+    Energy_i = cp.sqrt(pti*pti+ptf*ptf*cp.sinh(etaf)*cp.sinh(etaf)+m*m)
+
+    yi = cp.log((Energy_i+ptf*cp.sinh(etaf))/(Energy_i-ptf*cp.sinh(etaf)))/2
+    yf = cp.log((Energy+ptf*cp.sinh(etaf))/(Energy-ptf*cp.sinh(etaf)))/2
+    
+    try:
+        result = (Aridge*Aridge_result(pti, yi, T, m, md, a, sqrSnn, mp))*(Energy/Energy_i)
+        # print(cp.sqrt(1.-((mb*mb)/((mb*mb+ptf*ptf)*cp.cosh(yf)*cp.cosh(yf))))*(Energy/Energy_i))
+        # print(Aridge_result(pti, yi, T, m, md, a, sqrSnn, mp))
+        return result   # E/Ei 임을 명심하자.
+    except:
+        print("Error in Function_gpu, Ridge_dist")
+        exit(0)
+
 # 0712.3282 (10)
 def intergralNjet(pt, eta, phi, Njet, Tjet, ma, m, szero):   #P_T Final, Eta Final, Phi Final, ma, Pion mass, Sigma_(phi0)
     constant = Njet/(Tjet*(m+Tjet)*2*cp.pi())
