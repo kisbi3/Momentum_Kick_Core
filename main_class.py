@@ -460,8 +460,6 @@ def fit_ATLASonly():
     print("pp 13TeV ATLAS Fitting result : ", result)
 
 
-    
-
 '''Fitting 7TeV data'''
 def fit_7tev():
     print("Fitting 7 TeV")
@@ -548,6 +546,7 @@ def fit_multipl():
 
 
     # fitting = [ptdep_result[0], Fixed_Temperature_fitting, ptdep_result[2], ptdep_result[3], ptdep_result[4]]
+    '''순서 : q, T, fRNk, 나머지는 0으로 고정'''
     fitting = [Fixed_Kick_fitting, Fixed_Temperature_fitting, ptdep_result[2], ptdep_result[3], ptdep_result[4]]
 
 
@@ -1274,46 +1273,93 @@ def drawgraph_multi_phicorr():
     fig1.savefig('./Results/rezero_atlas_Nk.png')
 
 def drawgraph_initial_versus_final():
-    fig1, axes1 = plt.subplots(nrows=1, ncols=4,figsize=(100,20))
+    fig1, axes1 = plt.subplots(nrows=1, ncols=5,figsize=(160,20))
     print("13TeV : ", ptdep_result)
     alice_fin = classes.Drawing_Graphs(13000, (2, 5), *ptdep_result, None, None, 'ALICE')
     alice_ini = classes.Drawing_Graphs(13000, (2, 5), *ptdep_result, None, None, 'ALICE')
     for i in range(5):
         if i==0:
+            'pt distribution graph'
             ptf = (0.1, 4)
             phi_range = (-1, 1)
             '''initial parton'''
             alice_ini_result = alice_ini.result_plot("inital_parton", None, ptf, phi_range, 'ptdist')
-            axes1[i].plot(alice_ini_result[0], alice_ini_result[1], color = "black", linewidth=7, linestyle='-')
+            axes1[i].plot(alice_ini_result[0], alice_ini_result[1], color = "black", linewidth=7, linestyle='--', label = 'initial')
             '''final parton'''
             alice_fin_result = alice_fin.result_plot("final_beforefRNk", None, ptf, phi_range, 'ptdist')
-            axes1[i].plot(alice_fin_result[0], alice_fin_result[1], color = "red", linewidth=7, linestyle='-')
-            axes1[i].set_title(r'$\abs{y} > 2, \abs{\phi} < 1$', size = 70, pad=30)
-            axes1[i].set_ylabel(r'$\frac{dF}{p_T dp_T}$', size=70)
+            axes1[i].plot(alice_fin_result[0], alice_fin_result[1], color = "red", linewidth=7, linestyle='-', label = 'final')
+            axes1[i].set_title(r'$2 < |\Delta y| < 5, |\Delta \phi| < 1$', size = 100, pad=30)
+            axes1[i].set_ylabel(r'$dF / p_T dp_T$', size=100)
+            axes1[i].set_xlabel(r'$p_T$', size=100)
+            axes1[i].legend(fontsize=90, loc='upper right')
+            # axes1[i].set_ylim(0,0.008)
         elif i==1:
+            'phi distribution graph'
             ptf = (0.1, 4)
-            phi_range = (-1, 1)
+            phi_range = (-1.668971, 4.614214)
             '''initial parton'''
             alice_ini_result = alice_ini.result_plot("inital_parton", None, ptf, phi_range, 'phidist')
-            axes1[i].plot(alice_ini_result[0], alice_ini_result[1], color = "black", linewidth=7, linestyle='-')
+            axes1[i].plot(alice_ini_result[0], alice_ini_result[1], color = "black", linewidth=7, linestyle='--', label = 'initial')
             '''final parton'''
             alice_fin_result = alice_fin.result_plot("final_beforefRNk", None, ptf, phi_range, 'phidist')
-            axes1[i].plot(alice_fin_result[0], alice_fin_result[1], color = "red", linewidth=7, linestyle='-')
-            axes1[i].set_title(r'$0.1 < p_T < 4, \abs{y} > 2$', size = 70, pad=30)
-            axes1[i].set_ylabel(r'$\frac{dF}{d \phi}$', size=70)
-        else:
+            axes1[i].plot(alice_fin_result[0], alice_fin_result[1], color = "red", linewidth=7, linestyle='-', label = 'final')
+            axes1[i].set_title(r'$0.1 < p_T < 4, 2 < |\Delta y| < 5$', size = 100, pad=30)
+            axes1[i].set_ylabel(r'$dF / d \phi $', size=100)
+            axes1[i].set_xlabel(r'$\Delta\phi$', size=100)
+            axes1[i].legend(fontsize=90, loc='upper right')
+            # axes1[i].set_ylim(0.00,0.0045)
+        elif i==2:
+            'phi distribution graph - total azimuthal range'
+            alice_fin_2 = classes.Drawing_Graphs(13000, (-10, 10), *ptdep_result, None, None, 'ALICE')
+            alice_ini_2 = classes.Drawing_Graphs(13000, (-10, 10), *ptdep_result, None, None, 'ALICE')
+            ptf = (0.1, 10)
+            phi_range = (-1.668971, 4.614214)
+            '''initial parton'''
+            alice_ini_result = alice_ini_2.result_plot("inital_parton", None, ptf, phi_range, 'phidist')
+            print(alice_ini_result[1])
+            print(sum(alice_ini_result[1]))
+            axes1[i].plot(alice_ini_result[0], alice_ini_result[1], color = "black", linewidth=7, linestyle='--', label = 'initial')
+            '''final parton'''
+            alice_fin_result = alice_fin_2.result_plot("final_beforefRNk", None, ptf, phi_range, 'phidist')
+            axes1[i].plot(alice_fin_result[0], alice_fin_result[1], color = "red", linewidth=7, linestyle='-', label = 'final')
+            axes1[i].set_title(r'$0.1 < p_T < 10, -10< |\Delta y| < 10$', size = 100, pad=30)
+            axes1[i].set_ylabel(r'$dF / d \phi $', size=100)
+            axes1[i].set_xlabel(r'$\Delta\phi$', size=100)
+            axes1[i].legend(fontsize=90, loc='upper right')
+            # axes1[i].set_ylim(0.00,0.0045)
+        elif i==3:
+            'eta distribution graph'
             ptf = (0.1, 4)
             phi_range = (-1, 1)
             '''initial parton'''
             alice_ini_result = alice_ini.result_plot("inital_parton", None, ptf, phi_range, 'etadist')
-            axes1[i].plot(alice_ini_result[0], alice_ini_result[1], color = "black", linewidth=7, linestyle='-')
+            # print(alice_ini_result)
+            axes1[i].plot(alice_ini_result[0], alice_ini_result[1]*2.1, color = "black", linewidth=7, linestyle='--', label = 'initial x2.1')
             '''final parton'''
             alice_fin_result = alice_fin.result_plot("final_beforefRNk", None, ptf, phi_range, 'etadist')
-            axes1[i].plot(alice_fin_result[0], alice_fin_result[1], color = "red", linewidth=7, linestyle='-')
-            axes1[i].set_title(r'$0.1 < p_T < 4, \abs{\phi} < 1$', size = 70, pad=30)
-            axes1[i].set_ylabel(r'$\frac{dF}{d \eta}$', size=70)
-            st = i
-            en = i+1
+            axes1[i].plot(alice_fin_result[0], alice_fin_result[1], color = "red", linewidth=7, linestyle='-', label = 'final')
+            axes1[i].set_title(r'$0.1 < p_T < 4, |\Delta \phi| < 1$', size = 100, pad=30)
+            axes1[i].set_ylabel(r'$dF / dy$', size=100)
+            axes1[i].set_xlabel(r'$\Delta y$', size=100)
+            axes1[i].legend(fontsize=90, loc='upper right')
+            # axes1[i].set_ylim(0.0015,0.0025)
+        elif i==4:
+            'eta distribution graph total'
+            ptf = (0.1, 10)
+            phi_range = (-1.668971, 4.614214)
+            '''initial parton'''
+            alice_ini_result = alice_ini_2.result_plot("inital_parton", None, ptf, phi_range, 'etadist')
+            # print(alice_ini_result)
+            axes1[i].plot(alice_ini_result[0], alice_ini_result[1], color = "black", linewidth=7, linestyle='--', label = 'initial')
+            '''final parton'''
+            alice_fin_result = alice_fin_2.result_plot("final_beforefRNk", None, ptf, phi_range, 'etadist')
+            axes1[i].plot(alice_fin_result[0], alice_fin_result[1], color = "red", linewidth=7, linestyle='-', label = 'final')
+            axes1[i].set_title(r'$0.1 < p_T < 10$', size = 100, pad=30)
+            axes1[i].set_ylabel(r'$dF / dy$', size=100)
+            axes1[i].set_xlabel(r'$\Delta y$', size=100)
+            axes1[i].legend(fontsize=90, loc='upper right')
+            axes1[i].set_xlim(0.,10)
+            # axes1[i].set_ylim(0.0015,0.0025)
         # axes1[1].text(-1.18, 0.0165, fr"ALICE R-squared : {round(ptdep_Rsq[0], 3)}", size = 60)
         # axes1[1].text(-1.18, 0.0155, fr" \ CMS \ R-squared : {round(ptdep_Rsq[3], 3)}", size = 60)
         # axes1[2].text(-1.18, 0.0089, fr"ALICE R-squared : {round(ptdep_Rsq[1], 3)}", size = 60)
@@ -1321,15 +1367,14 @@ def drawgraph_initial_versus_final():
         # axes1[3].text(-1.18, 0.0042, fr"ALICE R-squared : {round(ptdep_Rsq[2], 3)}", size = 60)
         # axes1[3].text(-1.18, 0.0039, fr"\ CMS \ R-squared : {round(ptdep_Rsq[5], 3)}", size = 60)
 
-        axes1[i].set_xlabel(r'$\Delta\phi$', size=70)
+        
         axes1[i].minorticks_on()
-        axes1[i].tick_params(axis='both',which='major',direction='in',width=2,length=30,labelsize=45, top = 'true', right='true')
-        axes1[i].tick_params(axis='both',which='minor',direction='in',width=2,length=15,labelsize=45, top = 'true', right='true')
+        axes1[i].tick_params(axis='both',which='major',direction='in',width=4,length=60,labelsize=90, top = 'true', right='true')
+        axes1[i].tick_params(axis='both',which='minor',direction='in',width=4,length=30,labelsize=90, top = 'true', right='true')
         axes1[i].grid(color='silver',linestyle=':',linewidth=3)
 
     
     fig1.tight_layout(h_pad=-1)
-
     plt.show()
     fig1.savefig('./Results/initial_versus_final.png')
 

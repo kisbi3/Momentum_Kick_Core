@@ -124,10 +124,11 @@ class Fitting_gpu:
     def __MultiNk(self, Free1, Free2, Free3, multi):
         # return Free1*Free2*(multi-Free3)*(multi-Free3)
         # return Free1*(Free2+Free3*multi+multi*multi)
-        return Free1*Free2*np.exp(Free3*multi)
+        # return Free1*Free2*np.exp(Free3*multi)
         # return Free1*(Free2+Free3*multi)
         # return Free1*(Free2+Free3*multi*multi)
         # return Free1 + Free2*np.exp(-Free3/multi)
+        return Free1 + 0.00065111*multi
 
     def fitting(self, error, Fixed_parameters):
         if error is None:
@@ -437,7 +438,6 @@ class Fitting_gpu:
         # result = self.__multiplicity(phi_array, self.etaf, Aridge, kick, Tem[number], xx, yy, zz)
         Aridge = cp.asarray(1/np.sum(cpu.Aridge(pti, yi, Tem, self.__m, self.__md, self.__a, self.sqrSnn, self.__mp)*dyi*dpti*2*np.pi))
         # result = self.__MultiNk(1, AAA, BBB, multi_data[self.separate_number]) * self.__multiplicity(phi_array, self.etaf, Aridge, kick, Tem, xx, yy, zz)
-        print(xx)
         result = self.__MultiNk(xx, AAA, BBB, multi_data[self.separate_number]) * self.__multiplicity(phi_array, self.etaf, Aridge, kick, Tem, 1, yy, zz)
         result = result - np.min(result)
         self.__count = self.__count + 1
@@ -766,12 +766,43 @@ class Drawing_Graphs:
         #mode : Multiplciity, pTdependence, Both
         # self.mode = mode
     
+    # def __Aridge(self):
+    #     Aridge_bin = 12000
+    #     pti, yi = np.meshgrid(np.linspace(self.__pti[0], self.__pti[1], Aridge_bin), np.linspace(self.__yi[0], self.__yi[1], Aridge_bin))
+    #     dyi = (self.__pti[1] - self.__pti[0])/Aridge_bin
+    #     dpti = (self.__yi[1] - self.__yi[0])/Aridge_bin
+    #     return cp.asarray(1/np.sum(cpu.Aridge(pti, yi, cp.asnumpy(self.Tem), self.__m, self.__md, self.__a, self.sqrSnn, self.__mp)*dyi*dpti*2*np.pi))
+    # def __Aridge(self):
+    #     Aridge_bin = 10000
+    #     pti, yi = cp.meshgrid(cp.linspace(self.__pti[0], self.__pti[1], Aridge_bin), cp.linspace(self.__yi[0], self.__yi[1], Aridge_bin))
+    #     dyi = (self.__pti[1] - self.__pti[0])/Aridge_bin
+    #     dpti = (self.__yi[1] - self.__yi[0])/Aridge_bin
+    #     return 1/cp.sum(gpu.Aridge(pti, yi, self.Tem, self.__m, self.__md, self.__a, self.sqrSnn, self.__mp)*dyi*dpti*2*cp.pi)
     def __Aridge(self):
-        Aridge_bin = 5000
-        pti, yi = np.meshgrid(np.linspace(self.__pti[0], self.__pti[1], Aridge_bin), np.linspace(self.__yi[0], self.__yi[1], Aridge_bin))
-        dyi = (self.__pti[1] - self.__pti[0])/Aridge_bin
-        dpti = (self.__yi[1] - self.__yi[0])/Aridge_bin
-        return cp.asarray(1/np.sum(cpu.Aridge(pti, yi, cp.asnumpy(self.Tem), self.__m, self.__md, self.__a, self.sqrSnn, self.__mp)*dyi*dpti*2*np.pi))
+        Aridge_bin = 10000
+        def partial_integrals(pTi1, pTi2, yi1, yi2):
+            pTi, yi = cp.meshgrid(cp.linspace(pTi1, pTi2, Aridge_bin), cp.linspace(yi1, yi2, Aridge_bin))
+            dyi = (pTi2 - pTi1)/Aridge_bin
+            dpTi = (yi2 - yi1)/Aridge_bin
+            return cp.sum(gpu.Aridge(pTi, yi, self.Tem, self.__m, self.__md, self.__a, self.sqrSnn, self.__mp)*dyi*dpTi*2*cp.pi)
+        pT_min, pT_max = self.__pti  # pT 구간
+        y_min, y_max   = self.__yi   # y 구간
+        
+        pT_mid = 0.5 * (pT_min + pT_max)
+        y_mid  = 0.5 * (y_min  + y_max)
+        total_sum = 0
+        # pT: 앞( [pT_min, pT_mid] ), y: 앞( [y_min, y_mid] )
+        total_sum += partial_integrals(pT_min, pT_mid, y_min, y_mid)
+        
+        # pT: 앞, y: 뒤( [y_mid, y_max] )
+        total_sum += partial_integrals(pT_min, pT_mid, y_mid, y_max)
+        
+        # pT: 뒤( [pT_mid, pT_max] ), y: 앞
+        total_sum += partial_integrals(pT_mid, pT_max, y_min, y_mid)
+        
+        # pT: 뒤, y: 뒤
+        total_sum += partial_integrals(pT_mid, pT_max, y_mid, y_max)
+        return 1/total_sum
 
     def __FrNk(self, xx, yy, zz, pt):
         # return xx+yy*pt*pt
@@ -807,24 +838,7 @@ class Drawing_Graphs:
             quit()
     
     def __Initial_Parton(self, ptf_range, phif_range, x_axis):
-        if x_axis == 'ptdist':
-            delta_Deltaeta = 2*(self.etaf[1]-self.etaf[0])
-            delta_Deltaphi = 2*(phif_range[1]-phif_range[0])
-            deltapt = 1
-            first_sum = 1
-            second_sum = 1
-        elif x_axis == 'phidist':
-            delta_Deltaeta = 2*(self.etaf[1]-self.etaf[0])
-            delta_Deltaphi = 1
-            deltapt =  (ptf_range[1] - ptf_range[0])
-            first_sum = 1
-            second_sum = 0
-        elif x_axis == 'etadist':
-            delta_Deltaeta = 1
-            delta_Deltaphi = 2*(phif_range[1]-phif_range[0])
-            deltapt =  (ptf_range[1] - ptf_range[0])
-            first_sum = 0
-            second_sum = 1
+        delta_Deltaeta, delta_Deltaphi, deltapt, first_sum, second_sum = self.__sum_mode(ptf_range, phif_range, x_axis)
 
         # self.__md = self.kick
         self.__md = 1.
@@ -838,7 +852,7 @@ class Drawing_Graphs:
         if x_axis == 'ptdist':
             dist = cp.sum(gpu.Initial_parton_dist(Aridge, ptf, etaf, phif, kick, Tem, self.sqrSnn, self.__mp, self.__m, self.__mb, self.__md, self.__a), axis = first_sum)*detaf*dphif/(delta_Deltaeta*delta_Deltaphi)
             Ridge_phi = cp.asnumpy(cp.sum(dist, axis=second_sum))
-            return cp.asnumpy(ptf[0][0]), Ridge_phi
+            return cp.asnumpy(ptf[0, :, 0]), Ridge_phi
         elif x_axis == 'phidist':
             dist = cp.sum(gpu.Initial_parton_dist(Aridge, ptf, etaf, phif, kick, Tem, self.sqrSnn, self.__mp, self.__m, self.__mb, self.__md, self.__a)*ptf, axis = first_sum)*dptf*detaf/(delta_Deltaeta*delta_Deltaphi*deltapt)
             Ridge_phi = cp.asnumpy(cp.sum(dist, axis=second_sum))
@@ -846,10 +860,7 @@ class Drawing_Graphs:
         elif x_axis == 'etadist':
             dist = cp.sum(gpu.Initial_parton_dist(Aridge, ptf, etaf, phif, kick, Tem, self.sqrSnn, self.__mp, self.__m, self.__mb, self.__md, self.__a)*ptf, axis = first_sum)*dptf*dphif/(delta_Deltaeta*delta_Deltaphi*deltapt)
             Ridge_phi = cp.asnumpy(cp.sum(dist, axis=second_sum))
-            return cp.asnumpy(etaf[0][0]), Ridge_phi
-        # Ridge_phi = cp.asnumpy(cp.sum(dist, axis=0))
-        
-        # Ridge_phi = cp.asnumpy(cp.sum(dist, axis=0))
+            return cp.asnumpy(etaf[:, 0, 0]), Ridge_phi
         
         '''아래 경우는 pt에 대해서 normalization한 경우임. pt range에 따라서 나누어져 있기에 normalize 하면 안됨'
         if self.type == 'ATLAS':
@@ -863,27 +874,37 @@ class Drawing_Graphs:
         # return cp.asnumpy(ptf[0][0]), Ridge_phi
         return print("Error occured")
         '''아래 경우는 CZYAM을 제거하여 제대로 pt range가 나눠져 있는 결과와 합쳐져 있는 결과의 적분값이 동일한지 확인하기 위함. 정상적으로 그리려면 위에 있는 코드 사용.'''
-        # return cp.asnumpy(phif[0][0]), Ridge_phi
 
-    def __Final_BeforefRNk(self, ptf_range, phif_range, x_axis):
+    def __sum_mode(self, ptf_range, phif_range, x_axis):
         if x_axis == 'ptdist':
-            delta_Deltaeta = 2*(self.etaf[1]-self.etaf[0])
-            delta_Deltaphi = 2*(phif_range[1]-phif_range[0])
+            # delta_Deltaeta = 2*(self.etaf[1]-self.etaf[0])
+            delta_Deltaeta = 1
+            # delta_Deltaphi = (phif_range[1]-phif_range[0])
+            delta_Deltaphi = 1
             deltapt = 1
-            first_sum = 1
+            first_sum = 0
             second_sum = 1
         elif x_axis == 'phidist':
-            delta_Deltaeta = 2*(self.etaf[1]-self.etaf[0])
+            # delta_Deltaeta = 2*(self.etaf[1]-self.etaf[0])
+            delta_Deltaeta = 1
             delta_Deltaphi = 1
-            deltapt =  (ptf_range[1] - ptf_range[0])
+            # deltapt =  (ptf_range[1] - ptf_range[0])
+            deltapt = 1
             first_sum = 1
             second_sum = 0
         elif x_axis == 'etadist':
             delta_Deltaeta = 1
-            delta_Deltaphi = 2*(phif_range[1]-phif_range[0])
-            deltapt =  (ptf_range[1] - ptf_range[0])
-            first_sum = 0
+            # delta_Deltaphi = (phif_range[1]-phif_range[0])
+            delta_Deltaphi = 1
+            # deltapt =  (ptf_range[1] - ptf_range[0])
+            deltapt = 1
+            first_sum = 1
             second_sum = 1
+        return delta_Deltaeta,delta_Deltaphi,deltapt,first_sum,second_sum
+        # return cp.asnumpy(phif[0][0]), Ridge_phi
+
+    def __Final_BeforefRNk(self, ptf_range, phif_range, x_axis):
+        delta_Deltaeta, delta_Deltaphi, deltapt, first_sum, second_sum = self.__sum_mode(ptf_range, phif_range, x_axis)
         # self.__md = self.kick
         self.__md = 1.
 
@@ -897,7 +918,7 @@ class Drawing_Graphs:
         if x_axis == 'ptdist':
             dist = cp.sum(gpu.Final_BeforefRNk_dist(Aridge, ptf, etaf, phif, kick, Tem, self.sqrSnn, self.__mp, self.__m, self.__mb, self.__md, self.__a), axis = first_sum)*detaf*dphif/(delta_Deltaeta*delta_Deltaphi*deltapt)
             Ridge_phi = cp.asnumpy(cp.sum(dist, axis=second_sum))
-            return cp.asnumpy(ptf[0][0]), Ridge_phi
+            return cp.asnumpy(ptf[0, :, 0]), Ridge_phi
         elif x_axis == 'phidist':
             dist = cp.sum(gpu.Final_BeforefRNk_dist(Aridge, ptf, etaf, phif, kick, Tem, self.sqrSnn, self.__mp, self.__m, self.__mb, self.__md, self.__a)*ptf, axis = first_sum)*dptf*detaf/(delta_Deltaeta*delta_Deltaphi*deltapt)
             Ridge_phi = cp.asnumpy(cp.sum(dist, axis=second_sum))
@@ -905,8 +926,7 @@ class Drawing_Graphs:
         elif x_axis == 'etadist':
             dist = cp.sum(gpu.Final_BeforefRNk_dist(Aridge, ptf, etaf, phif, kick, Tem, self.sqrSnn, self.__mp, self.__m, self.__mb, self.__md, self.__a)*ptf, axis = first_sum)*dptf*dphif/(delta_Deltaeta*delta_Deltaphi*deltapt)
             Ridge_phi = cp.asnumpy(cp.sum(dist, axis=second_sum))
-            return cp.asnumpy(etaf[0][0]), Ridge_phi
-        # Ridge_phi = cp.asnumpy(cp.sum(dist, axis=0))
+            return cp.asnumpy(etaf[:, 0, 0]), Ridge_phi
         
         '''아래 경우는 pt에 대해서 normalization한 경우임. pt range에 따라서 나누어져 있기에 normalize 하면 안됨'
         if self.type == 'ATLAS':
@@ -930,10 +950,11 @@ class Drawing_Graphs:
     def __MultiNk_func(self, Free1, Free2, Free3, multi):
         # return Free1*Free2*(multi-Free3)*(multi-Free3)
         # return Free1*(Free2+Free3*multi+multi*multi)
-        return Free1*Free2*np.exp(Free3*multi)
+        # return Free1*Free2*np.exp(Free3*multi)
         # return Free1*(Free2+Free3*multi)
         # return Free1*(Free2+Free3*multi*multi)
         # return Free1 + Free2*np.exp(-Free3/multi)
+        return Free1 + 0.00065111*multi
 
     def __Ridge_Multi_FinalATLAS(self, multi, ptf, phif_range):
         # self.__md = self.kick
@@ -990,7 +1011,8 @@ class Drawing_Graphs:
         kick = self.kick; Tem = self.Tem; xx = self.xx; yy = self.yy; zz = self.zz
         Aridge = self.__Aridge()
         bin = 500
-        delta_Deltaeta = 2*(self.etaf[1]-self.etaf[0])
+        # delta_Deltaeta = 2*(self.etaf[1]-self.etaf[0])
+        delta_Deltaeta = 1
         dptf = (ptf_range[1]-ptf_range[0])/bin
         # deltapt = 1/(ptf_range[1] - ptf_range[0])       #pt normalize
         deltapt = 1
@@ -1031,7 +1053,8 @@ class Drawing_Graphs:
                 ptf, etaf = cp.meshgrid(cp.linspace(pt_range[0][i], pt_range[1][i], bin), cp.linspace(self.etaf[0], self.etaf[1], bin))
                 dptf = (pt_range[1][i] - pt_range[0][i])/bin
                 detaf = (self.etaf[1] - self.etaf[0])/bin
-                delta_Deltaeta = 2*(self.etaf[1]-self.etaf[0])
+                # delta_Deltaeta = 2*(self.etaf[1]-self.etaf[0])
+                delta_Deltaeta = 1
                 result = (4/3)*cp.sum(self.__FrNk(xx, yy, zz, ptf)*ptf*gpu.Ridge_dist(Aridge, ptf, etaf, phif, kick, Tem, self.sqrSnn, self.__mp, self.__m, self.__mb, self.__md, self.__a))*dptf*detaf/delta_Deltaeta
                 CZYAM = np.append(CZYAM, cp.asnumpy(result*phif*2))
                 ptrange_avg = np.append(ptrange_avg, (pt_range[0][i]+pt_range[1][i])/2)
@@ -1041,7 +1064,8 @@ class Drawing_Graphs:
                 dptf = (pt_range[1][i] - pt_range[0][i])/bin
                 detaf = (self.etaf[1] - self.etaf[0])/bin
                 dphif = (self.__Yridge_phif_end - self.__Yridge_phif_start)/bin
-                delta_Deltaeta = 2*(self.etaf[1]-self.etaf[0])
+                # delta_Deltaeta = 2*(self.etaf[1]-self.etaf[0])
+                delta_Deltaeta = 1
                 result = (4/3)*cp.sum(self.__FrNk(xx, yy, zz, ptf)*ptf*gpu.Ridge_dist(Aridge, ptf, etaf, phif, kick, Tem, self.sqrSnn, self.__mp, self.__m, self.__mb, self.__md, self.__a))*dptf*detaf*dphif/delta_Deltaeta
                 results = np.append(results, cp.asnumpy(result))
             return ptrange_avg, results-CZYAM
@@ -1058,7 +1082,8 @@ class Drawing_Graphs:
                 dptf = (pt_range[1][i] - pt_range[0][i])/bin
                 detaf = (self.etaf[1] - self.etaf[0])/bin
                 dphif = (self.__Yridge_phif_end - self.__Yridge_phif_start)/bin
-                delta_Deltaeta = 2*(self.etaf[1]-self.etaf[0])
+                # delta_Deltaeta = 2*(self.etaf[1]-self.etaf[0])
+                delta_Deltaeta = 1
                 result = (4/3)*cp.sum(self.__FrNk(xx, yy, zz, ptf)*ptf*gpu.Ridge_dist(Aridge, ptf, etaf, phif, kick, Tem, self.sqrSnn, self.__mp, self.__m, self.__mb, self.__md, self.__a))*dptf*detaf*dphif/delta_Deltaeta
                 results = np.append(results, cp.asnumpy(result))
                 ptrange_avg = np.append(ptrange_avg, (pt_range[0][i]+pt_range[1][i])/2)
@@ -1095,7 +1120,8 @@ class Drawing_Graphs:
                 ptf, etaf = cp.meshgrid(cp.linspace(pt_range[0][i], pt_range[1][i], bin), cp.linspace(self.etaf[0], self.etaf[1], bin))
                 dptf = (pt_range[1][i] - pt_range[0][i])/bin
                 detaf = (self.etaf[1] - self.etaf[0])/bin
-                delta_Deltaeta = 2*(self.etaf[1]-self.etaf[0])
+                # delta_Deltaeta = 2*(self.etaf[1]-self.etaf[0])
+                delta_Deltaeta = 1
                 result = (4/(3*pt_normal))*cp.sum(self.__FrNk(xx, yy, zz, ptf)*ptf*gpu.Ridge_dist(Aridge, ptf, etaf, phif, kick, Tem, self.sqrSnn, self.__mp, self.__m, self.__mb, self.__md, self.__a))*dptf*detaf/delta_Deltaeta
                 CZYAM = np.append(CZYAM, cp.asnumpy(result*phif*2))
                 ptrange_avg = np.append(ptrange_avg, (pt_range_cpu[0][i]+pt_range_cpu[1][i])/2)
@@ -1105,7 +1131,8 @@ class Drawing_Graphs:
                 dptf = (pt_range[1][i] - pt_range[0][i])/bin
                 detaf = (self.etaf[1] - self.etaf[0])/bin
                 dphif = (self.__Yridge_phif_end - self.__Yridge_phif_start)/bin
-                delta_Deltaeta = 2*(self.etaf[1]-self.etaf[0])
+                # delta_Deltaeta = 2*(self.etaf[1]-self.etaf[0])
+                delta_Deltaeta = 1
                 result = (4/(3*pt_normal))*cp.sum(self.__FrNk(xx, yy, zz, ptf)*ptf*gpu.Ridge_dist(Aridge, ptf, etaf, phif, kick, Tem, self.sqrSnn, self.__mp, self.__m, self.__mb, self.__md, self.__a))*dptf*detaf*dphif/delta_Deltaeta
                 results = np.append(results, cp.asnumpy(result))
 
@@ -1136,7 +1163,8 @@ class Drawing_Graphs:
                 ptf, etaf = cp.meshgrid(cp.linspace(pt_range[0][i], pt_range[1][i], bin), cp.linspace(self.etaf[0], self.etaf[1], bin))
                 dptf = (pt_range[1][i] - pt_range[0][i])/bin
                 detaf = (self.etaf[1] - self.etaf[0])/bin
-                delta_Deltaeta = 2*(self.etaf[1]-self.etaf[0])
+                # delta_Deltaeta = 2*(self.etaf[1]-self.etaf[0])
+                delta_Deltaeta = 1
                 result = (4/(3*pt_normal))*cp.sum(self.__FrNk(xx, yy, zz, ptf)*ptf*gpu.Ridge_dist(Aridge, ptf, etaf, phif, kick, Tem, self.sqrSnn, self.__mp, self.__m, self.__mb, self.__md, self.__a))*dptf*detaf/delta_Deltaeta
                 CZYAM = np.append(CZYAM, cp.asnumpy(result*phif*2))
                 ptrange_avg = np.append(ptrange_avg, (pt_range_cpu[0][i]+pt_range_cpu[1][i])/2)
@@ -1146,7 +1174,8 @@ class Drawing_Graphs:
                 dptf = (pt_range[1][i] - pt_range[0][i])/bin
                 detaf = (self.etaf[1] - self.etaf[0])/bin
                 dphif = (self.__Yridge_phif_end - self.__Yridge_phif_start)/bin
-                delta_Deltaeta = 2*(self.etaf[1]-self.etaf[0])
+                # delta_Deltaeta = 2*(self.etaf[1]-self.etaf[0])
+                delta_Deltaeta = 1
                 result = (4/(3*pt_normal))*cp.sum(self.__FrNk(xx, yy, zz, ptf)*ptf*gpu.Ridge_dist(Aridge, ptf, etaf, phif, kick, Tem, self.sqrSnn, self.__mp, self.__m, self.__mb, self.__md, self.__a))*dptf*detaf*dphif/delta_Deltaeta
                 results = np.append(results, cp.asnumpy(result))
             return ptrange_avg, (results-CZYAM)/1.18
@@ -1167,7 +1196,8 @@ class Drawing_Graphs:
                 dptf = (pt_range[1][i] - pt_range[0][i])/bin
                 detaf = (self.etaf[1] - self.etaf[0])/bin
                 dphif = (self.__Yridge_phif_end - self.__Yridge_phif_start)/bin
-                delta_Deltaeta = 2*(self.etaf[1]-self.etaf[0])
+                # delta_Deltaeta = 2*(self.etaf[1]-self.etaf[0])
+                delta_Deltaeta = 1
                 result = (4/3)*cp.sum(self.__FrNk(xx, yy, zz, ptf)*ptf*gpu.Ridge_dist(Aridge, ptf, etaf, phif, kick, Tem, self.sqrSnn, self.__mp, self.__m, self.__mb, self.__md, self.__a))*dptf*detaf*dphif/delta_Deltaeta
                 results = np.append(results, cp.asnumpy(result))
                 ptrange_avg = np.append(ptrange_avg, (pt_range[0][i]+pt_range[1][i])/2)
